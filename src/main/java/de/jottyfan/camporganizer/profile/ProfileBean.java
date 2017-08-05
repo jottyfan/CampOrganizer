@@ -11,6 +11,8 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ProfileBean {
+	private String forename;
+	private String surname;
 	private String username;
 	private String password;
 
@@ -21,8 +23,8 @@ public class ProfileBean {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	public boolean checkPassword(String comparable){
+
+	public boolean checkPassword(String comparable) {
 		return comparable.equals(password);
 	}
 
@@ -31,6 +33,23 @@ public class ProfileBean {
 	}
 
 	public void setPassword(String password) {
+		// TODO: encrypt
 		this.password = password;
+	}
+
+	public String getForename() {
+		return forename;
+	}
+
+	public void setForename(String forename) {
+		this.forename = forename;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 }
