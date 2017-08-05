@@ -1,17 +1,5 @@
-.header {
-	padding: 20px;
-	border: 1px solid black;
-	border-corner: 4px;
-}
-
-.content {
-	padding: 20px;
-	border: 1px solid black;
-	border-corner: 4px;
-}
-
-.footer {
-	padding: 20px;
-	border: 1px solid black;
-	border-corner: 4px;
+body {
+	background-color: transparent;
+	background-image: -moz-linear-gradient(bottom right, #fd7d0d, #ffcc00);
+	background-repeat: repeat;
 }
