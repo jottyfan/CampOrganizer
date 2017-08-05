@@ -2,7 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.jottyfan</groupId>
   <artifactId>camporganizer</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <version>0.0.1</version>
   <name>CampOrganizer</name>
   <description>organize bible camps (booking, registering)</description>
   <dependencies>
