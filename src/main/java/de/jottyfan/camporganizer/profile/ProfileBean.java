@@ -17,6 +17,17 @@ public class ProfileBean {
 	private String surname;
 	private String username;
 	private String password;
+	private String encryptedPassword;
+
+	public boolean checkPasswordAndForgetPlainOne() {
+		boolean result = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+		if (result) {
+			password = null;
+			return result;
+		} else {
+			return false;
+		}
+	}
 
 	public String getFullname() {
 		return new StringBuilder(forename).append(" ").append(surname).toString();
@@ -34,8 +45,14 @@ public class ProfileBean {
 		return password;
 	}
 
+	/**
+	 * use this from the web pages
+	 * 
+	 * @param password
+	 */
 	public void setPassword(String password) {
-		this.password = new StrongPasswordEncryptor().encryptPassword(password);
+		this.password = password;
+		this.encryptedPassword = new StrongPasswordEncryptor().encryptPassword(password);
 	}
 
 	public String getForename() {
@@ -54,7 +71,16 @@ public class ProfileBean {
 		this.surname = surname;
 	}
 
-	public boolean checkPassword(String plainPassword) {
-		return new StrongPasswordEncryptor().checkPassword(plainPassword, password);
+	public String getEncryptedPassword() {
+		return encryptedPassword;
+	}
+
+	/**
+	 * use this in the gateway for database content only
+	 * 
+	 * @param encryptedPassword
+	 */
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
 	}
 }

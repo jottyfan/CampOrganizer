@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Field;
 import org.jooq.Record;
+import org.jooq.Record3;
 import org.jooq.SelectConditionStep;
 import org.jooq.Table;
 import org.jooq.exception.DataAccessException;
@@ -58,22 +59,26 @@ public class ProfileGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public ProfileBean getProfile(ProfileBean requested) throws DataAccessException {
-		SelectConditionStep<?> sql = getJooq()
+		SelectConditionStep<Record3<String, String, String>> sql = getJooq()
 		// @formatter:off
 			.select(V_PROFILE.FORENAME.get(),
-					    V_PROFILE.SURNAME.get())
+					    V_PROFILE.SURNAME.get(),
+					    V_PROFILE.PASSWORD.get())
 			// TODO: add roles as jooq enum or such
 			.from(V_PROFILE.getTableName())
-			.where(V_PROFILE.USERNAME.get().eq(requested.getUsername()))
-			.and(V_PROFILE.PASSWORD.get().eq(requested.getPassword()));
+			.where(V_PROFILE.USERNAME.get().eq(requested.getUsername()));
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
-		Record r = sql.fetchOne();
+		Record3<String, String, String> r = sql.fetchOne();
 		if (r == null) {
-			throw new DataAccessException("login invalid");
+			throw new DataAccessException("login invalid, no such user " + requested.getUsername());
 		}
+		requested.setEncryptedPassword(r.get(V_PROFILE.PASSWORD.get()));
 		requested.setForename(r.get(V_PROFILE.FORENAME.get()));
 		requested.setSurname(r.get(V_PROFILE.SURNAME.get()));
+		if (!requested.checkPasswordAndForgetPlainOne()) {
+			throw new DataAccessException("login invalid for user " + requested.getUsername());
+		}
 		return requested;
 	}
 }

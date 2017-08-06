@@ -15,6 +15,7 @@ public class TestProfileBean {
 	public void testSetPassword() {
 		ProfileBean bean = new ProfileBean();
 		bean.setPassword("this is crap");
-		assertTrue(bean.checkPassword("this is crap"));
+		bean.setEncryptedPassword("bPy72qQgXSeplADk5MgftsLSf/a18ItMwvCMnJ+cdASTmHtb0IeqtTkAcQ7MZqn1");
+		assertTrue(bean.checkPasswordAndForgetPlainOne());
 	}
 }
