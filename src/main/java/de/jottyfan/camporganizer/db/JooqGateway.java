@@ -39,7 +39,6 @@ public abstract class JooqGateway {
 			throw new DataAccessException("facesContext must not be null");
 		}
 		Properties properties = new Properties();
-
 		try {
 			properties.load(new FileInputStream("/etc/camporganizer.properties"));
 		} catch (FileNotFoundException e) {

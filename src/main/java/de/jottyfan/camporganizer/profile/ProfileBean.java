@@ -3,6 +3,8 @@ package de.jottyfan.camporganizer.profile;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 /**
  * 
  * @author henkej
@@ -28,17 +30,12 @@ public class ProfileBean {
 		this.username = username;
 	}
 
-	public boolean checkPassword(String comparable) {
-		return comparable.equals(password);
-	}
-
 	public String getPassword() {
-		return null;
+		return password;
 	}
 
 	public void setPassword(String password) {
-		// TODO: encrypt
-		this.password = password;
+		this.password = new StrongPasswordEncryptor().encryptPassword(password);
 	}
 
 	public String getForename() {
@@ -55,5 +52,9 @@ public class ProfileBean {
 
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+
+	public boolean checkPassword(String plainPassword) {
+		return new StrongPasswordEncryptor().checkPassword(plainPassword, password);
 	}
 }
