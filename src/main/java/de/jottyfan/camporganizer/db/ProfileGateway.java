@@ -15,7 +15,7 @@ import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
- * @author henkej
+ * @author jotty
  *
  */
 public class ProfileGateway extends JooqGateway {

@@ -16,6 +16,10 @@ public class ProfileBean {
 	private String username;
 	private String password;
 
+	public String getFullname() {
+		return new StringBuilder(forename).append(" ").append(surname).toString();
+	}
+
 	public String getUsername() {
 		return username;
 	}

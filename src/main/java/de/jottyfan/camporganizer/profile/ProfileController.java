@@ -6,22 +6,35 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
+import org.jooq.exception.DataAccessException;
+
+import de.jottyfan.camporganizer.db.ProfileGateway;
+
 /**
  * 
- * @author henkej
+ * @author jotty
  *
  */
 @ManagedBean
 @RequestScoped
 public class ProfileController {
+
+	@ManagedProperty(value = "#{profileBean}")
 	private ProfileBean bean;
 
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
 	public String doLogin() {
-		facesContext.addMessage("password check not yet implemented",
-				new FacesMessage(FacesMessage.SEVERITY_WARN, "not yet implemented", "login is not yet ready"));
+		try {
+			new ProfileGateway(facesContext).getProfile(bean);
+			facesContext.addMessage("login",
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "result", bean.getFullname()));
+
+		} catch (DataAccessException e) {
+			facesContext.addMessage("login failed",
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "wrong login", e.getMessage()));
+		}
 		return "/pages/login.jsf";
 	}
 

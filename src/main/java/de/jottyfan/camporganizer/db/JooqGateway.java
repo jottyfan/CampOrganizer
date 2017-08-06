@@ -19,7 +19,7 @@ import org.jooq.impl.DSL;
 
 /**
  * 
- * @author henkej
+ * @author jotty
  *
  */
 public abstract class JooqGateway {
@@ -48,7 +48,7 @@ public abstract class JooqGateway {
 			LOGGER.warn("error on loading configuration: {}", e.getMessage());
 		}
 		try {
-			String url = properties.getProperty("url", "jdbc:postgres:/camp");
+			String url = properties.getProperty("url", "jdbc:postgresql:camp");
 			context = DSL.using(DriverManager.getConnection(url), SQLDialect.POSTGRES_9_5);
 		} catch (SQLException e) {
 			facesContext.addMessage("no database connection", new FacesMessage(FacesMessage.SEVERITY_FATAL,
