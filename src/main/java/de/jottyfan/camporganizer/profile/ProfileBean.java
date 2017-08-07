@@ -19,6 +19,7 @@ public class ProfileBean {
 	private String surname;
 	private String username;
 	private String password;
+	private String passwordAgain;
 	private String encryptedPassword;
 
 	public boolean checkPasswordAndForgetPlainOne() throws DataAccessException {
@@ -37,7 +38,8 @@ public class ProfileBean {
 	}
 
 	public String getFullname() {
-		return new StringBuilder(forename).append(" ").append(surname).toString();
+		return new StringBuilder(forename == null ? "" : forename).append(" ").append(surname == null ? "" : surname)
+				.toString();
 	}
 
 	public String getUsername() {
@@ -52,6 +54,10 @@ public class ProfileBean {
 		return password;
 	}
 
+	public void setPasswordButKeepEncrypted(String password) {
+		this.password = password;
+	}
+	
 	/**
 	 * use this from the web pages
 	 * 
@@ -89,5 +95,13 @@ public class ProfileBean {
 	 */
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
+	}
+
+	public String getPasswordAgain() {
+		return passwordAgain;
+	}
+
+	public void setPasswordAgain(String passwordAgain) {
+		this.passwordAgain = passwordAgain;
 	}
 }

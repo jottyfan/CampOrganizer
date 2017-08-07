@@ -9,6 +9,7 @@ import org.jooq.Record;
 import org.jooq.Record3;
 import org.jooq.SelectConditionStep;
 import org.jooq.Table;
+import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
@@ -23,12 +24,33 @@ public class ProfileGateway extends JooqGateway {
 
 	private static final Logger LOGGER = LogManager.getLogger(ProfileGateway.class);
 
+	private enum T_PROFILE {
+		// @formatter:off
+		PASSWORD(DSL.field("PASSWORD", String.class)),
+		USERNAME(DSL.field("USERNAME", String.class));
+    // @formatter:on
+
+		private final Field<String> field;
+
+		T_PROFILE(Field<String> field) {
+			this.field = field;
+		}
+
+		public static final Table<?> getTableName() {
+			return DSL.table("T_PROFILE");
+		}
+
+		public Field<String> get() {
+			return field;
+		}
+	}
+	
 	private enum V_PROFILE {
 		// @formatter:off
-		USERNAME(DSL.field("V_PROFILE.USERNAME", String.class)), 
-		PASSWORD(DSL.field("V_PROFILE.PASSWORD", String.class)), 
-		FORENAME(DSL.field("V_PROFILE.FORENAME", String.class)), 
-		SURNAME(DSL.field("V_PROFILE.SURNAME", String.class));
+		USERNAME(DSL.field("USERNAME", String.class)), 
+		PASSWORD(DSL.field("PASSWORD", String.class)), 
+		FORENAME(DSL.field("FORENAME", String.class)), 
+		SURNAME(DSL.field("SURNAME", String.class));
     // @formatter:on
 
 		private final Field<String> field;
@@ -80,5 +102,23 @@ public class ProfileGateway extends JooqGateway {
 			throw new DataAccessException("login invalid for user " + requested.getUsername());
 		}
 		return requested;
+	}
+
+	/**
+	 * change the users password
+	 * 
+	 * @param bean
+	 *          containing the new password in an encrypted way
+	 * @throws DataAccessException
+	 */
+	public void changePasswords(ProfileBean bean) throws DataAccessException {
+		UpdateConditionStep<?> sql = getJooq()
+		// @formatter:off
+			.update(T_PROFILE.getTableName())
+			.set(T_PROFILE.PASSWORD.get(), bean.getEncryptedPassword())
+			.where(T_PROFILE.USERNAME.get().eq(bean.getUsername()));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		sql.execute();
 	}
 }

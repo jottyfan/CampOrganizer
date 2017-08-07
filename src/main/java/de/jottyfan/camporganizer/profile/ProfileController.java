@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 
 import org.jooq.exception.DataAccessException;
 
+import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.ProfileGateway;
 
 /**
@@ -17,7 +18,7 @@ import de.jottyfan.camporganizer.db.ProfileGateway;
  */
 @ManagedBean
 @RequestScoped
-public class ProfileController {
+public class ProfileController extends Controller {
 
 	@ManagedProperty(value = "#{profileBean}")
 	private ProfileBean bean;
@@ -29,13 +30,43 @@ public class ProfileController {
 		try {
 			new ProfileGateway(facesContext).getProfile(bean);
 			facesContext.addMessage("login",
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "result", bean.getFullname()));
-
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "welcome back, ", bean.getFullname()));
+			return toProfile();
 		} catch (DataAccessException e) {
 			facesContext.addMessage("login failed",
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "wrong login", e.getMessage()));
+			bean.setForename(null);
+			bean.setSurname(null);
+			return toLogin();
 		}
-		return "/pages/login.jsf";
+	}
+
+	public String doLogout() {
+		facesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
+		return toLogin();
+	}
+
+	public String doChangePassword() {
+		if (bean.getPassword().equals(bean.getPasswordAgain())) {
+			bean.setPasswordButKeepEncrypted(null);
+			bean.setPasswordAgain(null);
+			try {
+				new ProfileGateway(facesContext).changePasswords(bean);
+				facesContext.addMessage("erfolgreich",
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "passwords changed", "Das Passwort wurde aktualisiert."));
+				return toProfile();
+			} catch (DataAccessException e) {
+				facesContext.addMessage("failure",
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+				return toProfile();
+			}
+		} else {
+			facesContext.addMessage("passwords not equal", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"passwords do not match", "Die eingegebenen Passwörter sind nicht identisch."));
+			bean.setPassword(null);
+			bean.setPasswordAgain(null);
+			return toProfile();
+		}
 	}
 
 	public ProfileBean getBean() {
