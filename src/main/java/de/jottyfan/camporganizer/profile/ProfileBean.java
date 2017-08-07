@@ -3,7 +3,9 @@ package de.jottyfan.camporganizer.profile;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jooq.exception.DataAccessException;
 
 /**
  * 
@@ -19,8 +21,13 @@ public class ProfileBean {
 	private String password;
 	private String encryptedPassword;
 
-	public boolean checkPasswordAndForgetPlainOne() {
-		boolean result = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+	public boolean checkPasswordAndForgetPlainOne() throws DataAccessException {
+		boolean result = false;
+		try {
+			result = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+		} catch (EncryptionOperationNotPossibleException e) {
+			return false; // password is not decryptable
+		}
 		if (result) {
 			password = null;
 			return result;

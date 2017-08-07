@@ -31,7 +31,7 @@ public abstract class JooqGateway {
 	 * generate a new instance of the gateway
 	 * 
 	 * @param facesContext
-	 *            to be used for messages
+	 *          to be used for messages
 	 * @throws DataAccessException
 	 */
 	public JooqGateway(FacesContext facesContext) throws DataAccessException {
@@ -48,10 +48,11 @@ public abstract class JooqGateway {
 		}
 		try {
 			String url = properties.getProperty("url", "jdbc:postgresql:camp");
+			Class.forName("org.postgresql.Driver");
 			context = DSL.using(DriverManager.getConnection(url), SQLDialect.POSTGRES_9_5);
-		} catch (SQLException e) {
-			facesContext.addMessage("no database connection", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-					"could not establish database connection", e.getMessage()));
+		} catch (SQLException | ClassNotFoundException e) {
+			facesContext.addMessage("no database connection",
+					new FacesMessage(FacesMessage.SEVERITY_FATAL, "could not establish database connection", e.getMessage()));
 			LOGGER.fatal("error on creating database access: {}", e.getMessage());
 			throw new DataAccessException(e.getMessage());
 		}
