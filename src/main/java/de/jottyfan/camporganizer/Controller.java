@@ -14,4 +14,8 @@ public abstract class Controller {
 	public String toProfile() {
 		return "/pages/profile.jsf";
 	}
+	
+	public String toRegister() {
+		return "/pages/register.jsf";
+	}
 }

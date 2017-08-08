@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:b="http://bootsfaces.net/ui">
+<h:body>
+	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<b:panel>
+					<b:panelGrid colSpans="3,9">
+						<h:outputText value="Vorname" />
+						<b:inputText value="#{profileBean.forename}" />
+						<h:outputText value="Nachname" />
+						<b:inputText value="#{profileBean.surname}" />
+						<h:outputText value="Login-Name" />
+						<b:inputText value="#{profileBean.username}" />
+						<h:outputText value="Passwort" />
+						<b:inputSecret value="#{profileBean.password}" />
+						<b:commandButton action="#{profileController.toLogin}" value="abbrechen" immediate="true" />
+						<b:commandButton action="#{profileController.doRegister}" value="registrieren" look="primary" />
+					</b:panelGrid>
+				</b:panel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

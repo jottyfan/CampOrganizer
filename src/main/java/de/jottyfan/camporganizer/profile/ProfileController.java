@@ -46,6 +46,30 @@ public class ProfileController extends Controller {
 		return toLogin();
 	}
 
+	public String doRegister() {
+		try {
+			new ProfileGateway(facesContext).register(bean);
+			return toProfile();
+		} catch (DataAccessException e) {
+			facesContext.addMessage("registering failed",
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "error on registering", e.getMessage()));
+			bean.setForename(null);
+			bean.setSurname(null);
+			return toRegister();
+		}
+	}
+
+	public String doRemoveLogin() {
+		try {
+			new ProfileGateway(facesContext).removeLogin(bean);
+			return doLogout();
+		} catch (DataAccessException e) {
+			facesContext.addMessage("remove login failed",
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "error on removing", e.getMessage()));
+			return "";
+		}
+	}
+
 	public String doChangePassword() {
 		if (bean.getPassword().equals(bean.getPasswordAgain())) {
 			bean.setPasswordButKeepEncrypted(null);
