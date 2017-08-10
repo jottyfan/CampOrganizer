@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+<h:body>
+	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="menu">
+			<b:panel>
+				<h:form>
+					<b:buttonGroup>
+						<b:commandButton action="#{salesController.toProfile}" value="Startseite" />
+					</b:buttonGroup>
+				</h:form>
+			</b:panel>
+		</ui:define>
+		<ui:define name="content">
+			<b:panel rendered="#{profileBean.hasRole('businessman')}">
+				<h:form>
+					<b:panelGrid colSpans="3,9">
+						<h:outputText value="Einkauf bei" />
+						<b:inputText value="#{salesBean.trader}" />
+						<h:outputText value="Freizeit" />
+						<b:selectOneMenu value="#{salesBean.fkCamp}">
+							<f:selectItems value="#{salesController.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
+						</b:selectOneMenu>
+						<h:outputText value="Name" />
+						<b:inputText value="#{salesBean.provider}" />
+						<h:outputText value="Betrag" />
+						<b:inputText value="#{salesBean.cash}">
+							<f:convertNumber type="number" pattern="#######,##" />
+							<f:facet name="prepend">€</f:facet>
+						</b:inputText>
+						<h:outputText value="Bestandteile" />
+						<h:outputText value="TODO" />
+						<h:outputText vaue="Rechnungsdatum" />
+						<b:dateTimePicker value="#{salesBean.buydate}" />
+						<h:outputText value="Belegnummer" />
+						<b:inputText value="#{salesBean.recipeNumber}" />
+						<h:outputText value="Foto von Kassenzettel" />
+						<h:outputText value="TODO" />
+						<h:outputText value="Buchungstext" />
+						<b:inputTextarea value="#{salesBean.recipeNote}" />
+						<b:commandButton action="#{salesController.toProfile}" value="abbrechen" immediate="true" />
+						<b:commandButton action="#{salesController.doInsert}" value="übernehmen" look="primary" />
+					</b:panelGrid>
+				</h:form>
+			</b:panel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

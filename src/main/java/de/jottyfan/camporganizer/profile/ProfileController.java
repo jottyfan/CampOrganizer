@@ -42,7 +42,7 @@ public class ProfileController extends Controller {
 	}
 
 	public String doLogout() {
-		facesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
+		facesContext.getExternalContext().getSessionMap().clear();
 		return toLogin();
 	}
 

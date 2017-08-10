@@ -21,6 +21,7 @@ public class ProfileBean {
 	private String password;
 	private String passwordAgain;
 	private String encryptedPassword;
+	private String roles;
 
 	public boolean checkPasswordAndForgetPlainOne() throws DataAccessException {
 		boolean result = false;
@@ -35,6 +36,10 @@ public class ProfileBean {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean hasRole(String role) {
+		return roles.contains(role);
 	}
 
 	public String getFullname() {
@@ -103,5 +108,13 @@ public class ProfileBean {
 
 	public void setPasswordAgain(String passwordAgain) {
 		this.passwordAgain = passwordAgain;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
 	}
 }
