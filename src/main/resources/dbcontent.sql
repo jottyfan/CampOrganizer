@@ -1,3 +1,5 @@
+set search_path = camp;
+
 insert into t_salescontenttype(name) values
 ('Lebensmittel'),('Material'),('Kraftstoff'),('Reisekosten'),('Unterkunft'),('Anzahlung/Vorkasse');
 
