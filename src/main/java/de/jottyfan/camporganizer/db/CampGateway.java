@@ -4,6 +4,7 @@ import static de.jottyfan.camporganizer.db.jooq.Tables.V_CAMP;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.Record3;
 import org.jooq.SelectSeekStep1;
 import org.jooq.exception.DataAccessException;
+import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.register.CampBean;
 
@@ -39,13 +41,18 @@ public class CampGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<CampBean> getAllCamps(boolean futureOnly) throws DataAccessException {
+		Timestamp limitDate = new Timestamp(0);
+		if (futureOnly)
+		{
+			limitDate.setTime(new Date().getTime());
+		}
 		SelectSeekStep1<Record3<Integer, String, Double>, Timestamp> sql = getJooq()
 		// @formatter:off
 			.select(V_CAMP.PK,
 					    V_CAMP.NAME,
 					    V_CAMP.YEAR)
 			.from(V_CAMP)
-			.where(V_CAMP.IS_OVER.notIn(true, futureOnly))
+			.where(V_CAMP.ARRIVE.greaterThan(limitDate))
 			.orderBy(V_CAMP.ARRIVE);
 	  // @formatter:on
 		LOGGER.debug("{}", sql.toString());
