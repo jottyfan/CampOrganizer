@@ -2,9 +2,12 @@ package de.jottyfan.camporganizer.sales;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+
+import de.jottyfan.camporganizer.register.CampBean;
 
 /**
  * 
@@ -12,7 +15,7 @@ import javax.faces.bean.ViewScoped;
  *
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class SalesBean {
 	private String trader;
 	private Integer fkCamp;
@@ -23,7 +26,9 @@ public class SalesBean {
 	private String recipeNumber;
 	// TODO: blob container for image upload
 	private String recipeNote;
-	
+
+	private List<CampBean> camps;
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -76,7 +81,7 @@ public class SalesBean {
 	public BigDecimal getCashBigDecimal() {
 		return cash == null ? null : new BigDecimal(cash);
 	}
-	
+
 	public void setCash(Float cash) {
 		this.cash = cash;
 	}
@@ -103,5 +108,13 @@ public class SalesBean {
 
 	public void setRecipeNote(String recipeNote) {
 		this.recipeNote = recipeNote;
+	}
+
+	public List<CampBean> getCamps() {
+		return camps;
+	}
+
+	public void setCamps(List<CampBean> camps) {
+		this.camps = camps;
 	}
 }
