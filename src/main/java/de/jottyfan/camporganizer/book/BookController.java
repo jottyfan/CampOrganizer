@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.sales;
+package de.jottyfan.camporganizer.book;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.myfaces.config.impl.digester.elements.FacesConfig;
+import org.apache.myfaces.context.FacesContextFactoryImpl;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.Controller;
@@ -24,39 +26,34 @@ import de.jottyfan.camporganizer.register.CampBean;
  */
 @ManagedBean
 @RequestScoped
-public class SalesController extends Controller {
+public class BookController extends Controller {
 
-	private final static Logger LOGGER = LogManager.getLogger(SalesController.class);
-	
+	private final static Logger LOGGER = LogManager.getLogger(BookController.class);
+
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
-	@ManagedProperty(value = "#{salesBean}")
-	private SalesBean bean;
+	@ManagedProperty(value = "#{BookBean}")
+	private BookBean bean;
 
 	private List<CampBean> camps;
 
-	public String toSales() {
-		// TODO: load recipe type list
+	public String toBook() {
 		try {
-			camps = new CampGateway(facesContext).getAllCamps(false);
+			camps = new CampGateway(facesContext).getAllCamps(true);
 		} catch (DataAccessException e) {
 			facesContext.addMessage("failure",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 		}
-		return "/pages/sales.jsf";
+		return "/pages/book.jsf";
 	}
 
-	public String doInsert() {
-		try {
-			LOGGER.debug("add to DB: {}", bean.toString());
-			new SalesGateway(facesContext).insert(bean);
-			return toProfile();
-		} catch (DataAccessException e) {
-			facesContext.addMessage("failure",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on adding entry", e.getMessage()));
-			return toSales();
-		}
+	public String doBook() {
+		facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "not yet implemented",
+				"Die Anmeldung wurde noch nicht entwickelt."));
+		LOGGER.info("someone wanted to book a camp");
+		// TODO: create book table and add data to it
+		return toBook();
 	}
 
 	public List<CampBean> getCamps() {
@@ -67,11 +64,11 @@ public class SalesController extends Controller {
 		this.facesContext = facesContext;
 	}
 
-	public SalesBean getBean() {
+	public BookBean getBean() {
 		return bean;
 	}
 
-	public void setBean(SalesBean bean) {
+	public void setBean(BookBean bean) {
 		this.bean = bean;
 	}
 }

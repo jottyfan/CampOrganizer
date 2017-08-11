@@ -13,8 +13,12 @@
 						<b:inputText value="#{profileBean.username}" placeholder="username" />
 						<h:outputText value="Passwort" />
 						<b:inputSecret value="#{profileBean.password}" />
-						<b:commandButton action="#{profileController.toRegister}" value="registrieren" immediate="true" />
-						<b:commandButton action="#{profileController.doLogin}" value="anmelden" look="primary" />
+						<h:outputText value="" />
+						<b:buttonGroup>
+							<b:commandButton action="#{profileController.doLogin}" value="anmelden" look="primary" />
+							<b:commandButton action="#{profileController.toRegister}" value="registrieren" immediate="true" />
+							<b:commandButton action="#{bookController.toBook}" value="ohne Registrierung zu einer Freizeit anmelden" immediate="true" />
+						</b:buttonGroup>
 					</b:panelGrid>
 				</b:panel>
 			</h:form>

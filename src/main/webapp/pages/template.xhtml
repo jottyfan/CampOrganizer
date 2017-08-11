@@ -7,13 +7,15 @@
 	<h:outputStylesheet name="style.css" library="css" />
 </h:head>
 <h:body>
-	<h:form rendered="#{profileBean != null}">
-		<!-- space between forename and surname -->
-		<b:buttonGroup rendered="#{profileBean.fullname != ' '}">
-			<b:commandButton action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
-			<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
-		</b:buttonGroup>
-	</h:form>
+	<ui:insert name="navigation">
+		<h:form rendered="#{profileBean != null}">
+			<!-- space between forename and surname -->
+			<b:buttonGroup rendered="#{profileBean.fullname != ' '}">
+				<b:commandButton action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
+				<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
+			</b:buttonGroup>
+		</h:form>
+	</ui:insert>
 	<ui:insert name="menu" />
 	<b:messages />
 	<ui:insert name="content" />

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+<h:body>
+	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="navigation">
+			<!-- overwrite profile check -->
+			<h:form>
+				<b:commandButton action="#{bookController.toLogin}" value="abbrechen" />
+			</h:form>
+		</ui:define>
+		<ui:define name="menu">
+			<b:panel title="Hinweis zur Online-Anmeldung" collapsible="true">
+			  Mit der Online-Anmeldung erklären Sie sich einverstanden, dass Ihre Adressdaten zu organisatorischen Zwecken der Freizeit digital erfasst werden.
+	  		Wenn Sie Ihre persönlichen Daten nicht über das Internet übertragen wollen, melden Sie Ihre Kinder bitte per Post an:
+	  		<br />
+				<p style="margin-left: 40px; font-weight: bolder">
+					Werner Blödtner<br /> Stresemannstr. 86<br />74080 Heilbronn
+				</p>
+				<br />
+	  		Bitte gegen Sie immer alle Daten an, damit wir Ihnen eine Bestätigung zukommen lassen können.
+	  	</b:panel>
+		</ui:define>
+		<ui:define name="content">
+			<h:form>
+				<b:panel>
+					<b:panelGrid colSpans="3,9">
+						<h:outputText value="Vorname" />
+						<b:inputText value="#{bookBean.forename}" placeholder="Bitte Vornamen eingeben" />
+						<h:outputText value="Nachname" />
+						<b:inputText value="#{bookBean.surname}" placeholder="Bitte Nachnamen eingeben" />
+						<h:outputText value="Straße" />
+						<b:inputText value="#{bookBean.street}" placeholder="Bitte Straße der Anschrift eingeben" />
+						<h:outputText value="PLZ" />
+						<b:inputText value="#{bookBean.zip}" placeholder="Bitte Postleitzahl der Anschrift eingeben" />
+						<h:outputText value="Ort" />
+						<b:inputText value="#{bookBean.city}" placeholder="Bitte den Ort der Anschrift eingeben" />
+						<h:outputText value="Telefon" />
+						<b:inputText value="#{bookBean.phone}" placeholder="Bitte eine Telefonnummer eingeben" />
+						<h:outputText value="Geburtsdatum" />
+						<b:datepicker value="#{bookBean.birthdate}" placeholder="Bitte das Geburtsdatum des Teilnehmers eingeben" />
+						<h:outputText value="E-Mail" />
+						<b:inputText value="#{bookBean.email}" placeholder="Bitte die E-Mail-Adresse angeben" />
+						<h:outputText value="Rolle" />
+						<b:selectOneMenu value="#{bookBean.role}">
+							<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+							<f:selectItem itemValue="girl" itemLabel="Mädchen" />
+							<f:selectItem itemValue="boy" itemLabel="Junge" />
+							<f:selectItem itemValue="helpergirl" itemLabel="Mitarbeiterin" />
+							<f:selectItem itemValue="helperboy" itemLabel="Mitarbeiter" />
+							<f:selectItem itemValue="kitchen" itemLabel="Küche" />
+						</b:selectOneMenu>
+						<h:outputText value="Freizeit" />
+						<b:selectOneMenu value="#{bookBean.fkCamp}">
+							<f:selectItems value="#{bookController.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
+						</b:selectOneMenu>
+						<h:outputText value="" />
+						<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary" />
+					</b:panelGrid>
+				</b:panel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

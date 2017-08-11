@@ -32,16 +32,20 @@ public class CampGateway extends JooqGateway {
 	/**
 	 * get all camps from db
 	 * 
+	 * @param futureOnly
+	 *          if true, load only camps that have not yet started
+	 * 
 	 * @return list of camps
 	 * @throws DataAccessException
 	 */
-	public List<CampBean> getAllCamps() throws DataAccessException {
+	public List<CampBean> getAllCamps(boolean futureOnly) throws DataAccessException {
 		SelectSeekStep1<Record3<Integer, String, Double>, Timestamp> sql = getJooq()
 		// @formatter:off
 			.select(V_CAMP.PK,
 					    V_CAMP.NAME,
 					    V_CAMP.YEAR)
 			.from(V_CAMP)
+			.where(V_CAMP.IS_OVER.notIn(true, futureOnly))
 			.orderBy(V_CAMP.ARRIVE);
 	  // @formatter:on
 		LOGGER.debug("{}", sql.toString());
