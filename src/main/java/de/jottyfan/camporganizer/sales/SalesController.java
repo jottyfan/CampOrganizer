@@ -1,6 +1,7 @@
 package de.jottyfan.camporganizer.sales;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -33,13 +34,15 @@ public class SalesController extends Controller {
 	@ManagedProperty(value = "#{salesBean}")
 	private SalesBean bean;
 
+	private List<SalesBean> list;
+
 	public String toSales() {
-		// TODO: load recipe type list
 		try {
 			bean.setCamps(new CampGateway(facesContext).getAllCamps(false));
+			list = new SalesGateway(facesContext).getAllSales();
 		} catch (DataAccessException e) {
 			bean.setCamps(new ArrayList<>());
-			facesContext.addMessage("failure",
+			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 		}
 		return "/pages/sales.jsf";
@@ -47,14 +50,21 @@ public class SalesController extends Controller {
 
 	public String doInsert() {
 		try {
-			LOGGER.debug("add to DB: {}", bean.toString());
-			new SalesGateway(facesContext).insert(bean);
+			SalesGateway gw = new SalesGateway(facesContext);
+			gw.insert(bean);
+			list = new SalesGateway(facesContext).getAllSales();
 			return toProfile();
 		} catch (DataAccessException e) {
-			facesContext.addMessage("failure",
+			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on adding entry", e.getMessage()));
 			return toSales();
 		}
+	}
+
+	public String doDownload() {
+		facesContext.addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "not yet implemented", "noch nicht entwickelt"));
+		return toSales();
 	}
 
 	public void setFacesContext(FacesContext facesContext) {
@@ -67,5 +77,9 @@ public class SalesController extends Controller {
 
 	public void setBean(SalesBean bean) {
 		this.bean = bean;
+	}
+
+	public List<SalesBean> getList() {
+		return list;
 	}
 }

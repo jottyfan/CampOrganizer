@@ -11,11 +11,9 @@ import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
-import de.jottyfan.camporganizer.db.jooq.tables.VBudget;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.VProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.VRole;
-import de.jottyfan.camporganizer.db.jooq.tables.VSales;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +40,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Camp extends SchemaImpl {
 
-    private static final long serialVersionUID = 1262145170;
+    private static final long serialVersionUID = -441578588;
 
     /**
      * The reference instance of <code>camp</code>
@@ -85,11 +83,6 @@ public class Camp extends SchemaImpl {
     public final TSalescontenttype T_SALESCONTENTTYPE = de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype.T_SALESCONTENTTYPE;
 
     /**
-     * The table <code>camp.v_budget</code>.
-     */
-    public final VBudget V_BUDGET = de.jottyfan.camporganizer.db.jooq.tables.VBudget.V_BUDGET;
-
-    /**
      * The table <code>camp.v_camp</code>.
      */
     public final VCamp V_CAMP = de.jottyfan.camporganizer.db.jooq.tables.VCamp.V_CAMP;
@@ -103,11 +96,6 @@ public class Camp extends SchemaImpl {
      * The table <code>camp.v_role</code>.
      */
     public final VRole V_ROLE = de.jottyfan.camporganizer.db.jooq.tables.VRole.V_ROLE;
-
-    /**
-     * The table <code>camp.v_sales</code>.
-     */
-    public final VSales V_SALES = de.jottyfan.camporganizer.db.jooq.tables.VSales.V_SALES;
 
     /**
      * No further instances allowed
@@ -156,10 +144,8 @@ public class Camp extends SchemaImpl {
             TSales.T_SALES,
             TSalescontent.T_SALESCONTENT,
             TSalescontenttype.T_SALESCONTENTTYPE,
-            VBudget.V_BUDGET,
             VCamp.V_CAMP,
             VProfile.V_PROFILE,
-            VRole.V_ROLE,
-            VSales.V_SALES);
+            VRole.V_ROLE);
     }
 }

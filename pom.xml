@@ -81,6 +81,7 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<outputFileName>camporganizer.war</outputFileName>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -128,4 +129,10 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+	  <repository>
+	  	<id>webapp-folder</id>
+	  	<url>file:///var/lib/tomcat8/webapps</url>
+	  </repository>
+	</distributionManagement>
 </project>

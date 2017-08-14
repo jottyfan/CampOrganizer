@@ -48,6 +48,7 @@ create table t_sales (pk serial primary key,
                       fk_camp integer not null,
                       provider text,
                       cash money not null,
+                      incredients text,
                       buydate timestamp,
                       recipenumber text,
                       recipeshot bytea,
@@ -85,11 +86,26 @@ left join t_location l on c.fk_location = l.pk;
          
 grant select on v_camp to camp;
 
+create view v_profile as 
+select pk,
+       forename,
+       surname,
+       username,
+       password,
+       array_agg(role) as roles
+from t_profile 
+left join t_profilerole on fk_profile = pk
+where duedate > now()
+group by pk, forename, surname, username, password;
+
+grant select on v_profile to camp;
+
 create view v_sales as 
 select s.pk,
        s.trader,
        c.name,
        l.name as location,
+       s.incredients,
        extract(isoyear from c.arrive) as year,
        s.provider,
        s.cash,
@@ -105,20 +121,6 @@ left join t_salescontent t on t.fk_sales = s.pk
 group by 1,2,3,4,5,6,7,8,9,10,11;
 
 grant select on v_sales to camp;
-
-create view v_profile as 
-select pk,
-       forename,
-       surname,
-       username,
-       password,
-       array_agg(role) as roles
-from t_profile 
-left join t_profilerole on fk_profile = pk
-where duedate > now()
-group by pk, forename, surname, username, password;
-
-grant select on v_profile to camp;
 
 create view v_budget as
 select sum(cash) as budget, location, year from v_sales

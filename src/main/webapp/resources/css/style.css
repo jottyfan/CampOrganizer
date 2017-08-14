@@ -3,3 +3,7 @@ body {
 	background-image: -moz-linear-gradient(bottom right, #fd7d0d, #ffcc00);
 	background-repeat: repeat;
 }
+
+.dist16 {
+	margin-top: 16px;
+}

@@ -21,10 +21,11 @@ public class SalesBean {
 	private Integer fkCamp;
 	private String provider;
 	private Float cash;
-	// TODO: list of recipe types
+	private String cashText;
+  private String incredients;
 	private Date buydate;
 	private String recipeNumber;
-	// TODO: blob container for image upload
+	private byte[] recipeshot;
 	private String recipeNote;
 
 	private List<CampBean> camps;
@@ -40,6 +41,8 @@ public class SalesBean {
 		builder.append(provider);
 		builder.append(", cash=");
 		builder.append(cash);
+		builder.append(", incredients=");
+		builder.append(incredients);
 		builder.append(", buydate=");
 		builder.append(buydate);
 		builder.append(", recipeNumber=");
@@ -116,5 +119,29 @@ public class SalesBean {
 
 	public void setCamps(List<CampBean> camps) {
 		this.camps = camps;
+	}
+
+	public String getIncredients() {
+		return incredients;
+	}
+
+	public void setIncredients(String incredients) {
+		this.incredients = incredients;
+	}
+
+	public byte[] getRecipeshot() {
+		return recipeshot;
+	}
+
+	public void setRecipeshot(byte[] recipeshot) {
+		this.recipeshot = recipeshot;
+	}
+
+	public String getCashText() {
+		return cashText;
+	}
+
+	public void setCashText(String cashText) {
+		this.cashText = cashText;
 	}
 }

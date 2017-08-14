@@ -16,34 +16,73 @@
 		</ui:define>
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('businessman')}">
-				<h:form>
-					<b:panelGrid colSpans="3,9">
-						<h:outputText value="Einkauf bei" />
-						<b:inputText value="#{salesBean.trader}" />
-						<h:outputText value="Freizeit" />
-						<b:selectOneMenu value="#{salesBean.fkCamp}">
-							<f:selectItems value="#{salesBean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
-						</b:selectOneMenu>
-						<h:outputText value="Name" />
-						<b:inputText value="#{salesBean.provider}" />
-						<h:outputText value="Betrag" />
-						<b:inputText value="#{salesBean.cash}" mask="-{0,1}9{1,7}.99">
-							<f:facet name="prepend">€</f:facet>
-						</b:inputText>
-						<h:outputText value="Bestandteile" />
-						<h:outputText value="TODO" />
-						<h:outputText value="Rechnungsdatum" />
-						<b:dateTimePicker value="#{salesBean.buydate}" />
-						<h:outputText value="Belegnummer" />
-						<b:inputText value="#{salesBean.recipeNumber}" />
-						<h:outputText value="Foto von Kassenzettel" />
-						<h:outputText value="TODO" />
-						<h:outputText value="Buchungstext" />
-						<b:inputTextarea value="#{salesBean.recipeNote}" />
-						<b:commandButton action="#{salesController.toProfile}" value="abbrechen" immediate="true" />
-						<b:commandButton action="#{salesController.doInsert}" value="übernehmen" look="primary" />
-					</b:panelGrid>
-				</h:form>
+				<b:tabView activeIndex="0">
+					<b:tab title="Rechung erfassen" styleClass="dist16">
+						<b:form inline="true" enctype="multipart/form-data">
+							<b:panelGrid colSpans="2,10">
+								<h:outputText value="Einkauf bei" />
+								<b:inputText value="#{salesBean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" />
+								<h:outputText value="Freizeit" />
+								<b:selectOneMenu value="#{salesBean.fkCamp}">
+									<f:selectItems value="#{salesBean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
+								</b:selectOneMenu>
+								<h:outputText value="Name" />
+								<b:inputText value="#{salesBean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" />
+								<h:outputText value="Betrag" />
+								<b:inputText value="#{salesBean.cash}" mask="-{0,1}9{1,7}.99">
+									<f:facet name="prepend">€</f:facet>
+								</b:inputText>
+								<h:outputText value="Bestandteile" />
+								<b:inputText value="#{salesBean.incredients}" placeholder="Bitte Bestandteile auflisten" tags="true" style="width: 100%" />
+								<h:outputText value="Rechnungsdatum" />
+								<b:dateTimePicker value="#{salesBean.buydate}" style="padding-bottom: 16px" />
+								<h:outputText value="Belegnummer" />
+								<b:inputText value="#{salesBean.recipeNumber}" placeholder="Bitte de Rechnungsnummer eintragen" />
+								<h:outputText value="Foto von Kassenzettel" />
+								<h:inputFile value="#{salesBean.recipeshot}" placeholder="Bitte Kassenzettelfoto hochladen" style="padding-bottom: 16px" />
+								<h:outputText value="Buchungstext" />
+								<b:inputTextarea value="#{salesBean.recipeNote}" placeholder="Bemerkungen" />
+								<b:commandButton action="#{salesController.toProfile}" value="abbrechen" immediate="true" />
+								<b:commandButton action="#{salesController.doInsert}" value="übernehmen" look="primary" />
+							</b:panelGrid>
+						</b:form>
+					</b:tab>
+					<b:tab title="Rechnungen anzeigen" styleClass="dist16">
+						<b:form>
+							<b:dataTable value="#{salesController.list}" var="l" lang="de">
+								<b:dataTableColumn label="Einkauf bei">
+									<h:outputText value="#{l.trader}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Freizeit">
+									<b:selectOneMenu value="#{l.fkCamp}" readonly="true">
+										<f:selectItems value="#{salesBean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
+									</b:selectOneMenu>
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Name">
+									<h:outputText value="#{l.provider}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Betrag">
+									<h:outputText value="#{l.cashText}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Bestandteile">
+									<h:outputText value="#{l.incredients}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Rechnungsdatum">
+									<h:outputText value="#{l.buydate}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Belegnummer">
+									<h:outputText value="#{l.recipeNumber}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Foto von Kassenzettel">
+									<b:commandButton action="#{salesController.doDownload(l.recipeshot)}" value="Download" iconAwesome="download" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Buchungstext">
+									<h:outputText value="#{l.recipeNote}" />
+								</b:dataTableColumn>
+							</b:dataTable>
+						</b:form>
+					</b:tab>
+				</b:tabView>
 			</b:panel>
 		</ui:define>
 	</ui:composition>
