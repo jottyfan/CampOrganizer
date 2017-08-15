@@ -16,7 +16,7 @@
 		</ui:define>
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('businessman')}">
-				<b:tabView activeIndex="0">
+				<b:tabView activeIndex="#{salesModel.activeIndex}">
 					<b:tab title="Rechung erfassen" styleClass="dist16">
 						<b:form inline="true" enctype="multipart/form-data">
 							<b:panelGrid colSpans="2,10">
@@ -39,7 +39,7 @@
 								<h:outputText value="Belegnummer" />
 								<b:inputText value="#{salesBean.recipeNumber}" placeholder="Bitte de Rechnungsnummer eintragen" />
 								<h:outputText value="Foto von Kassenzettel" />
-								<h:inputFile value="#{salesBean.recipeshot}" placeholder="Bitte Kassenzettelfoto hochladen" style="padding-bottom: 16px" />
+								<h:inputFile value="#{salesBean.file}" placeholder="Bitte Kassenzettelfoto hochladen" style="padding-bottom: 16px" />
 								<h:outputText value="Buchungstext" />
 								<b:inputTextarea value="#{salesBean.recipeNote}" placeholder="Bemerkungen" />
 								<b:commandButton action="#{salesController.toProfile}" value="abbrechen" immediate="true" />
@@ -49,14 +49,12 @@
 					</b:tab>
 					<b:tab title="Rechnungen anzeigen" styleClass="dist16">
 						<b:form>
-							<b:dataTable value="#{salesController.list}" var="l" lang="de">
+							<b:dataTable value="#{salesModel.list}" var="l" lang="de">
 								<b:dataTableColumn label="Einkauf bei">
 									<h:outputText value="#{l.trader}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Freizeit">
-									<b:selectOneMenu value="#{l.fkCamp}" readonly="true">
-										<f:selectItems value="#{salesBean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
-									</b:selectOneMenu>
+									<h:outputText value="#{salesBean.getCampNameAndYear(l.fkCamp)}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Name">
 									<h:outputText value="#{l.provider}" />
@@ -74,10 +72,18 @@
 									<h:outputText value="#{l.recipeNumber}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Foto von Kassenzettel">
-									<b:commandButton action="#{salesController.doDownload(l.recipeshot)}" value="Download" iconAwesome="download" />
+									<b:commandButton action="#{salesController.doDownload(l)}" value="Download" iconAwesome="download"
+										rendered="#{l.recipeshot != null}" />
+									<h:outputText value="kein Foto" rendered="#{l.recipeshot == null}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Buchungstext">
 									<h:outputText value="#{l.recipeNote}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Aktionen">
+									<b:buttonGroup>
+										<b:commandButton action="#{salesController.toEdit(l)}" value="bearbeiten" iconAwesome="pencil" />
+ 										<b:commandButton action="#{salesController.doDelete(l)}" value="" iconAwesome="trash-o" look="danger" />
+									</b:buttonGroup>
 								</b:dataTableColumn>
 							</b:dataTable>
 						</b:form>

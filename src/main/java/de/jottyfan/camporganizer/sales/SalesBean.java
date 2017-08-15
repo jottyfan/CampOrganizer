@@ -1,11 +1,16 @@
 package de.jottyfan.camporganizer.sales;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.servlet.http.Part;
+
+import org.apache.commons.io.IOUtils;
 
 import de.jottyfan.camporganizer.register.CampBean;
 
@@ -17,18 +22,56 @@ import de.jottyfan.camporganizer.register.CampBean;
 @ManagedBean
 @SessionScoped
 public class SalesBean {
+	private Integer pk;
 	private String trader;
 	private Integer fkCamp;
 	private String provider;
 	private Float cash;
 	private String cashText;
-  private String incredients;
+	private String incredients;
 	private Date buydate;
 	private String recipeNumber;
 	private byte[] recipeshot;
 	private String recipeNote;
 
+	private Part file;
+
 	private List<CampBean> camps;
+
+	/**
+	 * get name and year of camp
+	 * 
+	 * @param campId
+	 *          to be used as a reference
+	 * @return name and year if found, empty string otherwise
+	 */
+	public String getCampNameAndYear(Integer campId) {
+		for (CampBean bean : camps) {
+			if (bean.getPk().equals(campId)) {
+				StringBuilder buf = new StringBuilder();
+				buf.append(bean.getName()).append(" ").append(bean.getYear());
+				return buf.toString();
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * convert upload file content to recipeshot
+	 * 
+	 * @throws IOException
+	 */
+	public void uploadFile() throws IOException {
+		if (file != null) {
+			InputStream inputStream = file.getInputStream();
+			byte[] bytes = IOUtils.toByteArray(inputStream);
+			if (bytes.length > 0) {
+				recipeshot = bytes;
+			} else {
+				recipeshot = null;
+			}
+		}
+	}
 
 	@Override
 	public String toString() {
@@ -143,5 +186,21 @@ public class SalesBean {
 
 	public void setCashText(String cashText) {
 		this.cashText = cashText;
+	}
+
+	public Part getFile() {
+		return file;
+	}
+
+	public void setFile(Part file) {
+		this.file = file;
+	}
+
+	public Integer getPk() {
+		return pk;
+	}
+
+	public void setPk(Integer pk) {
+		this.pk = pk;
 	}
 }

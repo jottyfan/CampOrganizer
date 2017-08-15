@@ -11,8 +11,9 @@ import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep9;
-import org.jooq.Record9;
+import org.jooq.Record10;
 import org.jooq.SelectJoinStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
@@ -67,9 +68,10 @@ public class SalesGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<SalesBean> getAllSales() throws DataAccessException {
-		SelectJoinStep<Record9<java.lang.String, Integer, java.lang.String, java.lang.String, String, Timestamp, java.lang.String, byte[], java.lang.String>> sql = getJooq()
+		SelectJoinStep<Record10<Integer, String, Integer, String, String, String, Timestamp, String, byte[], String>> sql = getJooq()
 		// @formatter:off
-			.select(T_SALES.TRADER,
+			.select(T_SALES.PK,
+							T_SALES.TRADER,
 					    T_SALES.FK_CAMP,
 					    T_SALES.PROVIDER,
 					    T_SALES.INCREDIENTS,
@@ -82,8 +84,9 @@ public class SalesGateway extends JooqGateway {
 		// @formatter.on
 		LOGGER.debug("{}", sql.toString());
 		List<SalesBean> list = new ArrayList<>();
-		for (Record9<String, Integer, String, String, String, Timestamp, String, byte[], String> r : sql.fetch()) {
+		for (Record10<Integer, String, Integer, String, String, String, Timestamp, String, byte[], String> r : sql.fetch()) {
 			SalesBean bean = new SalesBean();
+			bean.setPk(r.get(T_SALES.PK));
 			bean.setTrader(r.get(T_SALES.TRADER));
 			bean.setFkCamp(r.get(T_SALES.FK_CAMP));
 			bean.setProvider(r.get(T_SALES.PROVIDER));
@@ -96,5 +99,22 @@ public class SalesGateway extends JooqGateway {
 			list.add(bean);
 		}
 		return list;
+	}
+
+	/**
+	 * delete tupel from db referenced by its pk
+	 * 
+	 * @param bean to be removed from db
+	 * @return affected rows
+	 * @throws DataAccessException
+	 */
+	public int delete(SalesBean bean) throws DataAccessException {
+		DeleteConditionStep<TSalesRecord> sql = getJooq()
+		// @formatter:off
+			.deleteFrom(T_SALES)
+			.where(T_SALES.PK.eq(bean.getPk()));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		return sql.execute();
 	}
 }

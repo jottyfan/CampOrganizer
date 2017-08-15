@@ -1,12 +1,14 @@
 package de.jottyfan.camporganizer.sales;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
@@ -31,40 +33,85 @@ public class SalesController extends Controller {
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
+	@ManagedProperty(value = "#{salesModel}")
+	private SalesModel model;
+
 	@ManagedProperty(value = "#{salesBean}")
 	private SalesBean bean;
 
-	private List<SalesBean> list;
-
-	public String toSales() {
+	private String toSales(Integer activeIndex) {
 		try {
 			bean.setCamps(new CampGateway(facesContext).getAllCamps(false));
-			list = new SalesGateway(facesContext).getAllSales();
+			model.setList(new SalesGateway(facesContext).getAllSales());
 		} catch (DataAccessException e) {
 			bean.setCamps(new ArrayList<>());
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 		}
+		model.setActiveIndex(activeIndex);
 		return "/pages/sales.jsf";
+	}
+
+	public String toSales() {
+		return toSales(0);
+	}
+
+	public String toEdit(SalesBean selection) {
+		facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "not yet implemented",
+				"Das Bearbeiten wurde noch nicht implementiert."));
+		return toSales(1);
+	}
+	
+	public String doDelete(SalesBean selection) {
+		try {
+			SalesGateway gw = new SalesGateway(facesContext);
+			gw.delete(selection);
+			model.setList(gw.getAllSales());
+			return toSales(1);
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on deleting entry", e.getMessage()));
+			return toSales(0);
+		}
 	}
 
 	public String doInsert() {
 		try {
 			SalesGateway gw = new SalesGateway(facesContext);
+			bean.uploadFile();
 			gw.insert(bean);
-			list = new SalesGateway(facesContext).getAllSales();
-			return toProfile();
-		} catch (DataAccessException e) {
+			model.setList(gw.getAllSales());
+			return toSales(1);
+		} catch (DataAccessException | IOException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on adding entry", e.getMessage()));
-			return toSales();
+			return toSales(0);
 		}
 	}
 
-	public String doDownload() {
-		facesContext.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "not yet implemented", "noch nicht entwickelt"));
-		return toSales();
+	public String doDownload(SalesBean selection) {
+		try {
+			if (selection.getRecipeshot() != null) {
+				ExternalContext ec = facesContext.getExternalContext();
+				ec.responseReset();
+				ec.setResponseContentType("image/jpeg"); // most likely, photos are saved as jpegs
+				ec.setResponseContentLength(selection.getRecipeshot().length);
+				ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + selection.getRecipeNumber() + ".jpg\"");
+				OutputStream out = ec.getResponseOutputStream();
+				out.write(selection.getRecipeshot());
+				out.flush();
+				facesContext.responseComplete();
+			} else {
+				LOGGER.warn("image contains not data (is null)");
+				facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "error on downloading file",
+						"Kassenzettel enthält keinen Inhalt"));
+			}
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on downloading file", e.getMessage()));
+		}
+		return toSales(1);
 	}
 
 	public void setFacesContext(FacesContext facesContext) {
@@ -79,7 +126,7 @@ public class SalesController extends Controller {
 		this.bean = bean;
 	}
 
-	public List<SalesBean> getList() {
-		return list;
+	public void setModel(SalesModel model) {
+		this.model = model;
 	}
 }
