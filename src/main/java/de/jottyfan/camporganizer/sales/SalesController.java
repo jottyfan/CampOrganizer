@@ -41,10 +41,15 @@ public class SalesController extends Controller {
 
 	private String toSales(Integer activeIndex) {
 		try {
+			SalesGateway gw = new SalesGateway(facesContext);
 			bean.setCamps(new CampGateway(facesContext).getAllCamps(false));
-			model.setList(new SalesGateway(facesContext).getAllSales());
+			bean.setTraders(gw.getAllTraders());
+			bean.setProviders(gw.getAllProviders());
+			model.setList(gw.getAllSales());
 		} catch (DataAccessException e) {
 			bean.setCamps(new ArrayList<>());
+			bean.setTraders(new ArrayList<>());
+			bean.setProviders(new ArrayList<>());
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 		}

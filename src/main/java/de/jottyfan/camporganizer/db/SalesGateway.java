@@ -5,6 +5,7 @@ import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALES;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -13,8 +14,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep9;
+import org.jooq.Record1;
 import org.jooq.Record10;
 import org.jooq.SelectJoinStep;
+import org.jooq.SelectSeekStep1;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
@@ -116,5 +119,46 @@ public class SalesGateway extends JooqGateway {
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		return sql.execute();
+	}
+
+	/**
+	 * get all traders from db
+	 * 
+	 * @return string of traders, comma separated
+	 */
+	public List<String> getAllTraders() {
+		SelectSeekStep1<Record1<String>, String> sql = getJooq()
+		// @formatter:off
+			.selectDistinct(T_SALES.TRADER)
+			.from(T_SALES)
+			.orderBy(T_SALES.TRADER);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<String> list = new ArrayList<>();
+		for (Record1<String> r : sql.fetch()) {
+			list.add(r.get(T_SALES.TRADER));
+		}
+		return list;
+	}
+	
+
+	/**
+	 * get all providers from db
+	 * 
+	 * @return string of providers, comma separated
+	 */
+	public List<String> getAllProviders() {
+		SelectSeekStep1<Record1<String>, String> sql = getJooq()
+		// @formatter:off
+			.selectDistinct(T_SALES.PROVIDER)
+			.from(T_SALES)
+			.orderBy(T_SALES.PROVIDER);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<String> list = new ArrayList<>();
+		for (Record1<String> r : sql.fetch()) {
+			list.add(r.get(T_SALES.PROVIDER));
+		}
+		return list;
 	}
 }

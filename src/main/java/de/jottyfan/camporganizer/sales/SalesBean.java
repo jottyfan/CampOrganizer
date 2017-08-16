@@ -37,6 +37,8 @@ public class SalesBean {
 	private Part file;
 
 	private List<CampBean> camps;
+	private List<String> traders;
+	private List<String> providers;
 
 	/**
 	 * get name and year of camp
@@ -202,5 +204,21 @@ public class SalesBean {
 
 	public void setPk(Integer pk) {
 		this.pk = pk;
+	}
+
+	public List<String> getTraders() {
+		return traders;
+	}
+
+	public void setTraders(List<String> traders) {
+		this.traders = traders;
+	}
+
+	public List<String> getProviders() {
+		return providers;
+	}
+
+	public void setProviders(List<String> providers) {
+		this.providers = providers;
 	}
 }

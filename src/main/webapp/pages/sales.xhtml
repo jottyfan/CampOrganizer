@@ -21,13 +21,13 @@
 						<b:form inline="true" enctype="multipart/form-data">
 							<b:panelGrid colSpans="2,10">
 								<h:outputText value="Einkauf bei" />
-								<b:inputText value="#{salesBean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" />
+								<b:inputText value="#{salesBean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" typeahead="true" typeaheadValues="#{salesBean.traders}" />
 								<h:outputText value="Freizeit" />
 								<b:selectOneMenu value="#{salesBean.fkCamp}">
 									<f:selectItems value="#{salesBean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
 								</b:selectOneMenu>
 								<h:outputText value="Name" />
-								<b:inputText value="#{salesBean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" />
+								<b:inputText value="#{salesBean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" typeahead="true" typeaheadValues="#{salesBean.providers}" />
 								<h:outputText value="Betrag" />
 								<b:inputText value="#{salesBean.cash}" mask="-{0,1}9{1,7}.99">
 									<f:facet name="prepend">€</f:facet>
