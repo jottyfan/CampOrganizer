@@ -39,7 +39,7 @@ public class ProfileBean {
 	}
 	
 	public boolean hasRole(String role) {
-		return roles.contains(role);
+		return roles == null ? false : roles.contains(role);
 	}
 
 	public String getFullname() {
