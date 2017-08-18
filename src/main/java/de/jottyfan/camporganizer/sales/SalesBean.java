@@ -12,7 +12,7 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.io.IOUtils;
 
-import de.jottyfan.camporganizer.register.CampBean;
+import de.jottyfan.camporganizer.CampBean;
 
 /**
  * 

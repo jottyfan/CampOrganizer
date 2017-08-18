@@ -6,8 +6,8 @@
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
-			<h:form>
-				<b:panel>
+			<h:form style="padding: 32px">
+				<b:panel title="Login" collapsed="true">
 					<b:panelGrid colSpans="3,9">
 						<h:outputText value="Name" />
 						<b:inputText value="#{profileBean.username}" placeholder="username" />
@@ -17,10 +17,37 @@
 						<b:buttonGroup>
 							<b:commandButton action="#{profileController.doLogin}" value="anmelden" look="primary" />
 							<b:commandButton action="#{profileController.toRegister}" value="registrieren" immediate="true" />
-							<b:commandButton action="#{bookController.toBook}" value="ohne Registrierung zu einer Freizeit anmelden" immediate="true" />
 						</b:buttonGroup>
 					</b:panelGrid>
 				</b:panel>
+				<ui:repeat value="#{bookModel.getCamps(facesContext)}" var="c">
+					<b:panel title="#{c.name} #{c.year} in #{c.locationName}" collapsed="true">
+						<b:panelGrid colSpans="3,9">
+							<h:outputText value="Ort" />
+							<ui:fragment>
+								<a href="#{c.url}" target="_blank"><h:outputText value="#{c.locationName}" /></a>
+							</ui:fragment>
+							<h:outputText value="Jungen und Mädchen" />
+							<h:outputText value="#{c.minAge} - #{c.maxAge} Jahre" />
+							<h:outputText value="Zeit" />
+							<h:outputText value="#{c.campTime}" />
+							<h:outputText value="Preis" />
+							<ui:fragment>
+								<p>
+									<h:outputText value="#{c.price}" escape="false" />
+								</p>
+							</ui:fragment>
+							<h:outputText value="Ferien" />
+							<ui:fragment>
+								<p>
+									<h:outputText value="#{c.countries}" escape="false" />
+								</p>
+						  </ui:fragment>
+							<h:outputText value="" />
+							<b:commandButton action="#{bookController.toBook(c.pk)}" value="jetzt anmelden" look="primary" immediate="true" />
+						</b:panelGrid>
+					</b:panel>
+				</ui:repeat>
 			</h:form>
 		</ui:define>
 	</ui:composition>

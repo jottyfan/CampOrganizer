@@ -14,10 +14,10 @@ import org.apache.myfaces.config.impl.digester.elements.FacesConfig;
 import org.apache.myfaces.context.FacesContextFactoryImpl;
 import org.jooq.exception.DataAccessException;
 
+import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.SalesGateway;
-import de.jottyfan.camporganizer.register.CampBean;
 
 /**
  * 
@@ -46,6 +46,12 @@ public class BookController extends Controller {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 		}
 		return "/pages/book.jsf";
+	}
+
+	public String toBook(Integer campPk) {
+		bean = new BookBean();
+		bean.setFkCamp(campPk);
+		return toBook();
 	}
 
 	public String doBook() {
