@@ -41,8 +41,9 @@ public class BookController extends Controller {
 	public String toBook() {
 		try {
 			camps = new CampGateway(facesContext).getAllCamps(true);
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "not yet implemented", "Die Online-Anmeldung ist noch nicht fertig entwickelt. Bitte geben Sie den Inhalt der angegegebenen Felder vollständig bei einer Anmeldung per E-Mail an onkel-werner-freizeit@web.de oder per Post an unten stehende Adresse an."));
 		} catch (DataAccessException e) {
-			facesContext.addMessage("failure",
+			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 		}
 		return "/pages/book.jsf";

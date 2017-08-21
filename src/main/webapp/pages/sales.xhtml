@@ -5,14 +5,8 @@
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
-		<ui:define name="menu">
-			<b:panel>
-				<h:form>
-					<b:buttonGroup>
-						<b:commandButton action="#{salesController.toProfile}" value="Startseite" />
-					</b:buttonGroup>
-				</h:form>
-			</b:panel>
+		<ui:define name="navigation">
+			<b:commandButton action="#{salesController.toProfile}" value="Startseite" />
 		</ui:define>
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('businessman')}">
@@ -21,13 +15,15 @@
 						<b:form inline="true" enctype="multipart/form-data">
 							<b:panelGrid colSpans="2,10">
 								<h:outputText value="Einkauf bei" />
-								<b:inputText value="#{salesBean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" typeahead="true" typeaheadValues="#{salesBean.traders}" />
+								<b:inputText value="#{salesBean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" typeahead="true"
+									typeaheadValues="#{salesBean.traders}" />
 								<h:outputText value="Freizeit" />
 								<b:selectOneMenu value="#{salesBean.fkCamp}">
 									<f:selectItems value="#{salesBean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
 								</b:selectOneMenu>
 								<h:outputText value="Name" />
-								<b:inputText value="#{salesBean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" typeahead="true" typeaheadValues="#{salesBean.providers}" />
+								<b:inputText value="#{salesBean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" typeahead="true"
+									typeaheadValues="#{salesBean.providers}" />
 								<h:outputText value="Betrag" />
 								<b:inputText value="#{salesBean.cash}" mask="-{0,1}9{1,7}.99">
 									<f:facet name="prepend">€</f:facet>
@@ -82,7 +78,7 @@
 								<b:dataTableColumn label="Aktionen">
 									<b:buttonGroup>
 										<b:commandButton action="#{salesController.toEdit(l)}" value="bearbeiten" iconAwesome="pencil" />
- 										<b:commandButton action="#{salesController.doDelete(l)}" value="" iconAwesome="trash-o" look="danger" />
+										<b:commandButton action="#{salesController.doDelete(l)}" value="" iconAwesome="trash-o" look="danger" />
 									</b:buttonGroup>
 								</b:dataTableColumn>
 							</b:dataTable>

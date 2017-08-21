@@ -5,14 +5,8 @@
 	xmlns:b="http://bootsfaces.net/ui">
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
-		<ui:define name="menu">
-			<b:panel>
-				<h:form>
-					<b:buttonGroup>
-						<b:commandButton action="#{salesController.toSales}" value="Abrechnung" rendered="#{profileBean.hasRole('businessman')}" />
-					</b:buttonGroup>
-				</h:form>
-			</b:panel>
+		<ui:define name="navigation">
+			<b:commandButton action="#{salesController.toSales}" value="Abrechnung" rendered="#{profileBean.hasRole('businessman')}" />
 		</ui:define>
 		<ui:define name="content">
 			<b:panel>

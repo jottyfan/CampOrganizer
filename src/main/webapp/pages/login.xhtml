@@ -5,6 +5,9 @@
 	xmlns:b="http://bootsfaces.net/ui">
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="navigation">
+			<h:outputText value="Das Buchungsportal des Onkel Werner Freizeiten e.V." />
+		</ui:define>
 		<ui:define name="content">
 			<h:form>
 				<b:panel title="Login" collapsed="true">
@@ -20,6 +23,7 @@
 						</b:buttonGroup>
 					</b:panelGrid>
 				</b:panel>
+				<h1>Unsere Freizeiten</h1>
 				<ui:repeat value="#{bookModel.getCamps(facesContext)}" var="c">
 					<b:panel title="#{c.name} #{c.year} in #{c.locationName}" collapsed="true">
 						<b:panelGrid colSpans="3,9">

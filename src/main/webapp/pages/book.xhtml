@@ -6,13 +6,10 @@
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="navigation">
-			<!-- overwrite profile check -->
-			<h:form>
-				<b:commandButton action="#{bookController.toLogin}" value="abbrechen" />
-			</h:form>
+			<b:commandButton action="#{bookController.toLogin}" value="abbrechen" />
 		</ui:define>
-		<ui:define name="menu">
-			<b:panel title="Hinweis zur Online-Anmeldung" collapsible="true">
+		<ui:define name="content">
+			<b:panel title="Hinweis zur Online-Anmeldung" collapsible="true" look="info">
 			  Mit der Online-Anmeldung erklären Sie sich einverstanden, dass Ihre Adressdaten zu organisatorischen Zwecken der Freizeit digital erfasst werden.
 	  		Wenn Sie Ihre persönlichen Daten nicht über das Internet übertragen wollen, melden Sie Ihre Kinder bitte per Post an:
 	  		<br />
@@ -22,8 +19,6 @@
 				<br />
 	  		Bitte gegen Sie immer alle Daten an, damit wir Ihnen eine Bestätigung zukommen lassen können.
 	  	</b:panel>
-		</ui:define>
-		<ui:define name="content">
 			<h:form>
 				<b:panel>
 					<b:panelGrid colSpans="3,9">
@@ -57,7 +52,7 @@
 							<f:selectItems value="#{bookController.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
 						</b:selectOneMenu>
 						<h:outputText value="" />
-						<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary" />
+						<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary" rendered="false" /><!-- not yet implemented -->
 					</b:panelGrid>
 				</b:panel>
 			</h:form>

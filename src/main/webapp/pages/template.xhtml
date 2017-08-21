@@ -8,23 +8,23 @@
 </h:head>
 <h:body>
 	<div class="header">
-		<ui:insert name="navigation">
+		<div class="innerheader">
 			<h:form rendered="#{profileBean != null}">
 				<!-- space between forename and surname -->
 				<b:buttonGroup rendered="#{profileBean.fullname != ' '}">
 					<b:commandButton action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
 					<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
+					<ui:insert name="navigation" />
 				</b:buttonGroup>
 			</h:form>
-			<ui:fragment rendered="#{profileBean == null or profileBean.fullname == ' '}">
-				<h:outputText value="Buchungsportal des Onkel Werner Freizeiten e.V." class="pagetitle" />
-			</ui:fragment>
-		</ui:insert>
+			<h:form rendered="#{profileBean == null or profileBean.fullname == ' '}">
+				<b:buttonGroup>
+					<ui:insert name="navigation" />
+				</b:buttonGroup>
+			</h:form>
+		</div>
 	</div>
 	<div class="content">
-		<div class="lrpadding">
-			<ui:insert name="menu" />
-		</div>
 		<div class="lrpadding">
 			<b:messages />
 		</div>
