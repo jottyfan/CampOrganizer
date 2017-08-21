@@ -3,8 +3,8 @@ package de.jottyfan.camporganizer.jsf;
 import java.io.IOException;
 import java.util.Properties;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 /**
@@ -13,7 +13,7 @@ import javax.faces.context.FacesContext;
  *
  */
 @ManagedBean
-@ApplicationScoped
+@RequestScoped
 public class ApplicationBean {
 
 	/**
@@ -26,7 +26,8 @@ public class ApplicationBean {
 		final Properties prop = new Properties();
 		try {
 			prop.load(facesContext.getExternalContext().getResourceAsStream("/META-INF/MANIFEST.MF"));
-			return new StringBuilder("Version ").append(prop.getProperty("Implementation-Version")).toString();
+			String version = prop.getProperty("Implementation-Version");
+			return new StringBuilder("Version ").append(version == null ? prop.toString() : version).toString();
 		} catch (final IOException e) {
 			return e.getMessage();
 		}
