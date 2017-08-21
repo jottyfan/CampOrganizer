@@ -7,18 +7,37 @@
 	<h:outputStylesheet name="style.css" library="css" />
 </h:head>
 <h:body>
-	<ui:insert name="navigation">
-		<h:form rendered="#{profileBean != null}">
-			<!-- space between forename and surname -->
-			<b:buttonGroup rendered="#{profileBean.fullname != ' '}">
-				<b:commandButton action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
-				<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
-			</b:buttonGroup>
-		</h:form>
-	</ui:insert>
-	<ui:insert name="menu" />
-	<b:messages />
-	<ui:insert name="content" />
-	<ui:insert name="footer" />
+	<div class="header">
+		<ui:insert name="navigation">
+			<h:form rendered="#{profileBean != null}">
+				<!-- space between forename and surname -->
+				<b:buttonGroup rendered="#{profileBean.fullname != ' '}">
+					<b:commandButton action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
+					<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
+				</b:buttonGroup>
+			</h:form>
+			<ui:fragment rendered="#{profileBean == null or profileBean.fullname == ' '}">
+				<h:outputText value="Buchungsportal des Onkel Werner Freizeiten e.V." class="pagetitle" />
+			</ui:fragment>
+		</ui:insert>
+	</div>
+	<div class="content">
+		<div class="lrpadding">
+			<ui:insert name="menu" />
+		</div>
+		<div class="lrpadding">
+			<b:messages />
+		</div>
+		<div class="lrpadding">
+			<ui:insert name="content" />
+		</div>
+	</div>
+	<div class="footer">
+		<span style="left: 4px"> <ui:insert name="footer" />
+		</span>
+		<div style="position: absolute; right: 4px; display: inline">
+			<h:outputText value="#{applicationBean.getVersion(facesContext)}" />
+		</div>
+	</div>
 </h:body>
 </html>
