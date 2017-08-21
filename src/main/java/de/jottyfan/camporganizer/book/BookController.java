@@ -16,6 +16,7 @@ import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.Controller;
+import de.jottyfan.camporganizer.db.BookGateway;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.SalesGateway;
 
@@ -33,15 +34,13 @@ public class BookController extends Controller {
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
-	@ManagedProperty(value = "#{BookBean}")
+	@ManagedProperty(value = "#{bookBean}")
 	private BookBean bean;
-
-	private List<CampBean> camps;
 
 	public String toBook() {
 		try {
-			camps = new CampGateway(facesContext).getAllCamps(true);
-			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "not yet implemented", "Die Online-Anmeldung ist noch nicht fertig entwickelt. Bitte geben Sie den Inhalt der angegegebenen Felder vollständig bei einer Anmeldung per E-Mail an onkel-werner-freizeit@web.de oder per Post an unten stehende Adresse an."));
+			bean = bean == null ? new BookBean() : bean;
+			bean.setCamps(new CampGateway(facesContext).getAllCamps(true));
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
@@ -56,15 +55,14 @@ public class BookController extends Controller {
 	}
 
 	public String doBook() {
-		facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "not yet implemented",
-				"Die Anmeldung wurde noch nicht entwickelt."));
-		LOGGER.info("someone wanted to book a camp");
-		// TODO: create book table and add data to it
+		try {
+			new BookGateway(facesContext).insert(bean);
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "booking finished",
+					"Die Anmeldung wurde übernommen. Sobald sie von uns bestätigt wurde, ist Dein Platz auf der Freizeit gesichert."));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on booking", e.getMessage()));
+		}
 		return toBook();
-	}
-
-	public List<CampBean> getCamps() {
-		return camps;
 	}
 
 	public void setFacesContext(FacesContext facesContext) {

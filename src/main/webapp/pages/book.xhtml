@@ -39,7 +39,7 @@
 						<h:outputText value="E-Mail" />
 						<b:inputText value="#{bookBean.email}" placeholder="Bitte die E-Mail-Adresse angeben" />
 						<h:outputText value="Rolle" />
-						<b:selectOneMenu value="#{bookBean.role}">
+						<b:selectOneMenu value="#{bookBean.camprole}">
 							<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
 							<f:selectItem itemValue="girl" itemLabel="Mädchen" />
 							<f:selectItem itemValue="boy" itemLabel="Junge" />
@@ -49,10 +49,10 @@
 						</b:selectOneMenu>
 						<h:outputText value="Freizeit" />
 						<b:selectOneMenu value="#{bookBean.fkCamp}">
-							<f:selectItems value="#{bookController.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
+							<f:selectItems value="#{bookBean.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
 						</b:selectOneMenu>
 						<h:outputText value="" />
-						<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary" rendered="false" /><!-- not yet implemented -->
+						<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary"  />
 					</b:panelGrid>
 				</b:panel>
 			</h:form>

@@ -6,6 +6,7 @@ package de.jottyfan.camporganizer.db.jooq;
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
+import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
@@ -13,6 +14,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
@@ -47,6 +49,7 @@ public class Keys {
 
     public static final Identity<TCampRecord, Integer> IDENTITY_T_CAMP = Identities0.IDENTITY_T_CAMP;
     public static final Identity<TLocationRecord, Integer> IDENTITY_T_LOCATION = Identities0.IDENTITY_T_LOCATION;
+    public static final Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = Identities0.IDENTITY_T_PERSON;
     public static final Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = Identities0.IDENTITY_T_PROFILE;
     public static final Identity<TSalesRecord, Integer> IDENTITY_T_SALES = Identities0.IDENTITY_T_SALES;
 
@@ -56,6 +59,7 @@ public class Keys {
 
     public static final UniqueKey<TCampRecord> T_CAMP_PKEY = UniqueKeys0.T_CAMP_PKEY;
     public static final UniqueKey<TLocationRecord> T_LOCATION_PKEY = UniqueKeys0.T_LOCATION_PKEY;
+    public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = UniqueKeys0.T_PERSON_PKEY;
     public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = UniqueKeys0.T_PROFILE_PKEY;
     public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = UniqueKeys0.T_PROFILEROLE_FK_PROFILE_ROLE_KEY;
     public static final UniqueKey<TSalesRecord> T_SALES_PKEY = UniqueKeys0.T_SALES_PKEY;
@@ -67,6 +71,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final ForeignKey<TCampRecord, TLocationRecord> T_CAMP__T_CAMP_FK_LOCATION_FKEY = ForeignKeys0.T_CAMP__T_CAMP_FK_LOCATION_FKEY;
+    public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = ForeignKeys0.T_PERSON__T_PERSON_FK_CAMP_FKEY;
     public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = ForeignKeys0.T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY;
     public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = ForeignKeys0.T_SALES__T_SALES_FK_CAMP_FKEY;
 
@@ -77,6 +82,7 @@ public class Keys {
     private static class Identities0 extends AbstractKeys {
         public static Identity<TCampRecord, Integer> IDENTITY_T_CAMP = createIdentity(TCamp.T_CAMP, TCamp.T_CAMP.PK);
         public static Identity<TLocationRecord, Integer> IDENTITY_T_LOCATION = createIdentity(TLocation.T_LOCATION, TLocation.T_LOCATION.PK);
+        public static Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = createIdentity(TPerson.T_PERSON, TPerson.T_PERSON.PK);
         public static Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = createIdentity(TProfile.T_PROFILE, TProfile.T_PROFILE.PK);
         public static Identity<TSalesRecord, Integer> IDENTITY_T_SALES = createIdentity(TSales.T_SALES, TSales.T_SALES.PK);
     }
@@ -84,6 +90,7 @@ public class Keys {
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<TCampRecord> T_CAMP_PKEY = createUniqueKey(TCamp.T_CAMP, "t_camp_pkey", TCamp.T_CAMP.PK);
         public static final UniqueKey<TLocationRecord> T_LOCATION_PKEY = createUniqueKey(TLocation.T_LOCATION, "t_location_pkey", TLocation.T_LOCATION.PK);
+        public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = createUniqueKey(TPerson.T_PERSON, "t_person_pkey", TPerson.T_PERSON.PK);
         public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_pkey", TProfile.T_PROFILE.PK);
         public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = createUniqueKey(TProfilerole.T_PROFILEROLE, "t_profilerole_fk_profile_role_key", TProfilerole.T_PROFILEROLE.FK_PROFILE, TProfilerole.T_PROFILEROLE.ROLE);
         public static final UniqueKey<TSalesRecord> T_SALES_PKEY = createUniqueKey(TSales.T_SALES, "t_sales_pkey", TSales.T_SALES.PK);
@@ -93,6 +100,7 @@ public class Keys {
 
     private static class ForeignKeys0 extends AbstractKeys {
         public static final ForeignKey<TCampRecord, TLocationRecord> T_CAMP__T_CAMP_FK_LOCATION_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_LOCATION_PKEY, TCamp.T_CAMP, "t_camp__t_camp_fk_location_fkey", TCamp.T_CAMP.FK_LOCATION);
+        public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TPerson.T_PERSON, "t_person__t_person_fk_camp_fkey", TPerson.T_PERSON.FK_CAMP);
         public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PROFILE_PKEY, TProfilerole.T_PROFILEROLE, "t_profilerole__t_profilerole_fk_profile_fkey", TProfilerole.T_PROFILEROLE.FK_PROFILE);
         public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TSales.T_SALES, "t_sales__t_sales_fk_camp_fkey", TSales.T_SALES.FK_CAMP);
     }

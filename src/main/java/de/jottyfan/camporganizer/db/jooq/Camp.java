@@ -6,14 +6,20 @@ package de.jottyfan.camporganizer.db.jooq;
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
+import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
+import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
+import de.jottyfan.camporganizer.db.jooq.tables.VBudget;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.VCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.VProfile;
+import de.jottyfan.camporganizer.db.jooq.tables.VRegistration;
 import de.jottyfan.camporganizer.db.jooq.tables.VRole;
+import de.jottyfan.camporganizer.db.jooq.tables.VSales;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +28,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Catalog;
-import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
 
@@ -40,7 +45,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Camp extends SchemaImpl {
 
-    private static final long serialVersionUID = -441578588;
+    private static final long serialVersionUID = 1671724882;
 
     /**
      * The reference instance of <code>camp</code>
@@ -58,6 +63,11 @@ public class Camp extends SchemaImpl {
     public final TLocation T_LOCATION = de.jottyfan.camporganizer.db.jooq.tables.TLocation.T_LOCATION;
 
     /**
+     * The table <code>camp.t_person</code>.
+     */
+    public final TPerson T_PERSON = de.jottyfan.camporganizer.db.jooq.tables.TPerson.T_PERSON;
+
+    /**
      * The table <code>camp.t_profile</code>.
      */
     public final TProfile T_PROFILE = de.jottyfan.camporganizer.db.jooq.tables.TProfile.T_PROFILE;
@@ -66,6 +76,11 @@ public class Camp extends SchemaImpl {
      * The table <code>camp.t_profilerole</code>.
      */
     public final TProfilerole T_PROFILEROLE = de.jottyfan.camporganizer.db.jooq.tables.TProfilerole.T_PROFILEROLE;
+
+    /**
+     * The table <code>camp.t_rss</code>.
+     */
+    public final TRss T_RSS = de.jottyfan.camporganizer.db.jooq.tables.TRss.T_RSS;
 
     /**
      * The table <code>camp.t_sales</code>.
@@ -83,9 +98,19 @@ public class Camp extends SchemaImpl {
     public final TSalescontenttype T_SALESCONTENTTYPE = de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype.T_SALESCONTENTTYPE;
 
     /**
+     * The table <code>camp.v_budget</code>.
+     */
+    public final VBudget V_BUDGET = de.jottyfan.camporganizer.db.jooq.tables.VBudget.V_BUDGET;
+
+    /**
      * The table <code>camp.v_camp</code>.
      */
     public final VCamp V_CAMP = de.jottyfan.camporganizer.db.jooq.tables.VCamp.V_CAMP;
+
+    /**
+     * The table <code>camp.v_camprole</code>.
+     */
+    public final VCamprole V_CAMPROLE = de.jottyfan.camporganizer.db.jooq.tables.VCamprole.V_CAMPROLE;
 
     /**
      * The table <code>camp.v_profile</code>.
@@ -93,9 +118,19 @@ public class Camp extends SchemaImpl {
     public final VProfile V_PROFILE = de.jottyfan.camporganizer.db.jooq.tables.VProfile.V_PROFILE;
 
     /**
+     * The table <code>camp.v_registration</code>.
+     */
+    public final VRegistration V_REGISTRATION = de.jottyfan.camporganizer.db.jooq.tables.VRegistration.V_REGISTRATION;
+
+    /**
      * The table <code>camp.v_role</code>.
      */
     public final VRole V_ROLE = de.jottyfan.camporganizer.db.jooq.tables.VRole.V_ROLE;
+
+    /**
+     * The table <code>camp.v_sales</code>.
+     */
+    public final VSales V_SALES = de.jottyfan.camporganizer.db.jooq.tables.VSales.V_SALES;
 
     /**
      * No further instances allowed
@@ -114,21 +149,6 @@ public class Camp extends SchemaImpl {
     }
 
     @Override
-    public final List<Sequence<?>> getSequences() {
-        List result = new ArrayList();
-        result.addAll(getSequences0());
-        return result;
-    }
-
-    private final List<Sequence<?>> getSequences0() {
-        return Arrays.<Sequence<?>>asList(
-            Sequences.T_CAMP_PK_SEQ,
-            Sequences.T_LOCATION_PK_SEQ,
-            Sequences.T_PROFILE_PK_SEQ,
-            Sequences.T_SALES_PK_SEQ);
-    }
-
-    @Override
     public final List<Table<?>> getTables() {
         List result = new ArrayList();
         result.addAll(getTables0());
@@ -139,13 +159,19 @@ public class Camp extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             TCamp.T_CAMP,
             TLocation.T_LOCATION,
+            TPerson.T_PERSON,
             TProfile.T_PROFILE,
             TProfilerole.T_PROFILEROLE,
+            TRss.T_RSS,
             TSales.T_SALES,
             TSalescontent.T_SALESCONTENT,
             TSalescontenttype.T_SALESCONTENTTYPE,
+            VBudget.V_BUDGET,
             VCamp.V_CAMP,
+            VCamprole.V_CAMPROLE,
             VProfile.V_PROFILE,
-            VRole.V_ROLE);
+            VRegistration.V_REGISTRATION,
+            VRole.V_ROLE,
+            VSales.V_SALES);
     }
 }

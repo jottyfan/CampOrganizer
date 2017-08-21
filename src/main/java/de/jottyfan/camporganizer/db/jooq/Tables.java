@@ -6,14 +6,20 @@ package de.jottyfan.camporganizer.db.jooq;
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
+import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
+import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
+import de.jottyfan.camporganizer.db.jooq.tables.VBudget;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.VCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.VProfile;
+import de.jottyfan.camporganizer.db.jooq.tables.VRegistration;
 import de.jottyfan.camporganizer.db.jooq.tables.VRole;
+import de.jottyfan.camporganizer.db.jooq.tables.VSales;
 
 import javax.annotation.Generated;
 
@@ -42,6 +48,11 @@ public class Tables {
     public static final TLocation T_LOCATION = de.jottyfan.camporganizer.db.jooq.tables.TLocation.T_LOCATION;
 
     /**
+     * The table <code>camp.t_person</code>.
+     */
+    public static final TPerson T_PERSON = de.jottyfan.camporganizer.db.jooq.tables.TPerson.T_PERSON;
+
+    /**
      * The table <code>camp.t_profile</code>.
      */
     public static final TProfile T_PROFILE = de.jottyfan.camporganizer.db.jooq.tables.TProfile.T_PROFILE;
@@ -50,6 +61,11 @@ public class Tables {
      * The table <code>camp.t_profilerole</code>.
      */
     public static final TProfilerole T_PROFILEROLE = de.jottyfan.camporganizer.db.jooq.tables.TProfilerole.T_PROFILEROLE;
+
+    /**
+     * The table <code>camp.t_rss</code>.
+     */
+    public static final TRss T_RSS = de.jottyfan.camporganizer.db.jooq.tables.TRss.T_RSS;
 
     /**
      * The table <code>camp.t_sales</code>.
@@ -67,9 +83,19 @@ public class Tables {
     public static final TSalescontenttype T_SALESCONTENTTYPE = de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype.T_SALESCONTENTTYPE;
 
     /**
+     * The table <code>camp.v_budget</code>.
+     */
+    public static final VBudget V_BUDGET = de.jottyfan.camporganizer.db.jooq.tables.VBudget.V_BUDGET;
+
+    /**
      * The table <code>camp.v_camp</code>.
      */
     public static final VCamp V_CAMP = de.jottyfan.camporganizer.db.jooq.tables.VCamp.V_CAMP;
+
+    /**
+     * The table <code>camp.v_camprole</code>.
+     */
+    public static final VCamprole V_CAMPROLE = de.jottyfan.camporganizer.db.jooq.tables.VCamprole.V_CAMPROLE;
 
     /**
      * The table <code>camp.v_profile</code>.
@@ -77,7 +103,17 @@ public class Tables {
     public static final VProfile V_PROFILE = de.jottyfan.camporganizer.db.jooq.tables.VProfile.V_PROFILE;
 
     /**
+     * The table <code>camp.v_registration</code>.
+     */
+    public static final VRegistration V_REGISTRATION = de.jottyfan.camporganizer.db.jooq.tables.VRegistration.V_REGISTRATION;
+
+    /**
      * The table <code>camp.v_role</code>.
      */
     public static final VRole V_ROLE = de.jottyfan.camporganizer.db.jooq.tables.VRole.V_ROLE;
+
+    /**
+     * The table <code>camp.v_sales</code>.
+     */
+    public static final VSales V_SALES = de.jottyfan.camporganizer.db.jooq.tables.VSales.V_SALES;
 }

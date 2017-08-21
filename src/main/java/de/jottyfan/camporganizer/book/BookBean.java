@@ -1,9 +1,12 @@
 package de.jottyfan.camporganizer.book;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+
+import de.jottyfan.camporganizer.CampBean;
 
 /**
  * 
@@ -11,7 +14,7 @@ import javax.faces.bean.ViewScoped;
  *
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class BookBean {
 	private String forename;
 	private String surname;
@@ -21,8 +24,10 @@ public class BookBean {
 	private String phone;
 	private Date birthdate;
 	private String email;
-	private String role;
+	private String camprole;
 	private Integer fkCamp;
+
+	private List<CampBean> camps;
 
 	public String getForename() {
 		return forename;
@@ -88,12 +93,12 @@ public class BookBean {
 		this.email = email;
 	}
 
-	public String getRole() {
-		return role;
+	public String getCamprole() {
+		return camprole;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setCamprole(String camprole) {
+		this.camprole = camprole;
 	}
 
 	public Integer getFkCamp() {
@@ -102,5 +107,13 @@ public class BookBean {
 
 	public void setFkCamp(Integer fkCamp) {
 		this.fkCamp = fkCamp;
+	}
+
+	public List<CampBean> getCamps() {
+		return camps;
+	}
+
+	public void setCamps(List<CampBean> camps) {
+		this.camps = camps;
 	}
 }

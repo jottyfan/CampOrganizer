@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TSales extends TableImpl<TSalesRecord> {
 
-    private static final long serialVersionUID = -835050880;
+    private static final long serialVersionUID = 238881426;
 
     /**
      * The reference instance of <code>camp.t_sales</code>
@@ -79,6 +79,11 @@ public class TSales extends TableImpl<TSalesRecord> {
     public final TableField<TSalesRecord, BigDecimal> CASH = createField("cash", org.jooq.impl.SQLDataType.NUMERIC.nullable(false), this, "");
 
     /**
+     * The column <code>camp.t_sales.incredients</code>.
+     */
+    public final TableField<TSalesRecord, String> INCREDIENTS = createField("incredients", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
      * The column <code>camp.t_sales.buydate</code>.
      */
     public final TableField<TSalesRecord, Timestamp> BUYDATE = createField("buydate", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
@@ -97,11 +102,6 @@ public class TSales extends TableImpl<TSalesRecord> {
      * The column <code>camp.t_sales.recipenote</code>.
      */
     public final TableField<TSalesRecord, String> RECIPENOTE = createField("recipenote", org.jooq.impl.SQLDataType.CLOB, this, "");
-
-    /**
-     * The column <code>camp.t_sales.incredients</code>.
-     */
-    public final TableField<TSalesRecord, String> INCREDIENTS = createField("incredients", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>camp.t_sales</code> table reference

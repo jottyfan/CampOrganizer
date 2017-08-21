@@ -131,3 +131,28 @@ grant select on v_budget to camp;
 create view v_role as select unnest(enum_range(NULL::enum_role));
 
 grant select on v_role to camp;
+
+/* from 20170821 on */
+
+create table t_rss (msg text, regdate timestamp default now());
+
+grant select,insert,update,delete on t_rss to camp;
+
+create type enum_camprole as enum ('boy', 'girl', 'helperboy', 'helpergirl', 'kitchen');
+
+create view v_camprole as select unnest(enum_range(NULL::enum_camprole)) as name;
+
+grant select on v_camprole to camp;
+
+create table t_person (pk serial primary key, forename text, surname text, street text, zip text, city text, phone text, 
+                       birthdate date, camprole enum_camprole, email text, fk_camp integer, 
+                       foreign key (fk_camp) references t_camp(pk));
+                       
+grant select,insert,update,delete on t_person to camp;
+
+create view v_registration as
+select t_person.pk, forename, surname, street, zip, city, phone, birthdate, camprole, email, name || extract(isoyear from arrive) as campname
+from t_person
+left join t_camp on t_camp.pk = fk_camp;
+
+grant select on v_registration to camp;

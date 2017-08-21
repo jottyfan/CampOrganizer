@@ -4,7 +4,7 @@
 	<groupId>de.jottyfan</groupId>
 	<artifactId>camporganizer</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>CampOrganizer</name>
 	<description>organize bible camps (booking, registering)</description>
 	<dependencies>
@@ -124,7 +124,7 @@
 						</goals>
 						<configuration>
 							<skip>
-								true
+								false
 							</skip>
 						</configuration>
 					</execution>
@@ -139,7 +139,7 @@
 				<configuration>
 					<jdbc>
 						<driver>org.postgresql.Driver</driver>
-						<url>jdbc:postgresql://127.0.0.1/camp</url>
+						<url>jdbc:postgresql://127.0.0.1/ow</url>
 						<user>jooq</user>
 					</jdbc>
 					<generator>
