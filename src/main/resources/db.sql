@@ -156,3 +156,7 @@ from t_person
 left join t_camp on t_camp.pk = fk_camp;
 
 grant select on v_registration to camp;
+
+/* from 20170822 on */
+grant usage on sequence t_person_pk_seq to camp;
+

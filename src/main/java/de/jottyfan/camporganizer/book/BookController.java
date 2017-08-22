@@ -39,7 +39,6 @@ public class BookController extends Controller {
 
 	public String toBook() {
 		try {
-			bean = bean == null ? new BookBean() : bean;
 			bean.setCamps(new CampGateway(facesContext).getAllCamps(true));
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
@@ -49,7 +48,6 @@ public class BookController extends Controller {
 	}
 
 	public String toBook(Integer campPk) {
-		bean = new BookBean();
 		bean.setFkCamp(campPk);
 		return toBook();
 	}
