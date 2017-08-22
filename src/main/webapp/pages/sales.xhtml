@@ -5,11 +5,8 @@
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
-		<ui:define name="navigation">
-			<b:commandButton action="#{salesController.toProfile}" value="Startseite" />
-		</ui:define>
 		<ui:define name="content">
-			<b:panel rendered="#{profileBean.hasRole('businessman')}">
+			<b:panel rendered="#{profileBean.hasRole('businessman')}" title="Abrechnung" collapsible="false">
 				<b:tabView activeIndex="#{salesModel.activeIndex}">
 					<b:tab title="Rechung erfassen" styleClass="dist16">
 						<b:form inline="true" enctype="multipart/form-data">

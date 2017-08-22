@@ -14,6 +14,11 @@
 				<b:buttonGroup rendered="#{profileBean.fullname != ' '}">
 					<b:commandButton action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
 					<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
+				</b:buttonGroup>
+				<b:buttonGroup rendered="#{profileBean.fullname != ' '}" style="margin-left: 8px">
+					<b:commandButton action="#{salesController.toSales}" value="Abrechnung" rendered="#{profileBean.hasRole('businessman')}" />
+					<b:commandButton action="#{adminController.toAdministrate}" value="Administration"
+						rendered="#{profileBean.hasRole('admin')}" />
 					<ui:insert name="navigation" />
 				</b:buttonGroup>
 			</h:form>

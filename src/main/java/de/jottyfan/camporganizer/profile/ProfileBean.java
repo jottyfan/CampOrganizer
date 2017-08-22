@@ -15,6 +15,8 @@ import org.jooq.exception.DataAccessException;
 @ManagedBean
 @SessionScoped
 public class ProfileBean {
+	
+	private Integer pk;
 	private String forename;
 	private String surname;
 	private String username;
@@ -116,5 +118,13 @@ public class ProfileBean {
 
 	public void setRoles(String roles) {
 		this.roles = roles;
+	}
+
+	public Integer getPk() {
+		return pk;
+	}
+
+	public void setPk(Integer pk) {
+		this.pk = pk;
 	}
 }

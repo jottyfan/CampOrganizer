@@ -3,20 +3,33 @@ package de.jottyfan.camporganizer.db;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILEROLE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_PROFILE;
+import static de.jottyfan.camporganizer.db.jooq.Tables.V_ROLE;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
+import org.jooq.InsertValuesStep2;
 import org.jooq.InsertValuesStep4;
-import org.jooq.Record3;
+import org.jooq.Record;
+import org.jooq.Record1;
 import org.jooq.Record4;
+import org.jooq.Record5;
 import org.jooq.SelectConditionStep;
+import org.jooq.SelectJoinStep;
+import org.jooq.SelectOnConditionStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
+import org.jooq.impl.DSL;
 
+import de.jottyfan.camporganizer.admin.ProfileRoleBean;
+import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumRole;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
@@ -136,5 +149,122 @@ public class ProfileGateway extends JooqGateway {
 		// @formatter:on
 		LOGGER.debug("{}", sql2.toString());
 		sql2.execute();
+	}
+
+	/**
+	 * get all from profile role table
+	 * 
+	 * @return list of found prifile roles
+	 */
+	public List<ProfileRoleBean> getAllProfileRoles() {
+		SelectOnConditionStep<Record5<EnumRole, String, String, String, Integer>> sql = getJooq()
+		// @formatter:off
+			.select(T_PROFILEROLE.ROLE,
+							T_PROFILE.FORENAME,
+							T_PROFILE.SURNAME,
+							T_PROFILE.USERNAME,
+							T_PROFILE.PK)
+			.from(T_PROFILEROLE)
+			.leftJoin(T_PROFILE).on(T_PROFILE.PK.eq(T_PROFILEROLE.FK_PROFILE));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<ProfileRoleBean> list = new ArrayList<>();
+		for (Record5<EnumRole, String, String, String, Integer> r : sql.fetch()) {
+			ProfileBean user = new ProfileBean();
+			user.setForename(r.get(T_PROFILE.FORENAME));
+			user.setSurname(r.get(T_PROFILE.SURNAME));
+			user.setUsername(r.get(T_PROFILE.USERNAME));
+			user.setPk(r.get(T_PROFILE.PK));
+			ProfileRoleBean bean = new ProfileRoleBean();
+			bean.setRole(r.get(T_PROFILEROLE.ROLE).getLiteral());
+			bean.setUser(user);
+			list.add(bean);
+		}
+		return list;
+	}
+
+	/**
+	 * get all roles from db
+	 * 
+	 * @return list of valid roles
+	 */
+	public List<String> getAllRoles() {
+		SelectJoinStep<Record1<EnumRole>> sql = getJooq()
+		// @formatter:off
+			.select(V_ROLE.UNNEST)
+			.from(V_ROLE);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<String> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			list.add(r.get(V_ROLE.UNNEST).getLiteral());
+		}
+		return list;
+	}
+
+	/**
+	 * get all users from db (except password)
+	 * 
+	 * @return list of valid users
+	 */
+	public List<ProfileBean> getAllUsers() {
+		SelectJoinStep<Record4<String, String, String, Integer>> sql = getJooq()
+		// @formatter:off
+			.select(T_PROFILE.FORENAME,
+					    T_PROFILE.SURNAME,
+					    T_PROFILE.USERNAME,
+					    T_PROFILE.PK)
+			.from(T_PROFILE);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<ProfileBean> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			ProfileBean bean = new ProfileBean();
+			bean.setForename(r.get(T_PROFILE.FORENAME));
+			bean.setSurname(r.get(T_PROFILE.SURNAME));
+			bean.setUsername(r.get(T_PROFILE.USERNAME));
+			bean.setPk(r.get(T_PROFILE.PK));
+			list.add(bean);
+		}
+		return list;
+	}
+
+	/**
+	 * delete entry from profile role table
+	 * 
+	 * @param bean
+	 *          containing user's pk and role
+	 * @return amount of affected lines
+	 * @throws DataAccessException
+	 */
+	public Integer deleteProfileRole(ProfileRoleBean bean) throws DataAccessException {
+		DeleteConditionStep<TProfileroleRecord> sql = getJooq()
+		// @formatter:off
+			.deleteFrom(T_PROFILEROLE)
+			.where(T_PROFILEROLE.ROLE.eq(new EnumConverter().getEnumRole(bean.getRole()))
+			.and(T_PROFILEROLE.FK_PROFILE.eq(bean.getUser().getPk())));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		return sql.execute();
+	}
+
+	/**
+	 * add entry into profile role table
+	 * 
+	 * @param bean
+	 *          containig user's pk and role
+	 * @return amount of affected lines
+	 * @throws DataAccessException
+	 */
+	public Integer insertProfileRole(ProfileRoleBean bean) throws DataAccessException {
+		InsertValuesStep2<TProfileroleRecord, EnumRole, Integer> sql = getJooq()
+		// @formatter:off
+			.insertInto(T_PROFILEROLE,
+					        T_PROFILEROLE.ROLE,
+					        T_PROFILEROLE.FK_PROFILE)
+			.values(new EnumConverter().getEnumRole(bean.getRole()), bean.getUser().getPk());
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		return sql.execute();
 	}
 }

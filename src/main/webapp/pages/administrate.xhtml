@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+<h:body>
+	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="content">
+			<b:panel rendered="#{profileBean.hasRole('admin')}" title="Administration" collapsible="false">
+				<b:tabView activeIndex="#{adminModel.activeIndex}">
+					<b:tab title="Rollen verwalten" styleClass="dist16">
+						<b:form>
+							<b:dataTable value="#{adminModel.profileRoles}" var="l" lang="de">
+								<b:dataTableColumn label="Nutzer">
+									<h:outputText value="#{l.user.fullname}" />
+									<f:facet name="footer">
+										<b:selectOneMenu value="#{adminModel.profileRole.user}">
+											<f:selectItems value="#{adminModel.users}" var="u" itemLabel="#{u.fullname}" itemValue="#{u}" />
+										</b:selectOneMenu>
+									</f:facet>
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Rolle">
+									<h:outputText value="#{l.role}" />
+									<f:facet name="footer">
+										<b:selectOneMenu value="#{adminModel.profileRole.role}">
+											<f:selectItems value="#{adminModel.roles}" var="r" itemValue="#{r}" itemLabel="#{r}" />
+										</b:selectOneMenu>
+									</f:facet>
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Aktionen">
+									<b:commandButton action="#{adminController.doDelete(l)}" value="" iconAwesome="trash-o" look="danger" />
+									<f:facet name="footer">
+										<b:commandButton action="#{adminController.doInsert}" value="vergeben" look="success" />
+									</f:facet>
+								</b:dataTableColumn>
+							</b:dataTable>
+						</b:form>
+					</b:tab>
+					<b:tab title="Passwörter" styleClass="dist16">
+						<b:form>
+							<h:outputText value="TODO: reset passwords" />
+						</b:form>
+					</b:tab>
+				</b:tabView>
+			</b:panel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
