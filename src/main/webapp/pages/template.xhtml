@@ -16,9 +16,12 @@
 					<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
 				</b:buttonGroup>
 				<b:buttonGroup rendered="#{profileBean.fullname != ' '}" style="margin-left: 8px">
-					<b:commandButton action="#{salesController.toSales}" value="Abrechnung" rendered="#{profileBean.hasRole('businessman')}" />
-					<b:commandButton action="#{adminController.toAdministrate}" value="Administration"
+					<b:commandButton action="#{salesController.toSales}" value="Abrechnung" iconAwesome="money"
+						rendered="#{profileBean.hasRole('businessman')}" />
+					<b:commandButton action="#{adminController.toAdministrate}" value="Administration" iconAwesome="graduation-cap"
 						rendered="#{profileBean.hasRole('admin')}" />
+					<b:commandButton action="#{rssController.toRss}" value="RSS-Feed für Anmeldungen" iconAwesome="rss"
+						rendered="#{profileBean.hasRole('registrator')}" />
 					<ui:insert name="navigation" />
 				</b:buttonGroup>
 			</h:form>
