@@ -22,6 +22,8 @@
 						rendered="#{profileBean.hasRole('admin')}" />
 					<b:commandButton action="#{rssController.toRss}" value="RSS-Feed für Anmeldungen" iconAwesome="rss"
 						rendered="#{profileBean.hasRole('registrator')}" />
+					<b:commandButton action="#{registratorController.toRegistrator}" value="Bestätigung" iconAwesome="user-o"
+						rendered="#{profileBean.hasRole('registrator')}" />
 					<ui:insert name="navigation" />
 				</b:buttonGroup>
 			</h:form>

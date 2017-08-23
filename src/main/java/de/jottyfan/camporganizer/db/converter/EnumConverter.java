@@ -49,4 +49,27 @@ public class EnumConverter {
 		throw new DataAccessException(
 				"enum " + camprole + " not found. Maybe the jooq generated classes are not up to date?");
 	}
+
+	/**
+	 * get string of camprole
+	 * 
+	 * @param camprole
+	 *          enum that contains the camprole
+	 * @return german translation of camprole
+	 */
+	public String getStringCamprole(EnumCamprole camprole) {
+		if (EnumCamprole.boy.equals(camprole)) {
+			return "Junge";
+		} else if (EnumCamprole.girl.equals(camprole)) {
+			return "Mädchen";
+		} else if (EnumCamprole.helperboy.equals(camprole)) {
+			return "Mitarbeiter";
+		} else if (EnumCamprole.helpergirl.equals(camprole)) {
+			return "Mitarbeiterin";
+		} else if (EnumCamprole.kitchen.equals(camprole)) {
+			return "Küche";
+		} else {
+			return null;
+		}
+	}
 }

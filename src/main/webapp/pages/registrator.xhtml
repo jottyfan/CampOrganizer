@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+<h:body>
+	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="content">
+			<b:panel rendered="#{profileBean.hasRole('registrator')}" title="Bestätigung" collapsible="false">
+				<h:form>
+					<b:dataTable value="#{registratorModel.list}" var="l" lang="de">
+						<b:dataTableColumn label="Vorname">
+							<h:outputText value="#{l.forename}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Nachname">
+							<h:outputText value="#{l.surname}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Adresse">
+							<h:outputText value="#{l.street}, #{l.zip} #{l.city}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Kontakt">
+							<h:outputText value="#{l.phone}" />
+							<a href="mailto:#{l.email}"><h:outputText value="#{l.email}" /></a>
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Geburtstag">
+							<h:outputText value="#{l.birthdate}">
+								<f:convertDateTime pattern="dd.MM.yyyy" />
+							</h:outputText>
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Rolle">
+							<h:outputText value="#{l.camproleAsString}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Freizeit">
+							<h:outputText value="#{l.campname}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Bemerkungen">
+							<h:outputText value="#{l.note}" />
+						</b:dataTableColumn>
+					</b:dataTable>
+				</h:form>
+			</b:panel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

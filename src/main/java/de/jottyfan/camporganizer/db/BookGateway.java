@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.InsertValuesStep1;
+import org.jooq.InsertValuesStep10;
 import org.jooq.InsertValuesStep9;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
@@ -43,20 +44,21 @@ public class BookGateway extends JooqGateway {
 	public void insert(BookBean bean) throws DataAccessException {
 		getJooq().transaction(t -> {
 			Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
-			InsertValuesStep9<TPersonRecord, String, String, String, String, String, Date, EnumCamprole, String, Integer> sql = DSL
+			InsertValuesStep10<TPersonRecord, String, String, String, String, String, String, Date, EnumCamprole, String, Integer> sql = DSL
 					.using(t)
-			// @formatter:off
+					// @formatter:off
 			  .insertInto(T_PERSON,
 			  		        T_PERSON.FORENAME,
 			  		        T_PERSON.SURNAME,
 			  		        T_PERSON.STREET,
 			  		        T_PERSON.ZIP,
 			  		        T_PERSON.CITY,
+			  		        T_PERSON.PHONE,
 			  		        T_PERSON.BIRTHDATE,
 			  		        T_PERSON.CAMPROLE,
 			  		        T_PERSON.EMAIL,
 			  		        T_PERSON.FK_CAMP)
-			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp());
+			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(),bean.getPhone(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp());
 			// @formatter:on
 			LOGGER.debug("{}", sql.toString());
 			sql.execute();
