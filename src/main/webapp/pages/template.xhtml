@@ -22,8 +22,6 @@
 						rendered="#{profileBean.hasRole('businessman')}" />
 					<b:commandButton action="#{adminController.toAdministrate}" value="Administration" iconAwesome="graduation-cap"
 						rendered="#{profileBean.hasRole('admin')}" />
-					<b:commandButton action="#{rssController.toRss}" value="RSS-Feed für Anmeldungen" iconAwesome="rss"
-						rendered="#{profileBean.hasRole('registrator')}" />
 					<b:commandButton action="#{registratorController.toRegistrator}" value="Bestätigung" iconAwesome="user-o"
 						rendered="#{profileBean.hasRole('registrator')}" />
 					<ui:insert name="navigation" />

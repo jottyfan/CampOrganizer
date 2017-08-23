@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertResultStep;
+import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep2;
 import org.jooq.InsertValuesStep4;
 import org.jooq.Record;
@@ -34,6 +35,7 @@ import de.jottyfan.camporganizer.db.jooq.enums.EnumRole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
@@ -142,6 +144,14 @@ public class ProfileGateway extends JooqGateway {
 				LOGGER.debug("{}", sql2.toString());
 				sql2.execute();
 			}
+			InsertValuesStep1<TRssRecord, String> sql3 = DSL.using(t)
+			// @formatter:off
+				.insertInto(T_RSS,
+						        T_RSS.MSG)
+				.values(new StringBuilder(bean.getFullname()).append(" hat sich als Nutzer im camporganizer registriert.").toString());
+			// @formatter:on
+			LOGGER.debug("{}", sql3.toString());
+			sql3.execute();
 		});
 		return lrw.getNumber();
 	}
