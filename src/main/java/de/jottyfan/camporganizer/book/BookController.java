@@ -18,7 +18,9 @@ import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.BookGateway;
 import de.jottyfan.camporganizer.db.CampGateway;
+import de.jottyfan.camporganizer.db.ProfileGateway;
 import de.jottyfan.camporganizer.db.SalesGateway;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
@@ -37,6 +39,9 @@ public class BookController extends Controller {
 	@ManagedProperty(value = "#{bookBean}")
 	private BookBean bean;
 
+	@ManagedProperty(value = "#{profileBean}")
+	private ProfileBean profileBean;
+
 	public String toBook() {
 		try {
 			bean.setCamps(new CampGateway(facesContext).getAllCamps(true));
@@ -54,12 +59,28 @@ public class BookController extends Controller {
 
 	public String doBook() {
 		try {
+			if (profileBean.getPassword() != null) {
+				profileBean.setForename(bean.getForename());
+				profileBean.setSurname(bean.getSurname());
+				if (new ProfileGateway(facesContext).checkUsernameExists(profileBean)) {
+					throw new DataAccessException("Der Name ist leider schon vergeben, bitte wähle einen anderen.");
+				} else if (profileBean.getPassword().equals(profileBean.getPasswordAgain())) {
+					Integer pk = new ProfileGateway(facesContext).register(profileBean, true);
+					bean.setFkProfile(pk);
+				} else {
+					throw new DataAccessException("Die eingegebenen Passwörter sind nicht gleich.");
+				}
+			}
 			new BookGateway(facesContext).insert(bean);
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "booking finished",
 					"Die Anmeldung wurde übernommen. Sobald sie von uns bestätigt wurde, ist Dein Platz auf der Freizeit gesichert."));
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on booking", e.getMessage()));
 		}
+		profileBean.setForename(null);
+		profileBean.setSurname(null);
+		profileBean.setPk(null);
+		profileBean.setUsername(null);
 		return toBook();
 	}
 
@@ -73,5 +94,9 @@ public class BookController extends Controller {
 
 	public void setBean(BookBean bean) {
 		this.bean = bean;
+	}
+
+	public void setProfileBean(ProfileBean profileBean) {
+		this.profileBean = profileBean;
 	}
 }

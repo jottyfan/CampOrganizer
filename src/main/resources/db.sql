@@ -10,7 +10,8 @@ create table t_profile (pk serial primary key,
                         surname text, 
                         username text not null, 
                         password text not null,
-                        duedate timestamp default now() + interval '1 year');
+                        duedate timestamp default now() + interval '1 year',
+                        unique(username));
 
 grant select,insert,update,delete on t_profile to camp;                        
 grant usage on t_profile_pk_seq to camp;
@@ -132,8 +133,6 @@ create view v_role as select unnest(enum_range(NULL::enum_role));
 
 grant select on v_role to camp;
 
-/* from 20170821 on */
-
 create table t_rss (msg text, regdate timestamp default now());
 
 grant select,insert,update,delete on t_rss to camp;
@@ -145,8 +144,9 @@ create view v_camprole as select unnest(enum_range(NULL::enum_camprole)) as name
 grant select on v_camprole to camp;
 
 create table t_person (pk serial primary key, forename text, surname text, street text, zip text, city text, phone text, 
-                       birthdate date, camprole enum_camprole, email text, fk_camp integer, 
-                       foreign key (fk_camp) references t_camp(pk));
+                       birthdate date, camprole enum_camprole, email text, fk_camp integer, fk_profile integer,
+                       foreign key (fk_camp) references t_camp(pk),
+                       foreign key (fk_profile) references t_profile(pk));
                        
 grant select,insert,update,delete on t_person to camp;
 
@@ -157,6 +157,5 @@ left join t_camp on t_camp.pk = fk_camp;
 
 grant select on v_registration to camp;
 
-/* from 20170822 on */
 grant usage on sequence t_person_pk_seq to camp;
 

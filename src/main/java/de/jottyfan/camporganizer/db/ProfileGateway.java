@@ -1,6 +1,6 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILE;
+import static de.jottyfan.camporganizer.db.jooq.Tables.*;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILEROLE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_PROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_ROLE;
@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
+import org.jooq.InsertResultStep;
 import org.jooq.InsertValuesStep2;
 import org.jooq.InsertValuesStep4;
 import org.jooq.Record;
@@ -26,9 +27,12 @@ import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
+import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.admin.ProfileRoleBean;
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumRole;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
@@ -54,9 +58,10 @@ public class ProfileGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public ProfileBean getProfile(ProfileBean requested) throws DataAccessException {
-		SelectConditionStep<Record4<String, String, String, EnumRole[]>> sql = getJooq()
+		SelectConditionStep<Record5<Integer, String, String, String, EnumRole[]>> sql = getJooq()
 		// @formatter:off
-			.select(V_PROFILE.FORENAME,
+			.select(V_PROFILE.PK,
+						  V_PROFILE.FORENAME,
 					    V_PROFILE.SURNAME,
 					    V_PROFILE.PASSWORD,
 					    V_PROFILE.ROLES)
@@ -64,10 +69,11 @@ public class ProfileGateway extends JooqGateway {
 			.where(V_PROFILE.USERNAME.eq(requested.getUsername()));
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
-		Record4<String, String, String, EnumRole[]> r = sql.fetchOne();
+		Record5<Integer, String, String, String, EnumRole[]> r = sql.fetchOne();
 		if (r == null) {
 			throw new DataAccessException("login invalid, no such user " + requested.getUsername());
 		}
+		requested.setPk(r.get(V_PROFILE.PK));
 		requested.setEncryptedPassword(r.get(V_PROFILE.PASSWORD));
 		requested.setForename(r.get(V_PROFILE.FORENAME));
 		requested.setSurname(r.get(V_PROFILE.SURNAME));
@@ -105,20 +111,39 @@ public class ProfileGateway extends JooqGateway {
 	 * 
 	 * @param bean
 	 *          containing new password, username, forename and surname
+	 * @param addSubscriber
+	 *          if true, add an entry of users new pk and role subscriber to t_profilerole
+	 * @return pk of new profile
 	 * @throws DataAccessException
 	 */
-	public void register(ProfileBean bean) throws DataAccessException {
-		InsertValuesStep4<?, String, String, String, String> sql = getJooq()
-		// @formatter:off
-			.insertInto(T_PROFILE,
-					        T_PROFILE.FORENAME,
-					        T_PROFILE.SURNAME,
-					        T_PROFILE.USERNAME,
-					        T_PROFILE.PASSWORD)
-			.values(bean.getForename(), bean.getSurname(), bean.getUsername(), bean.getEncryptedPassword());
-	  // @formatter:on
-		LOGGER.debug("{}", sql.toString());
-		sql.execute();
+	public Integer register(ProfileBean bean, boolean addSubscriber) throws DataAccessException {
+		LambdaResultWrapper lrw = new LambdaResultWrapper();
+		getJooq().transaction(t -> {
+			InsertResultStep<TProfileRecord> sql = DSL.using(t)
+			// @formatter:off
+				.insertInto(T_PROFILE,
+						        T_PROFILE.FORENAME,
+						        T_PROFILE.SURNAME,
+						        T_PROFILE.USERNAME,
+						        T_PROFILE.PASSWORD)
+				.values(bean.getForename(), bean.getSurname(), bean.getUsername(), bean.getEncryptedPassword())
+				.returning(T_PROFILE.PK);
+		  // @formatter:on
+			LOGGER.debug("{}", sql.toString());
+			lrw.setNumber(sql.fetchOne().get(T_PROFILE.PK));
+			if (addSubscriber) {
+				InsertValuesStep2<TProfileroleRecord, Integer, EnumRole> sql2 = DSL.using(t)
+				// @formatter:off
+					.insertInto(T_PROFILEROLE,
+	                     T_PROFILEROLE.FK_PROFILE,
+	                     T_PROFILEROLE.ROLE)
+					.values(lrw.getNumber(), EnumRole.subscriber);
+				// @formatter:on
+				LOGGER.debug("{}", sql2.toString());
+				sql2.execute();
+			}
+		});
+		return lrw.getNumber();
 	}
 
 	/**
@@ -129,26 +154,37 @@ public class ProfileGateway extends JooqGateway {
 	 * @throws DataAccessExceptionF
 	 */
 	public void removeLogin(ProfileBean bean) throws DataAccessException {
-		DeleteConditionStep<?> sql = getJooq()
-		// @formatter:off
-	    .deleteFrom(T_PROFILEROLE)
-	    .where(T_PROFILEROLE.FK_PROFILE.in(
-	    		getJooq()
-	    		.select(T_PROFILE.PK)
-	    		.from(T_PROFILE)
-	      .where(T_PROFILE.USERNAME.eq(bean.getUsername())
-	    )));
-		// @formatter:on
-		LOGGER.debug("{}", sql.toString());
-		sql.execute();
+		getJooq().transaction(t->{
+			UpdateConditionStep<TPersonRecord> sql = DSL.using(t)
+			// @formatter:off
+			  .update(T_PERSON)
+			  .set(T_PERSON.FK_PROFILE, (Integer) null)
+			  .where(T_PERSON.FK_PROFILE.eq(bean.getPk()));
+			// @formatter:off
+			LOGGER.debug("{}", sql.toString());
+			sql.execute();
+			
+			DeleteConditionStep<?> sql1 = DSL.using(t)
+			// @formatter:off
+		    .deleteFrom(T_PROFILEROLE)
+		    .where(T_PROFILEROLE.FK_PROFILE.in(
+		    		getJooq()
+		    		.select(T_PROFILE.PK)
+		    		.from(T_PROFILE)
+		      .where(T_PROFILE.USERNAME.eq(bean.getUsername())
+		    )));
+			// @formatter:on
+			LOGGER.debug("{}", sql1.toString());
+			sql1.execute();
 
-		DeleteConditionStep<?> sql2 = getJooq()
-		// @formatter:off
-	    .deleteFrom(T_PROFILE)
-	    .where(T_PROFILE.USERNAME.eq(bean.getUsername()));
-		// @formatter:on
-		LOGGER.debug("{}", sql2.toString());
-		sql2.execute();
+			DeleteConditionStep<?> sql2 = DSL.using(t)
+			// @formatter:off
+		    .deleteFrom(T_PROFILE)
+		    .where(T_PROFILE.USERNAME.eq(bean.getUsername()));
+			// @formatter:on
+			LOGGER.debug("{}", sql2.toString());
+			sql2.execute();
+		});
 	}
 
 	/**
@@ -266,5 +302,22 @@ public class ProfileGateway extends JooqGateway {
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		return sql.execute();
+	}
+
+	/**
+	 * check if username exists in db
+	 * 
+	 * @param profileBean
+	 * @return true if username exists, false otherwise
+	 */
+	public boolean checkUsernameExists(ProfileBean profileBean) {
+		SelectConditionStep<Record1<Integer>> sql = getJooq()
+		// @formatter:off
+			.select(T_PROFILE.PK)
+			.from(T_PROFILE)
+			.where(T_PROFILE.USERNAME.eq(profileBean.getUsername()));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		return sql.fetchOne() != null;
 	}
 }

@@ -26,6 +26,7 @@ public class BookBean {
 	private String email;
 	private String camprole;
 	private Integer fkCamp;
+	private Integer fkProfile;
 
 	private List<CampBean> camps;
 
@@ -115,5 +116,13 @@ public class BookBean {
 
 	public void setCamps(List<CampBean> camps) {
 		this.camps = camps;
+	}
+
+	public Integer getFkProfile() {
+		return fkProfile;
+	}
+
+	public void setFkProfile(Integer fkProfile) {
+		this.fkProfile = fkProfile;
 	}
 }

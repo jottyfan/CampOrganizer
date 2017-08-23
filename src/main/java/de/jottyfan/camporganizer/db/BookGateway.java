@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep10;
+import org.jooq.InsertValuesStep11;
 import org.jooq.InsertValuesStep9;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
@@ -44,7 +45,7 @@ public class BookGateway extends JooqGateway {
 	public void insert(BookBean bean) throws DataAccessException {
 		getJooq().transaction(t -> {
 			Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
-			InsertValuesStep10<TPersonRecord, String, String, String, String, String, String, Date, EnumCamprole, String, Integer> sql = DSL
+			InsertValuesStep11<TPersonRecord, String, String, String, String, String, String, Date, EnumCamprole, String, Integer, Integer> sql = DSL
 					.using(t)
 					// @formatter:off
 			  .insertInto(T_PERSON,
@@ -57,8 +58,9 @@ public class BookGateway extends JooqGateway {
 			  		        T_PERSON.BIRTHDATE,
 			  		        T_PERSON.CAMPROLE,
 			  		        T_PERSON.EMAIL,
-			  		        T_PERSON.FK_CAMP)
-			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(),bean.getPhone(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp());
+			  		        T_PERSON.FK_CAMP,
+			  		        T_PERSON.FK_PROFILE)
+			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(),bean.getPhone(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp(), bean.getFkProfile());
 			// @formatter:on
 			LOGGER.debug("{}", sql.toString());
 			sql.execute();

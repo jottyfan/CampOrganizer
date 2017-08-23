@@ -72,6 +72,7 @@ public class Keys {
 
     public static final ForeignKey<TCampRecord, TLocationRecord> T_CAMP__T_CAMP_FK_LOCATION_FKEY = ForeignKeys0.T_CAMP__T_CAMP_FK_LOCATION_FKEY;
     public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = ForeignKeys0.T_PERSON__T_PERSON_FK_CAMP_FKEY;
+    public static final ForeignKey<TPersonRecord, TProfileRecord> T_PERSON__T_PERSON_FK_PROFILE_FKEY = ForeignKeys0.T_PERSON__T_PERSON_FK_PROFILE_FKEY;
     public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = ForeignKeys0.T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY;
     public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = ForeignKeys0.T_SALES__T_SALES_FK_CAMP_FKEY;
 
@@ -101,6 +102,7 @@ public class Keys {
     private static class ForeignKeys0 extends AbstractKeys {
         public static final ForeignKey<TCampRecord, TLocationRecord> T_CAMP__T_CAMP_FK_LOCATION_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_LOCATION_PKEY, TCamp.T_CAMP, "t_camp__t_camp_fk_location_fkey", TCamp.T_CAMP.FK_LOCATION);
         public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TPerson.T_PERSON, "t_person__t_person_fk_camp_fkey", TPerson.T_PERSON.FK_CAMP);
+        public static final ForeignKey<TPersonRecord, TProfileRecord> T_PERSON__T_PERSON_FK_PROFILE_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PROFILE_PKEY, TPerson.T_PERSON, "t_person__t_person_fk_profile_fkey", TPerson.T_PERSON.FK_PROFILE);
         public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PROFILE_PKEY, TProfilerole.T_PROFILEROLE, "t_profilerole__t_profilerole_fk_profile_fkey", TProfilerole.T_PROFILEROLE.FK_PROFILE);
         public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TSales.T_SALES, "t_sales__t_sales_fk_camp_fkey", TSales.T_SALES.FK_CAMP);
     }

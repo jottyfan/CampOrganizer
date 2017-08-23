@@ -48,8 +48,12 @@ public class ProfileController extends Controller {
 
 	public String doRegister() {
 		try {
-			new ProfileGateway(facesContext).register(bean);
-			return toProfile();
+			if (bean.getPassword().equals(bean.getPasswordAgain())) {
+				new ProfileGateway(facesContext).register(bean, false);
+				return toProfile();
+			} else {
+				throw new DataAccessException("Die Passwörter sind nicht gleich.");
+			}
 		} catch (DataAccessException e) {
 			facesContext.addMessage("registering failed",
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "error on registering", e.getMessage()));
