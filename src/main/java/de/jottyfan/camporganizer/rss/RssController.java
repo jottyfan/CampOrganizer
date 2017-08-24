@@ -40,10 +40,10 @@ public class RssController {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on reading rss from db", e.getMessage()));
 		}
 		SyndFeed feed = new RssModel().getRss(beans);
-		String rssContent = "TODO";
 		ExternalContext ec = facesContext.getExternalContext();
 		ec.responseReset();
-		ec.setResponseContentType("xml");
+		ec.setResponseCharacterEncoding("UTF-8");
+		ec.setResponseContentType("application/rss+xml");
 		ec.setResponseHeader("Content-Disposition", "attachment; filename=\"onkelwernerfreizeiten.de.xml\"");
 		Writer writer;
 		try {
