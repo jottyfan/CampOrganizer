@@ -24,7 +24,6 @@ public class RssModel {
 		feed.setLink("https://onkelwernerfreizeiten.de/camporganizer/rss.jsf");
 		feed.setDescription("In diesem Feed werden neue Anmeldungen gesammelt.");
 		feed.setEncoding("UTF-8");
-		feed.setLanguage("de");
 		List<SyndEntry> entries = new ArrayList<>();
 		for (RssBean bean : beans) {
 			SyndEntry entry = new SyndEntryImpl();
