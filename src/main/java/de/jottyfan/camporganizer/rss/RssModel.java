@@ -1,5 +1,6 @@
 package de.jottyfan.camporganizer.rss;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,15 @@ public class RssModel {
 		feed.setTitle("Onkel Werner Freizeiten e.V. Anmeldungsnotifier");
 		feed.setLink("https://onkelwernerfreizeiten.de/camporganizer/rss.jsf");
 		feed.setDescription("In diesem Feed werden neue Anmeldungen gesammelt.");
+		feed.setEncoding("UTF-8");
+		feed.setLanguage("de");
 		List<SyndEntry> entries = new ArrayList<>();
 		for (RssBean bean : beans) {
 			SyndEntry entry = new SyndEntryImpl();
 			entry.setTitle("neue Anmeldung");
-			entry.setLink(feed.getLink());
-			entry.setPublishedDate(bean.getPubdate());			
+			entry.setLink("https://onkelwernerfreizeiten.de/camporganizer/");
+			entry.setUri(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(bean.getPubdate()));
+			entry.setPublishedDate(bean.getPubdate());	
 			SyndContent description = new SyndContentImpl();
 			description.setType("text/plain");
 			description.setValue(bean.getMessage());
