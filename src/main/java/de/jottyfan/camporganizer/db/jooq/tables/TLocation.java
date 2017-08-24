@@ -14,6 +14,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
@@ -35,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TLocation extends TableImpl<TLocationRecord> {
 
-    private static final long serialVersionUID = -1201710770;
+    private static final long serialVersionUID = -1504415046;
 
     /**
      * The reference instance of <code>camp.t_location</code>
@@ -64,6 +65,11 @@ public class TLocation extends TableImpl<TLocationRecord> {
      * The column <code>camp.t_location.url</code>.
      */
     public final TableField<TLocationRecord, String> URL = createField("url", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>camp.t_location.fk_document</code>.
+     */
+    public final TableField<TLocationRecord, Integer> FK_DOCUMENT = createField("fk_document", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>camp.t_location</code> table reference
@@ -117,6 +123,14 @@ public class TLocation extends TableImpl<TLocationRecord> {
     @Override
     public List<UniqueKey<TLocationRecord>> getKeys() {
         return Arrays.<UniqueKey<TLocationRecord>>asList(Keys.T_LOCATION_PKEY);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ForeignKey<TLocationRecord, ?>> getReferences() {
+        return Arrays.<ForeignKey<TLocationRecord, ?>>asList(Keys.T_LOCATION__T_LOCATION_FK_DOCUMENT_FKEY);
     }
 
     /**

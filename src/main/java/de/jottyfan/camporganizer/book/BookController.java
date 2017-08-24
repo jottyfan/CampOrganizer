@@ -1,7 +1,5 @@
 package de.jottyfan.camporganizer.book;
 
-import java.util.List;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -10,16 +8,12 @@ import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.myfaces.config.impl.digester.elements.FacesConfig;
-import org.apache.myfaces.context.FacesContextFactoryImpl;
 import org.jooq.exception.DataAccessException;
 
-import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.BookGateway;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.ProfileGateway;
-import de.jottyfan.camporganizer.db.SalesGateway;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
@@ -48,6 +42,7 @@ public class BookController extends Controller {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
+			LOGGER.error("BookController.toBook: ", e);
 		}
 		return "/pages/book.jsf";
 	}

@@ -54,6 +54,7 @@ public class RegistratorBean {
 			}
 			if (minAge != null && maxAge != null) {
 				LocalDate now = LocalDate.now();
+				@SuppressWarnings("deprecation")
 				LocalDate bDate = LocalDate.of(birthdate.getYear(), birthdate.getMonth(), birthdate.getDate());
 				Integer years = Period.between(bDate, now).getYears();
 				if (minAge < years || maxAge > years) {

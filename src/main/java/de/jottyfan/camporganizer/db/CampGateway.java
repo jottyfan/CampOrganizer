@@ -12,11 +12,8 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Record11;
-import org.jooq.Record3;
-import org.jooq.Record4;
 import org.jooq.SelectSeekStep1;
 import org.jooq.exception.DataAccessException;
-import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.CampBean;
 

@@ -31,7 +31,7 @@ public class SubscriberController extends Controller {
 
 	@ManagedProperty(value = "#{subscriberModel}")
 	private SubscriberModel model;
-	
+
 	@ManagedProperty(value = "#{profileBean}")
 	private ProfileBean profileBean;
 
@@ -40,6 +40,7 @@ public class SubscriberController extends Controller {
 			model.setCamps(new SubscriberGateway(facesContext).getCamps(profileBean.getPk()));
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("SubscriberController.toSubscriber", e);
 		}
 		return "/pages/subscriber.jsf";
 	}

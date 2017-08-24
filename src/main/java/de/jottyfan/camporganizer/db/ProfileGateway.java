@@ -1,7 +1,9 @@
 package de.jottyfan.camporganizer.db;
 
 import static de.jottyfan.camporganizer.db.jooq.Tables.*;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILEROLE;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_PROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_ROLE;
 
@@ -16,7 +18,6 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.InsertResultStep;
 import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep2;
-import org.jooq.InsertValuesStep4;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record4;
@@ -29,8 +30,11 @@ import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
+import de.jottyfan.camporganizer.admin.DocumentBean;
 import de.jottyfan.camporganizer.admin.ProfileRoleBean;
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumRole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
@@ -164,7 +168,7 @@ public class ProfileGateway extends JooqGateway {
 	 * @throws DataAccessExceptionF
 	 */
 	public void removeLogin(ProfileBean bean) throws DataAccessException {
-		getJooq().transaction(t->{
+		getJooq().transaction(t -> {
 			UpdateConditionStep<TPersonRecord> sql = DSL.using(t)
 			// @formatter:off
 			  .update(T_PERSON)
@@ -320,7 +324,7 @@ public class ProfileGateway extends JooqGateway {
 	 * @param profileBean
 	 * @return true if username exists, false otherwise
 	 */
-	public boolean checkUsernameExists(ProfileBean profileBean) {
+	public boolean checkUsernameExists(ProfileBean profileBean) throws DataAccessException {
 		SelectConditionStep<Record1<Integer>> sql = getJooq()
 		// @formatter:off
 			.select(T_PROFILE.PK)
@@ -329,5 +333,34 @@ public class ProfileGateway extends JooqGateway {
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		return sql.fetchOne() != null;
+	}
+
+	/**
+	 * get all documents from db
+	 * 
+	 * @return list of found documents
+	 * @throws DataAccessException
+	 */
+	public List<DocumentBean> getAllDocuments() throws DataAccessException {
+		SelectJoinStep<Record5<Integer, EnumDocument, String, String, EnumFiletype>> sql = getJooq()
+		// @formatter:off
+			.select(T_DOCUMENT.PK,
+					    T_DOCUMENT.DOCTYPE,
+					    T_DOCUMENT.NAME,
+					    T_DOCUMENT.DOCUMENT,
+					    T_DOCUMENT.FILETYPE)
+			.from(T_DOCUMENT);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<DocumentBean> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			DocumentBean bean = new DocumentBean(r.get(T_DOCUMENT.PK));
+			bean.setDoctype(r.get(T_DOCUMENT.DOCTYPE));
+			bean.setName(r.get(T_DOCUMENT.NAME));
+			bean.setDocument(r.get(T_DOCUMENT.DOCUMENT));
+			bean.setFiletype(r.get(T_DOCUMENT.FILETYPE));
+			list.add(bean);
+		}
+		return list;
 	}
 }

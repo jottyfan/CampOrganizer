@@ -5,7 +5,6 @@ import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALES;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;

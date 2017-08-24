@@ -4,6 +4,18 @@ grant usage on schema camp to camp;
 set search_path = camp;
 
 create type enum_role as enum ('subscriber', 'registrator', 'businessman', 'admin');
+create type enum_document as enum ('camppass', 'location', 'camp');
+create type enum_filetype as enum ('pdf', 'png', 'jpg');
+
+create table t_document (pk serial primary key, 
+                         doctype enum_document, 
+                         name text, 
+                         document text, 
+                         filetype enum_filetype, 
+                         unique(name));
+
+grant select,insert,update,delete on t_document to camp;
+grant usage on t_document_pk_seq to camp;
 
 create table t_profile (pk serial primary key, 
                         forename text, 
@@ -25,7 +37,9 @@ grant select,insert,update,delete on t_profilerole to camp;
 
 create table t_location (pk serial primary key,
                          name text not null,
-                         url text);
+                         url text,
+                         fk_document integer,
+                         foreign key (fk_document) references t_document(pk));
 
 grant select,insert,update,delete on t_location to camp;                         
 grant usage on t_location_pk_seq to camp;
@@ -39,7 +53,9 @@ create table t_camp (pk serial primary key,
                      max_age integer not null,
                      price text,
                      countries text,
-                     foreign key (fk_location) references t_location(pk));
+                     fk_document integer,
+                     foreign key (fk_location) references t_location(pk),
+                     foreign key (fk_document) references t_document(pk));
 
 grant select,insert,update,delete on t_camp to camp;
 grant usage on t_camp_pk_seq to camp;

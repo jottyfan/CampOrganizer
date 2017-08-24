@@ -11,7 +11,7 @@
 		<ui:define name="content">
 			<h:form>
 				<b:panel title="Login">
-					<b:panelGrid colSpans="3,9">
+					<b:panelGrid colSpans="3,9" size="xs">
 						<h:outputText value="Name" />
 						<b:inputText value="#{profileBean.username}" placeholder="username" />
 						<h:outputText value="Passwort" />
@@ -26,7 +26,7 @@
 				<h1>Unsere Freizeiten</h1>
 				<ui:repeat value="#{bookModel.getCamps(facesContext)}" var="c">
 					<b:panel title="#{c.name} #{c.year} in #{c.locationName}" collapsed="true">
-						<b:panelGrid colSpans="3,9">
+						<b:panelGrid colSpans="3,9" size="xs">
 							<h:outputText value="Ort" />
 							<ui:fragment>
 								<a href="#{c.url}" target="_blank"><h:outputText value="#{c.locationName}" /></a>

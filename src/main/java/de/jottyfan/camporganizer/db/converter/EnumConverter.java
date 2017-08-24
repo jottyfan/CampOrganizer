@@ -1,7 +1,5 @@
 package de.jottyfan.camporganizer.db.converter;
 
-import javax.faces.convert.ConverterException;
-
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;

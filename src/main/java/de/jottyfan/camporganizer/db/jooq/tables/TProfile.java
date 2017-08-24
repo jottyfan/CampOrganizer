@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TProfile extends TableImpl<TProfileRecord> {
 
-    private static final long serialVersionUID = 1965825883;
+    private static final long serialVersionUID = 1885289720;
 
     /**
      * The reference instance of <code>camp.t_profile</code>
@@ -132,7 +132,7 @@ public class TProfile extends TableImpl<TProfileRecord> {
      */
     @Override
     public List<UniqueKey<TProfileRecord>> getKeys() {
-        return Arrays.<UniqueKey<TProfileRecord>>asList(Keys.T_PROFILE_PKEY);
+        return Arrays.<UniqueKey<TProfileRecord>>asList(Keys.T_PROFILE_PKEY, Keys.T_PROFILE_USERNAME_KEY);
     }
 
     /**

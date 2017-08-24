@@ -37,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TCamp extends TableImpl<TCampRecord> {
 
-    private static final long serialVersionUID = -1822573489;
+    private static final long serialVersionUID = -1111535644;
 
     /**
      * The reference instance of <code>camp.t_camp</code>
@@ -98,6 +98,11 @@ public class TCamp extends TableImpl<TCampRecord> {
     public final TableField<TCampRecord, String> COUNTRIES = createField("countries", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
+     * The column <code>camp.t_camp.fk_document</code>.
+     */
+    public final TableField<TCampRecord, Integer> FK_DOCUMENT = createField("fk_document", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
      * Create a <code>camp.t_camp</code> table reference
      */
     public TCamp() {
@@ -156,7 +161,7 @@ public class TCamp extends TableImpl<TCampRecord> {
      */
     @Override
     public List<ForeignKey<TCampRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TCampRecord, ?>>asList(Keys.T_CAMP__T_CAMP_FK_LOCATION_FKEY);
+        return Arrays.<ForeignKey<TCampRecord, ?>>asList(Keys.T_CAMP__T_CAMP_FK_LOCATION_FKEY, Keys.T_CAMP__T_CAMP_FK_DOCUMENT_FKEY);
     }
 
     /**

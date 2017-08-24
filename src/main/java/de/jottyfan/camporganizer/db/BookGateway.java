@@ -10,9 +10,7 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.InsertValuesStep1;
-import org.jooq.InsertValuesStep10;
 import org.jooq.InsertValuesStep11;
-import org.jooq.InsertValuesStep9;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 

@@ -41,6 +41,63 @@
 							<h:outputText value="TODO: reset passwords" />
 						</b:form>
 					</b:tab>
+					<b:tab title="Freizeitheime" styleClass="dist16">
+						<b:form>
+							<h:outputText value="TODO: manipulate content of t_location" />
+						</b:form>
+					</b:tab>
+					<b:tab title="Freizeiten" styleClass="dist16">
+						<b:form>
+							<h:outputText value="TODO: manipulate content of t_camp" />
+						</b:form>
+					</b:tab>
+					<b:tab title="Dokumente" styleClass="dist16">
+						<b:tabView activeIndex="#{adminModel.activeIndexDocument}">
+							<b:tab title="Tabelle">
+								<b:form>
+									<b:dataTable value="#{adminModel.documents}" var="d" lang="de">
+										<b:dataTableColumn label="ID">
+											<b:commandButton action="#{adminController.toEditDocument(d.pk)}" value="#{d.pk}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Name">
+											<b:commandButton action="#{adminController.toEditDocument(d.pk)}" value="#{d.name}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Dokumententyp">
+											<b:commandButton action="#{adminController.toEditDocument(d.pk)}" value="#{d.doctype.literal}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Inhalt">
+											<b:commandButton action="#{adminController.doDownloadDocument(d)}" value="" iconAwesome="download" link="look" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Dateityp">
+											<b:commandButton action="#{adminController.toEditDocument(d.pk)}" value="#{d.filetype.literal}" look="link" />
+										</b:dataTableColumn>
+									</b:dataTable>
+								</b:form>
+							</b:tab>
+							<b:tab title="Element">
+								<b:form enctype="multipart/form-data">
+									<b:panelGrid colSpans="3,9" size="xs">
+										<h:outputText value="ID = #{adminModel.document.pk}" />
+										<b:commandButton action="#{adminController.doResetDocument}" value="Felder leeren" />
+										<h:outputText value="Name" />
+										<b:inputText value="#{adminModel.document.name}" />
+										<h:outputText value="Dokumententyp" />
+										<b:selectOneMenu value="#{adminModel.document.doctype}">
+											<f:selectItems value="#{adminModel.enumlistDoctype}" var="e" itemValue="#{e}" itemLabel="#{e.literal}" />
+										</b:selectOneMenu>
+										<h:outputText value="Inhalt" />
+										<h:inputFile value="#{adminModel.document.uploadfile}" style="padding-bottom: 16px" />
+										<h:outputText value="Dateityp" />
+										<b:selectOneMenu value="#{adminModel.document.filetype}">
+											<f:selectItems value="#{adminModel.enumlistFiletype}" var="e" itemValue="#{e}" itemLabel="#{e.literal}" />
+										</b:selectOneMenu>
+										<b:commandButton action="#{adminController.doDeleteDocument}" value="Löschen" look="danger" />
+										<b:commandButton action="#{adminController.doUpsertDocument}" value="Übernehmen" look="primary" />
+									</b:panelGrid>
+								</b:form>
+							</b:tab>
+						</b:tabView>
+					</b:tab>
 				</b:tabView>
 			</b:panel>
 		</ui:define>
