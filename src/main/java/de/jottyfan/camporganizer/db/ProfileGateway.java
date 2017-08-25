@@ -1,6 +1,8 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.*;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_DOCUMENT;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_LOCATION;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSON;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILEROLE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
@@ -9,11 +11,13 @@ import static de.jottyfan.camporganizer.db.jooq.Tables.V_ROLE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertResultStep;
 import org.jooq.InsertValuesStep1;
@@ -390,5 +394,69 @@ public class ProfileGateway extends JooqGateway {
 			list.add(bean);
 		}
 		return list;
+	}
+
+	/**
+	 * delete from t_profile where pk = ?
+	 * 
+	 * @param bean
+	 * @return number of affected rows
+	 * @throws DataAccessException
+	 */
+	public Integer deleteProfile(ProfileBean bean) throws DataAccessException {
+		LambdaResultWrapper lrw = new LambdaResultWrapper();
+		getJooq().transaction(t -> {
+			Integer affected = 0;
+
+			DeleteConditionStep<TProfileroleRecord> sql = DSL.using(t)
+			// @formatter:off
+				.deleteFrom(T_PROFILEROLE)
+				.where(T_PROFILEROLE.FK_PROFILE.eq(bean.getPk()));
+			// @formatter:on
+			LOGGER.debug("{}", sql.toString());
+			affected += sql.execute();
+
+			UpdateConditionStep<TPersonRecord> sql1 = DSL.using(t)
+			// @formatter:off
+				.update(T_PERSON)
+				.set(T_PERSON.FK_PROFILE, (Integer) null)
+				.where(T_PERSON.FK_PROFILE.eq(bean.getPk()));
+			// @formatter:on
+			LOGGER.debug("{}", sql1.toString());
+			affected += sql1.execute();
+
+			DeleteConditionStep<TProfileRecord> sql2 = DSL.using(t)
+			// @formatter:off
+				.deleteFrom(T_PROFILE)
+				.where(T_PROFILE.PK.eq(bean.getPk()));
+			// @formatter:on
+			LOGGER.debug("{}", sql2.toString());
+			affected += sql2.execute();
+
+			lrw.setNumber(affected);
+		});
+		return lrw.getNumber();
+	}
+
+	/**
+	 * generate a new password and set it for the user
+	 * 
+	 * @param bean
+	 *          to be used
+	 * @return new password
+	 */
+	public String resetPassword(ProfileBean bean) {
+		String uuid = UUID.randomUUID().toString();
+		String password = new StrongPasswordEncryptor().encryptPassword(uuid);
+		bean.setPassword(password);
+		UpdateConditionStep<TProfileRecord> sql = getJooq()
+		// @formatter:off
+			.update(T_PROFILE)
+			.set(T_PROFILE.PASSWORD, bean.getEncryptedPassword())
+			.where(T_PROFILE.PK.eq(bean.getPk()));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		sql.execute();
+		return password;
 	}
 }

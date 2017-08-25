@@ -36,9 +36,22 @@
 							</b:dataTable>
 						</b:form>
 					</b:tab>
-					<b:tab title="Passwörter" styleClass="dist16">
+					<b:tab title="Logins verwalten" styleClass="dist16">
 						<b:form>
-							<h:outputText value="TODO: reset passwords" />
+							<b:dataTable value="#{adminModel.users}" var="u" lang="de">
+								<b:dataTableColumn label="Name">
+									<h:outputText value="#{u.fullname}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Login">
+									<h:outputText value="#{u.username}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="Operationen">
+									<b:buttonGroup>
+										<b:commandButton action="#{adminController.doResetUserPassword(u)}" iconAwesome="flash" value="Passwort zurücksetzen" look="warning" />
+										<b:commandButton action="#{adminController.doDeleteUser(u)}" iconAwesome="trash-o" value="" look="danger" />
+									</b:buttonGroup>
+								</b:dataTableColumn>
+							</b:dataTable>
 						</b:form>
 					</b:tab>
 					<b:tab title="Freizeitheime" styleClass="dist16">

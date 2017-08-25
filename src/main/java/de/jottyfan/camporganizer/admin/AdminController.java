@@ -19,6 +19,7 @@ import de.jottyfan.camporganizer.db.LocationGateway;
 import de.jottyfan.camporganizer.db.ProfileGateway;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
@@ -61,6 +62,29 @@ public class AdminController extends Controller {
 			LOGGER.error("AdminController.toAdministrate: ", e);
 		}
 		return "/pages/administrate.jsf";
+	}
+
+	public String doResetUserPassword(ProfileBean bean) {
+		model.setActiveIndex(1);
+		try {
+			String newPassword = new ProfileGateway(facesContext).resetPassword(bean);
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "password reset", "Das neue Passwort von " + bean.getFullname() + " lautet: " + newPassword));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doResetUserPassword: ", e);
+		}
+		return toAdministrate();
+	}
+
+	public String doDeleteUser(ProfileBean bean) {
+		model.setActiveIndex(1);
+		try {
+			new ProfileGateway(facesContext).deleteProfile(bean);
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doDeleteUser: ", e);
+		}
+		return toAdministrate();
 	}
 
 	public String doDelete(ProfileRoleBean bean) {
@@ -146,7 +170,7 @@ public class AdminController extends Controller {
 		}
 		return toAdministrate();
 	}
-	
+
 	public String doUpsertLocation() {
 		model.setActiveIndex(2);
 		try {
