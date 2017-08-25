@@ -19,16 +19,21 @@ import de.jottyfan.camporganizer.profile.ProfileBean;
 public class AdminModel {
 
 	private Integer activeIndex;
-	private Integer activeIndexDocument;
 	private ProfileRoleBean profileRole;
 	private List<ProfileRoleBean> profileRoles;
 	private List<ProfileBean> users;
 	private List<String> roles;
-	private DocumentBean document;
-	private List<DocumentBean> documents;
+
+	private Integer activeIndexDocument;
 	private List<EnumDocument> enumlistDoctype;
 	private List<EnumFiletype> enumlistFiletype;
+	private DocumentBean document;
+	private List<DocumentBean> documents;
 
+	private Integer activeIndexLocation;
+	private LocationBean location;
+	private List<LocationBean> locations;
+	
 	public Integer getActiveIndex() {
 		return activeIndex;
 	}
@@ -107,5 +112,29 @@ public class AdminModel {
 
 	public void setDocument(DocumentBean document) {
 		this.document = document;
+	}
+
+	public LocationBean getLocation() {
+		return location;
+	}
+
+	public void setLocation(LocationBean location) {
+		this.location = location;
+	}
+
+	public List<LocationBean> getLocations() {
+		return locations;
+	}
+
+	public void setLocations(List<LocationBean> locations) {
+		this.locations = locations;
+	}
+
+	public Integer getActiveIndexLocation() {
+		return activeIndexLocation;
+	}
+
+	public void setActiveIndexLocation(Integer activeIndexLocation) {
+		this.activeIndexLocation = activeIndexLocation;
 	}
 }

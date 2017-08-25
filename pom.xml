@@ -4,7 +4,7 @@
 	<groupId>de.jottyfan</groupId>
 	<artifactId>camporganizer</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.7</version>
+	<version>0.0.8</version>
 	<name>CampOrganizer</name>
 	<description>organize bible camps (booking, registering)</description>
 	<dependencies>

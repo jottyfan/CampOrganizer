@@ -15,6 +15,7 @@ import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.DocumentGateway;
+import de.jottyfan.camporganizer.db.LocationGateway;
 import de.jottyfan.camporganizer.db.ProfileGateway;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
@@ -43,12 +44,18 @@ public class AdminController extends Controller {
 			model.setProfileRoles(gw.getAllProfileRoles());
 			model.setRoles(gw.getAllRoles());
 			model.setUsers(gw.getAllUsers());
+
+			model.setEnumlistDoctype(Arrays.asList(EnumDocument.values()));
+			model.setEnumlistFiletype(Arrays.asList(EnumFiletype.values()));
 			if (model.getDocument() == null) {
 				model.setDocument(new DocumentBean(null));
 			}
 			model.setDocuments(gw.getAllDocuments());
-			model.setEnumlistDoctype(Arrays.asList(EnumDocument.values()));
-			model.setEnumlistFiletype(Arrays.asList(EnumFiletype.values()));
+
+			if (model.getLocation() == null) {
+				model.setLocation(new LocationBean(null));
+			}
+			model.setLocations(gw.getAllLocations());
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.toAdministrate: ", e);
@@ -89,6 +96,17 @@ public class AdminController extends Controller {
 		return toAdministrate();
 	}
 
+	public String toEditLocation(Integer pk) {
+		model.setActiveIndex(2);
+		for (LocationBean bean : model.getLocations()) {
+			if (bean.getPk().equals(pk)) {
+				model.setLocation(bean);
+				model.setActiveIndexLocation(1);
+			}
+		}
+		return toAdministrate();
+	}
+
 	public String doDeleteDocument() {
 		model.setActiveIndex(4);
 		try {
@@ -98,6 +116,19 @@ public class AdminController extends Controller {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.doDeleteDocument: ", e);
+		}
+		return toAdministrate();
+	}
+
+	public String doDeleteLocation() {
+		model.setActiveIndex(2);
+		try {
+			new LocationGateway(facesContext).deleteLocation(model.getLocation().getPk());
+			model.setActiveIndexLocation(0);
+			model.setLocation(new LocationBean(null));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doDeleteLocation: ", e);
 		}
 		return toAdministrate();
 	}
@@ -115,17 +146,56 @@ public class AdminController extends Controller {
 		}
 		return toAdministrate();
 	}
+	
+	public String doUpsertLocation() {
+		model.setActiveIndex(2);
+		try {
+			new LocationGateway(facesContext).upsert(model.getLocation());
+			model.setActiveIndexLocation(0);
+			model.setLocation(new LocationBean(null));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doUpsertLocation: ", e);
+		}
+		return toAdministrate();
+	}
 
 	public String doDownloadDocument(DocumentBean bean) {
 		model.setActiveIndex(4);
 		model.setActiveIndexDocument(0);
 		return super.doDownloadBase64(facesContext, bean.getDocument(), bean.getName(), bean.getFiletype().getLiteral());
 	}
-	
+
+	public String doDownloadDocument(LocationBean bean) {
+		model.setActiveIndex(2);
+		model.setActiveIndexLocation(0);
+		DocumentBean docBean = null;
+		for (DocumentBean b : model.getDocuments()) {
+			if (b.getPk().equals(bean.getFkDocument())) {
+				docBean = b;
+			}
+		}
+		if (docBean != null) {
+			return super.doDownloadBase64(facesContext, docBean.getDocument(), docBean.getName(),
+					docBean.getFiletype().getLiteral());
+		} else {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "error download document",
+					"Das gewünschte Dokument wurde nicht gefunden. Möglicherweise wurde es gerade eben gelöscht."));
+			return "";
+		}
+	}
+
 	public String doResetDocument() {
 		model.setActiveIndex(4);
 		model.setActiveIndexDocument(1);
 		model.setDocument(new DocumentBean(null));
+		return toAdministrate();
+	}
+
+	public String doResetLocation() {
+		model.setActiveIndex(2);
+		model.setActiveIndexLocation(1);
+		model.setLocation(new LocationBean(null));
 		return toAdministrate();
 	}
 

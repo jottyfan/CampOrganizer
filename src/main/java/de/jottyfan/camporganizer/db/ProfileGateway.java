@@ -31,6 +31,7 @@ import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.admin.DocumentBean;
+import de.jottyfan.camporganizer.admin.LocationBean;
 import de.jottyfan.camporganizer.admin.ProfileRoleBean;
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
@@ -359,6 +360,33 @@ public class ProfileGateway extends JooqGateway {
 			bean.setName(r.get(T_DOCUMENT.NAME));
 			bean.setDocument(r.get(T_DOCUMENT.DOCUMENT));
 			bean.setFiletype(r.get(T_DOCUMENT.FILETYPE));
+			list.add(bean);
+		}
+		return list;
+	}
+
+	/**
+	 * get all from t_location
+	 * 
+	 * @return list of found locations
+	 * @throws DataAccessException
+	 */
+	public List<LocationBean> getAllLocations() throws DataAccessException {
+		SelectJoinStep<Record4<Integer, String, String, Integer>> sql = getJooq()
+		// @formatter:off
+			.select(T_LOCATION.PK,
+					    T_LOCATION.NAME,
+					    T_LOCATION.URL,
+					    T_LOCATION.FK_DOCUMENT)
+			.from(T_LOCATION);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<LocationBean> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			LocationBean bean = new LocationBean(r.get(T_LOCATION.PK));
+			bean.setName(r.get(T_LOCATION.NAME));
+			bean.setUrl(r.get(T_LOCATION.URL));
+			bean.setFkDocument(r.get(T_LOCATION.FK_DOCUMENT));
 			list.add(bean);
 		}
 		return list;
