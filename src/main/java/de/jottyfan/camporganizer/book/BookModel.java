@@ -28,7 +28,7 @@ public class BookModel {
 	 * @return list of found camp beans
 	 */
 	public List<CampBean> getCamps(FacesContext facesContext) {
-		bean.setCamps(new CampGateway(facesContext).getAllCamps(true));
+		bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(true));
 		// do not catch DataAccessException, as there is no
 		// facesMessage rendered here (jsf lifecycle is too late)
 		return bean.getCamps();

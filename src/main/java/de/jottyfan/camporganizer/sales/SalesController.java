@@ -42,7 +42,7 @@ public class SalesController extends Controller {
 	private String toSales(Integer activeIndex) {
 		try {
 			SalesGateway gw = new SalesGateway(facesContext);
-			bean.setCamps(new CampGateway(facesContext).getAllCamps(false));
+			bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(false));
 			bean.setTraders(gw.getAllTraders());
 			bean.setProviders(gw.getAllProviders());
 			model.setList(gw.getAllSales());

@@ -11,6 +11,7 @@ import java.util.Date;
 public class CampBean {
 	private Integer pk;
 	private String name;
+	private Integer fkLocation;
 	private String locationName;
 	private Integer year;
 	private Integer minAge;
@@ -20,6 +21,8 @@ public class CampBean {
 	private Date depart;
 	private String price;
 	private String countries;
+	private Integer fkDocument;
+	private Integer bookings;
 	
 	public String getCampTime() {
 		StringBuilder buf = new StringBuilder();
@@ -115,5 +118,29 @@ public class CampBean {
 
 	public void setCountries(String countries) {
 		this.countries = countries;
+	}
+
+	public Integer getFkDocument() {
+		return fkDocument;
+	}
+
+	public void setFkDocument(Integer fkDocument) {
+		this.fkDocument = fkDocument;
+	}
+
+	public Integer getFkLocation() {
+		return fkLocation;
+	}
+
+	public void setFkLocation(Integer fkLocation) {
+		this.fkLocation = fkLocation;
+	}
+
+	public Integer getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(Integer bookings) {
+		this.bookings = bookings;
 	}
 }

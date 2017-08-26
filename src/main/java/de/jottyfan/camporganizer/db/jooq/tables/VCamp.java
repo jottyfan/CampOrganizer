@@ -31,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VCamp extends TableImpl<VCampRecord> {
 
-    private static final long serialVersionUID = 1600091259;
+    private static final long serialVersionUID = 989714932;
 
     /**
      * The reference instance of <code>camp.v_camp</code>
@@ -105,6 +105,11 @@ public class VCamp extends TableImpl<VCampRecord> {
      * The column <code>camp.v_camp.countries</code>.
      */
     public final TableField<VCampRecord, String> COUNTRIES = createField("countries", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>camp.v_camp.fk_document</code>.
+     */
+    public final TableField<VCampRecord, Integer> FK_DOCUMENT = createField("fk_document", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>camp.v_camp</code> table reference

@@ -85,24 +85,6 @@ create table t_salescontent (fk_sales integer not null,
 
 grant select,insert,update,delete on t_salescontent to camp;
 
-create view v_camp as
-select c.pk,
-       c.depart < now() AS is_over,
-       c.name,
-       c.arrive,
-       c.depart,
-       extract(isoyear from c.arrive) as year,
-       l.name as location_name,
-       c.min_age,
-       c.max_age,
-       l.url,
-       c.price,
-       c.countries 
-from t_camp c
-left join t_location l on c.fk_location = l.pk;
-         
-grant select on v_camp to camp;
-
 create view v_profile as 
 select pk,
        forename,
@@ -175,3 +157,24 @@ grant select on v_registration to camp;
 
 grant usage on sequence t_person_pk_seq to camp;
 
+/* 20170826 */
+drop view if exists v_camp;
+
+create view v_camp as
+select c.pk,
+       c.depart < now() AS is_over,
+       c.name,
+       c.arrive,
+       c.depart,
+       extract(isoyear from c.arrive) as year,
+       l.name as location_name,
+       c.min_age,
+       c.max_age,
+       l.url,
+       c.price,
+       c.countries,
+       c.fk_document
+from t_camp c
+left join t_location l on c.fk_location = l.pk;
+         
+grant select on v_camp to camp;

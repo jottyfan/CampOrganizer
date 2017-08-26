@@ -13,7 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.exception.DataAccessException;
 
+import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.Controller;
+import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.DocumentGateway;
 import de.jottyfan.camporganizer.db.LocationGateway;
 import de.jottyfan.camporganizer.db.ProfileGateway;
@@ -57,6 +59,12 @@ public class AdminController extends Controller {
 				model.setLocation(new LocationBean(null));
 			}
 			model.setLocations(gw.getAllLocations());
+			
+			if (model.getCamp() == null) {
+				model.setCamp(new CampBean());
+			}
+			model.setCamps(new CampGateway(facesContext).getAllCampsFromTable());
+			model.setLocationNameToCamp();
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.toAdministrate: ", e);
@@ -130,6 +138,17 @@ public class AdminController extends Controller {
 		}
 		return toAdministrate();
 	}
+	
+	public String toEditCamp(Integer pk) {
+		model.setActiveIndex(3);
+		for (CampBean bean : model.getCamps()) {
+			if (bean.getPk().equals(pk)) {
+				model.setCamp(bean);
+				model.setActiveIndexCamp(1);
+			}
+		}
+		return toAdministrate();
+	}
 
 	public String doDeleteDocument() {
 		model.setActiveIndex(4);
@@ -153,6 +172,19 @@ public class AdminController extends Controller {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.doDeleteLocation: ", e);
+		}
+		return toAdministrate();
+	}
+	
+	public String doDeleteCamp() {
+		model.setActiveIndex(3);
+		try {
+			new CampGateway(facesContext).deleteCamp(facesContext, model.getCamp().getPk());
+			model.setActiveIndexCamp(0);
+			model.setCamp(new CampBean());
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doDeleteCamp: ", e);
 		}
 		return toAdministrate();
 	}
@@ -184,10 +216,42 @@ public class AdminController extends Controller {
 		return toAdministrate();
 	}
 
+	public String doUpsertCamp() {
+		model.setActiveIndex(3);
+		try {
+			new CampGateway(facesContext).upsert(model.getCamp());
+			model.setActiveIndexCamp(0);
+			model.setCamp(new CampBean());
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doUpsertCamp: ", e);
+		}
+		return toAdministrate();
+	}
+
 	public String doDownloadDocument(DocumentBean bean) {
 		model.setActiveIndex(4);
 		model.setActiveIndexDocument(0);
 		return super.doDownloadBase64(facesContext, bean.getDocument(), bean.getName(), bean.getFiletype().getLiteral());
+	}
+	
+	public String doDownloadDocument(CampBean bean) {
+		model.setActiveIndex(3);
+		model.setActiveIndexCamp(0);
+		DocumentBean docBean = null;
+		for (DocumentBean b : model.getDocuments()) {
+			if (b.getPk().equals(bean.getFkDocument())) {
+				docBean = b;
+			}
+		}
+		if (docBean != null) {
+			return super.doDownloadBase64(facesContext, docBean.getDocument(), docBean.getName(),
+					docBean.getFiletype().getLiteral());
+		} else {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "error download document",
+					"Das gewünschte Dokument wurde nicht gefunden. Möglicherweise wurde es gerade eben gelöscht."));
+			return "";
+		}
 	}
 
 	public String doDownloadDocument(LocationBean bean) {
@@ -220,6 +284,13 @@ public class AdminController extends Controller {
 		model.setActiveIndex(2);
 		model.setActiveIndexLocation(1);
 		model.setLocation(new LocationBean(null));
+		return toAdministrate();
+	}
+	
+	public String doResetCamp() {
+		model.setActiveIndex(3);
+		model.setActiveIndexCamp(1);
+		model.setCamp(new CampBean());
 		return toAdministrate();
 	}
 

@@ -38,7 +38,7 @@ public class BookController extends Controller {
 
 	public String toBook() {
 		try {
-			bean.setCamps(new CampGateway(facesContext).getAllCamps(true));
+			bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(true));
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
@@ -54,7 +54,7 @@ public class BookController extends Controller {
 
 	public String doBook() {
 		try {
-			if (profileBean.getPassword() != null) {
+			if (profileBean.getUsername() != null && !profileBean.getUsername().isEmpty()) {
 				profileBean.setForename(bean.getForename());
 				profileBean.setSurname(bean.getSurname());
 				if (new ProfileGateway(facesContext).checkUsernameExists(profileBean)) {

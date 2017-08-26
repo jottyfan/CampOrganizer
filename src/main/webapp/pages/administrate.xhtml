@@ -96,9 +96,67 @@
 						</b:tabView>
 					</b:tab>
 					<b:tab title="Freizeiten" styleClass="dist16">
-						<b:form>
-							<h:outputText value="TODO: manipulate content of t_camp" />
-						</b:form>
+						<b:tabView activeIndex="#{adminModel.activeIndexCamp}">
+						  <b:tab title="Tabelle">
+						    <b:form>
+						      <b:dataTable value="#{adminModel.camps}" var="c" lang="de">
+						        <b:dataTableColumn label="Name">
+						          <b:commandButton action="#{adminController.toEditCamp(c.pk)}" value="#{c.name}" look="link" />
+						        </b:dataTableColumn>
+						        <b:dataTableColumn label="Zeit">
+	                     <b:commandButton action="#{adminController.toEditCamp(c.pk)}" value="#{c.campTime}" look="link" />
+						        </b:dataTableColumn>
+						        <b:dataTableColumn label="in">
+		                   <b:commandButton action="#{adminController.toEditCamp(c.pk)}" value="#{c.locationName}" look="link" />
+						        </b:dataTableColumn>
+						        <b:dataTableColumn label="Bestätigung">
+                       <b:commandButton action="#{adminController.doDownloadDocument(c)}" value="" iconAwesome="download" rendered="#{c.fkDocument != null}" />
+                     </b:dataTableColumn>
+                     <b:dataTableColumn label="Anmeldungen">
+                      <h:outputText value="#{c.bookings}" />
+                     </b:dataTableColumn>
+						      </b:dataTable>
+						    </b:form>
+						  </b:tab>
+						  <b:tab title="Element">
+		            <b:form>
+                  <b:panelGrid colSpans="3,9" size="xs">
+                    <h:outputText value="ID = #{adminModel.camp.pk}" />
+                    <b:commandButton action="#{adminController.doResetCamp}" value="Felder leeren" />
+                    <h:outputText value="Name" />
+                    <b:inputText value="#{adminModel.camp.name}" />
+                    <h:outputText value="von" />
+                    <b:datepicker value="#{adminModel.camp.arrive}" />
+                    <h:outputText value="bis" />
+                    <b:datepicker value="#{adminModel.camp.depart}" />
+                    <h:outputText value="Freizeitheim" />
+                    <b:selectOneMenu value="#{adminModel.camp.fkLocation}">
+                      <f:selectItem itemValue="" itemLabel="--- bitte auswählen ---" />
+                      <f:selectItems value="#{adminModel.locations}" var="l" itemValue="#{l.pk}" itemLabel="#{l.name}" />
+                    </b:selectOneMenu>
+                    <h:outputText value="Mindestalter" />
+                    <b:inputText value="#{adminModel.camp.minAge}">
+                      <f:convertNumber integerOnly="true" />
+                    </b:inputText>
+                     <h:outputText value="Maximalalter" />
+                     <b:inputText value="#{adminModel.camp.maxAge}">
+                      <f:convertNumber integerOnly="true" />
+                    </b:inputText>
+                    <h:outputText value="Preis" />
+                    <b:inputTextarea value="#{adminModel.camp.price}" />
+                    <h:outputText value="Ferien in" />
+                    <b:inputText value="#{adminModel.camp.countries}" tags="true" typeahead="true" typeaheadValues="#{adminModel.possibleCountries}"/>
+                    <h:outputText value="Bestätigung" />
+                    <b:selectOneMenu value="#{adminModel.camp.fkDocument}">
+                      <f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+                      <f:selectItems value="#{adminModel.documents}" var="d" itemValue="#{d.pk}" itemLabel="#{d.name}" />
+                    </b:selectOneMenu>
+                    <b:commandButton action="#{adminController.doDeleteCamp}" value="Löschen" look="danger" />
+                    <b:commandButton action="#{adminController.doUpsertCamp}" value="Übernehmen" look="primary" />
+                  </b:panelGrid>
+                </b:form>						  
+						  </b:tab>
+						</b:tabView>
 					</b:tab>
 					<b:tab title="Dokumente" styleClass="dist16">
 						<b:tabView activeIndex="#{adminModel.activeIndexDocument}">
