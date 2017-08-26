@@ -203,6 +203,15 @@ public class ProfileGateway extends JooqGateway {
 			// @formatter:on
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();
+			
+			InsertValuesStep1<TRssRecord, String> sql3 = DSL.using(t)
+			// @formatter:off
+				.insertInto(T_RSS,
+						        T_RSS.MSG)
+				.values(new StringBuilder(bean.getFullname()).append(" hat sich vom Portal abgemeldet.").toString());
+			// @formatter:on
+			LOGGER.debug("{}", sql3.toString());
+			sql3.execute();
 		});
 	}
 
