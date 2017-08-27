@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TPerson extends TableImpl<TPersonRecord> {
 
-    private static final long serialVersionUID = -1707683609;
+    private static final long serialVersionUID = -741961350;
 
     /**
      * The reference instance of <code>camp.t_person</code>
@@ -112,6 +112,11 @@ public class TPerson extends TableImpl<TPersonRecord> {
      * The column <code>camp.t_person.fk_profile</code>.
      */
     public final TableField<TPersonRecord, Integer> FK_PROFILE = createField("fk_profile", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>camp.t_person.accept</code>.
+     */
+    public final TableField<TPersonRecord, Boolean> ACCEPT = createField("accept", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * Create a <code>camp.t_person</code> table reference

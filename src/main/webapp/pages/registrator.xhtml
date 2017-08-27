@@ -9,6 +9,10 @@
 			<b:panel rendered="#{profileBean.hasRole('registrator')}" title="Bestätigung" collapsible="false">
 				<h:form>
 					<b:dataTable value="#{registratorModel.list}" var="l" lang="de">
+					  <b:dataTableColumn label="Bestätigung">
+					    <h:outputText value="erledigt" rendered="#{l.accept}" />
+					    <b:commandButton action="#{registratorController.doAccept(l.pk)}" value="bestätigen" look="success" rendered="#{!l.accept}" />
+					  </b:dataTableColumn>
 						<b:dataTableColumn label="Vorname">
 							<h:outputText value="#{l.forename}" />
 						</b:dataTableColumn>

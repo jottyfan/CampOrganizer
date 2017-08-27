@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.Controller;
+import de.jottyfan.camporganizer.admin.DocumentBean;
 import de.jottyfan.camporganizer.db.SubscriberGateway;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 import de.jottyfan.camporganizer.sales.SalesController;
@@ -43,6 +44,11 @@ public class SubscriberController extends Controller {
 			LOGGER.error("SubscriberController.toSubscriber", e);
 		}
 		return "/pages/subscriber.jsf";
+	}
+	
+	public String doDownloadDocument(DocumentBean d) {
+		super.doDownloadBase64(facesContext, d.getDocument(), d.getName(), d.getFiletype().getLiteral());
+		return toSubscriber();
 	}
 
 	public void setFacesContext(FacesContext facesContext) {

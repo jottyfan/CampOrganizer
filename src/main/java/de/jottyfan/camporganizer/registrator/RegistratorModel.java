@@ -38,6 +38,20 @@ public class RegistratorModel {
 		}
 	}
 
+	/**
+	 * set accept flat to true
+	 * 
+	 * @param pk
+	 */
+	public void acceptRegistration(FacesContext facesContext, Integer pk) {
+		try {
+			new RegistratorGateway(facesContext).acceptUser(pk);
+		}catch (DataAccessException e) {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on accepting user", e.getMessage()));
+		}
+	}
+
 	public List<RegistratorBean> getList() {
 		return list;
 	}

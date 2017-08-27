@@ -14,10 +14,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Record;
 import org.jooq.Record15;
+import org.jooq.Record16;
 import org.jooq.SelectOnConditionStep;
+import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.registrator.RegistratorBean;
 
 /**
@@ -33,7 +36,7 @@ public class RegistratorGateway extends JooqGateway {
 	}
 
 	public List<RegistratorBean> loadUsers() throws DataAccessException {
-		SelectOnConditionStep<Record15<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, String, Integer, Integer, Timestamp, Timestamp>> sql = getJooq()
+		SelectOnConditionStep<Record16<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, String, Integer, Integer, Timestamp, Timestamp>> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
 							T_PERSON.FORENAME,
@@ -45,6 +48,7 @@ public class RegistratorGateway extends JooqGateway {
 					    T_PERSON.BIRTHDATE,
 					    T_PERSON.EMAIL,
 					    T_PERSON.CAMPROLE,
+					    T_PERSON.ACCEPT,
 					    V_CAMP.NAME,
 					    V_CAMP.MIN_AGE,
 					    V_CAMP.MAX_AGE,
@@ -71,8 +75,28 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setMaxAge(r.get(V_CAMP.MAX_AGE));
 			bean.setArrive(r.get(V_CAMP.ARRIVE));
 			bean.setDepart(r.get(V_CAMP.DEPART));
+			bean.setAccept(r.get(T_PERSON.ACCEPT));
 			list.add(bean);
 		}
 		return list;
+	}
+
+	/**
+	 * set accept flag to true for person referenced by pk
+	 * 
+	 * @param pk
+	 *          of t_person
+	 * @return number of affected rows
+	 * @throws DataAccessException
+	 */
+	public Integer acceptUser(Integer pk) throws DataAccessException {
+		UpdateConditionStep<TPersonRecord> sql = getJooq()
+		// @formatter:off
+			.update(T_PERSON)
+			.set(T_PERSON.ACCEPT, true)
+			.where(T_PERSON.PK.eq(pk));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		return sql.execute();
 	}
 }

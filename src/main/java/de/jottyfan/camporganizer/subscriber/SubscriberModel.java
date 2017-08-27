@@ -15,13 +15,13 @@ import de.jottyfan.camporganizer.CampBean;
 @ManagedBean
 @SessionScoped
 public class SubscriberModel {
-	private List<CampBean> camps;
+	private List<SubscriberBean> camps;
 
-	public List<CampBean> getCamps() {
+	public List<SubscriberBean> getCamps() {
 		return camps;
 	}
 
-	public void setCamps(List<CampBean> camps) {
+	public void setCamps(List<SubscriberBean> camps) {
 		this.camps = camps;
 	}
 }

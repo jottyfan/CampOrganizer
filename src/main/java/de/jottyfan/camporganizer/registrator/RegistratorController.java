@@ -27,6 +27,11 @@ public class RegistratorController extends Controller {
 		return "/pages/registrator.jsf";
 	}
 	
+	public String doAccept(Integer pk) {
+		model.acceptRegistration(facesContext, pk);
+		return toRegistrator();
+	}
+	
 	public void setFacesContext(FacesContext facesContext) {
 		this.facesContext = facesContext;
 	}

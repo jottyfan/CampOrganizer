@@ -7,13 +7,30 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('subscriber')}" title="Buchung" collapsible="false">
-			  <h:outputText value="Du hast dich für folgende Freizeiten angemeldet:" />
-			  <b:dataTable value="#{subscriberModel.camps}" var="c" lang="de">
-			    <b:dataTableColumn label="Freizeit">
-			      <h:outputText value="#{c.name}" />
-			    </b:dataTableColumn>
-			  </b:dataTable>
-      </b:panel>
+				<b:form>
+					<h:outputText value="Du hast dich für folgende Freizeiten angemeldet:" />
+					<b:dataTable value="#{subscriberModel.camps}" var="c" lang="de">
+						<b:dataTableColumn label="Freizeit">
+							<h:outputText value="#{c.campname} #{c.camptime}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Ort">
+							<a href="#{c.url}" target="_blank"> <h:outputText value="#{c.locationname}" /></a>
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Dokumente">
+							<h:outputText value="Die Bestätigungsdokumente sind erst nach der offiziellen Bestätigung einsehbar."
+								rendered="#{!c.accept}" />
+							<h:outputText
+								value="Dir wurde ein Freizeitplatz reserviert. Bitte fülle die hier downloadbaren Formulare vollständig aus und schicke sie zügig an uns zurück."
+								rendered="#{c.accept}" />
+							<h:dataTable value="#{c.documents}" var="d" rendered="#{c.accept}">
+								<h:column>
+									<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
+								</h:column>
+							</h:dataTable>
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:form>
+			</b:panel>
 		</ui:define>
 	</ui:composition>
 </h:body>

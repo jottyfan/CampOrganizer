@@ -30,6 +30,7 @@ public class RegistratorBean {
 	private Date arrive;
 	private Date depart;
 	private EnumCamprole camprole;
+	private Boolean accept;
 
 	public RegistratorBean(Integer pk) {
 		super();
@@ -186,5 +187,13 @@ public class RegistratorBean {
 
 	public void setCamprole(EnumCamprole camprole) {
 		this.camprole = camprole;
+	}
+
+	public Boolean getAccept() {
+		return accept;
+	}
+
+	public void setAccept(Boolean accept) {
+		this.accept = accept;
 	}
 }
