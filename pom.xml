@@ -4,7 +4,7 @@
 	<groupId>de.jottyfan</groupId>
 	<artifactId>camporganizer</artifactId>
 	<packaging>war</packaging>
-	<version>0.1</version>
+	<version>0.2</version>
 	<name>CampOrganizer</name>
 	<description>organize bible camps (booking, registering)</description>
 	<dependencies>
@@ -91,6 +91,11 @@
 			<groupId>com.rometools</groupId>
 			<artifactId>rome</artifactId>
 			<version>1.7.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.biweekly</groupId>
+			<artifactId>biweekly</artifactId>
+			<version>0.6.1</version>
 		</dependency>
 	</dependencies>
 	<build>
