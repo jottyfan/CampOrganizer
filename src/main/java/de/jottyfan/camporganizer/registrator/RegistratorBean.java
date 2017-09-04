@@ -54,11 +54,14 @@ public class RegistratorBean {
 				}
 			}
 			if (minAge != null && maxAge != null) {
-				LocalDate now = LocalDate.now();
-				@SuppressWarnings("deprecation")
-				LocalDate bDate = LocalDate.of(birthdate.getYear(), birthdate.getMonth(), birthdate.getDate());
-				Integer years = Period.between(bDate, now).getYears();
-				if (minAge < years || maxAge > years) {
+				Calendar aCal = new GregorianCalendar();
+				Calendar bCal = new GregorianCalendar();
+				aCal.setTime(arrive);
+				bCal.setTime(birthdate);
+				LocalDate aDate = LocalDate.of(aCal.get(Calendar.YEAR), aCal.get(Calendar.MONTH) + 1, aCal.get(Calendar.DATE));
+				LocalDate bDate = LocalDate.of(bCal.get(Calendar.YEAR), bCal.get(Calendar.MONTH) + 1, bCal.get(Calendar.DATE));
+				Integer years = Period.between(bDate, aDate).getYears();
+				if (years < minAge || years > maxAge) {
 					// ignore helpers and kitchen
 					if (EnumCamprole.boy.equals(camprole) || EnumCamprole.girl.equals(camprole)) {
 						buf.append("passt vom Alter her nicht in die Freizeit");
