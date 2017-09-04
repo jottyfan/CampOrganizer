@@ -13,8 +13,7 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Record;
-import org.jooq.Record15;
-import org.jooq.Record16;
+import org.jooq.Record18;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
@@ -36,7 +35,7 @@ public class RegistratorGateway extends JooqGateway {
 	}
 
 	public List<RegistratorBean> loadUsers() throws DataAccessException {
-		SelectOnConditionStep<Record16<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, String, Integer, Integer, Timestamp, Timestamp>> sql = getJooq()
+		SelectOnConditionStep<Record18<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, String, Integer, Integer, Timestamp, Timestamp, Double, String>> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
 							T_PERSON.FORENAME,
@@ -53,7 +52,9 @@ public class RegistratorGateway extends JooqGateway {
 					    V_CAMP.MIN_AGE,
 					    V_CAMP.MAX_AGE,
 					    V_CAMP.ARRIVE,
-					    V_CAMP.DEPART)
+					    V_CAMP.DEPART,
+					    V_CAMP.YEAR,
+					    V_CAMP.LOCATION_NAME)
 			.from(T_PERSON)
 			.leftJoin(V_CAMP).on(V_CAMP.PK.eq(T_PERSON.FK_CAMP));
 		// @formatter:on
@@ -70,7 +71,12 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
 			bean.setEmail(r.get(T_PERSON.EMAIL));
 			bean.setCamprole(r.get(T_PERSON.CAMPROLE));
-			bean.setCampname(r.get(V_CAMP.NAME));
+			StringBuilder campName = new StringBuilder();
+			campName.append(r.get(V_CAMP.NAME)).append(" ");
+			Double year = r.get(V_CAMP.YEAR);
+			campName.append(year == null ? "" : year.intValue()).append(" in ");
+			campName.append(r.get(V_CAMP.LOCATION_NAME));
+			bean.setCampname(campName.toString());
 			bean.setMinAge(r.get(V_CAMP.MIN_AGE));
 			bean.setMaxAge(r.get(V_CAMP.MAX_AGE));
 			bean.setArrive(r.get(V_CAMP.ARRIVE));
