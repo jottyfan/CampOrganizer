@@ -75,7 +75,9 @@
 								<b:dataTableColumn label="Aktionen">
 									<b:buttonGroup>
 										<b:commandButton action="#{salesController.toEdit(l)}" value="bearbeiten" iconAwesome="pencil" />
-										<b:commandButton action="#{salesController.doDelete(l)}" value="" iconAwesome="trash-o" look="danger" />
+										<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
+											<b:commandButton action="#{salesController.doDelete(l)}" value="ja, unwiederbringlich löschen" look="danger" />
+										</b:dropButton>
 									</b:buttonGroup>
 								</b:dataTableColumn>
 							</b:dataTable>

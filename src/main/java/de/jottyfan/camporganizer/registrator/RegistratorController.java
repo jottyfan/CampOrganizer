@@ -32,6 +32,11 @@ public class RegistratorController extends Controller {
 		return toRegistrator();
 	}
 	
+	public String doReject(Integer pk) {
+		model.rejectRegistration(facesContext, pk);
+		return toRegistrator();
+	}
+	
 	public void setFacesContext(FacesContext facesContext) {
 		this.facesContext = facesContext;
 	}

@@ -13,7 +13,9 @@
 						<b:inputSecret value="#{profileBean.password}" />
 						<h:outputText value="Passwort (nochmal)" />
 						<b:inputSecret value="#{profileBean.passwordAgain}" />
-						<b:commandButton action="#{profileController.doRemoveLogin}" value="Profil löschen" look="danger" />
+						<b:dropButton value="Profil löschen" look="danger">
+							<b:commandButton action="#{profileController.doRemoveLogin}" value="ja, Profil unwiederbringlich löschen" look="danger" />
+						</b:dropButton>
 						<b:commandButton action="#{profileController.doChangePassword}" value="Passwort ändern" look="primary" />
 					</b:panelGrid>
 				</h:form>

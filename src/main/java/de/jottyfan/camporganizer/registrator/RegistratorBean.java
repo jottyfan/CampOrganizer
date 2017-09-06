@@ -31,6 +31,8 @@ public class RegistratorBean {
 	private Date depart;
 	private EnumCamprole camprole;
 	private Boolean accept;
+	private String profileForename;
+	private String profileSurname;
 
 	public RegistratorBean(Integer pk) {
 		super();
@@ -39,6 +41,10 @@ public class RegistratorBean {
 
 	public String getNote() {
 		StringBuilder buf = new StringBuilder();
+		if (profileForename != null || profileSurname != null) {
+			buf.append("angemeldet von ");
+			buf.append(profileForename).append(" ").append(profileSurname).append("\n");
+		}
 		if (birthdate != null) {
 			if (arrive != null && depart != null) {
 				// check birthdate in camp
@@ -198,5 +204,21 @@ public class RegistratorBean {
 
 	public void setAccept(Boolean accept) {
 		this.accept = accept;
+	}
+
+	public String getProfileForename() {
+		return profileForename;
+	}
+
+	public void setProfileForename(String profileForename) {
+		this.profileForename = profileForename;
+	}
+
+	public String getProfileSurname() {
+		return profileSurname;
+	}
+
+	public void setProfileSurname(String profileSurname) {
+		this.profileSurname = profileSurname;
 	}
 }

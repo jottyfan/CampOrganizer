@@ -41,6 +41,7 @@ public class RegistratorModel {
 	/**
 	 * set accept flat to true
 	 * 
+	 * @param facesContext
 	 * @param pk
 	 */
 	public void acceptRegistration(FacesContext facesContext, Integer pk) {
@@ -49,6 +50,21 @@ public class RegistratorModel {
 		}catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on accepting user", e.getMessage()));
+		}
+	}
+
+	/**
+	 * delete registration from database
+	 * 
+	 * @param facesContext
+	 * @param pk
+	 */
+	public void rejectRegistration(FacesContext facesContext, Integer pk) {
+		try {
+			new RegistratorGateway(facesContext).rejectUser(pk);
+		}catch (DataAccessException e) {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on rejecting user", e.getMessage()));
 		}
 	}
 
