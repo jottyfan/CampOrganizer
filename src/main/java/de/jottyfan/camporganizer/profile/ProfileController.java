@@ -96,6 +96,23 @@ public class ProfileController extends Controller {
 		}
 	}
 
+	/**
+	 * update forename, surname and username of profile bean
+	 * 
+	 * @return profile page
+	 */
+	public String doChangeNames() {
+		try {
+			new ProfileGateway(facesContext).changeNames(bean);
+			facesContext.addMessage("erfolgreich",
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "names changed", "Die Namen wurde aktualisiert."));
+		} catch (DataAccessException e) {
+			facesContext.addMessage("failure",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+		}
+		return toProfile();
+	}
+
 	public ProfileBean getBean() {
 		return bean;
 	}

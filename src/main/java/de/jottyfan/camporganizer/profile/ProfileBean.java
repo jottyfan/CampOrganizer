@@ -1,5 +1,7 @@
 package de.jottyfan.camporganizer.profile;
 
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -24,6 +26,7 @@ public class ProfileBean {
 	private String passwordAgain;
 	private String encryptedPassword;
 	private String roles;
+	private List<String> allUsernames;
 
 	public void clear() {
 		this.pk = null;
@@ -142,5 +145,13 @@ public class ProfileBean {
 
 	public void setPk(Integer pk) {
 		this.pk = pk;
+	}
+
+	public List<String> getAllUsernames() {
+		return allUsernames;
+	}
+
+	public void setAllUsernames(List<String> allUsernames) {
+		this.allUsernames = allUsernames;
 	}
 }

@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jasypt.util.password.StrongPasswordEncryptor;
+import org.jooq.DSLContext;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertFinalStep;
 import org.jooq.InsertResultStep;
@@ -98,7 +99,28 @@ public class ProfileGateway extends JooqGateway {
 			requested.clear();
 			throw new DataAccessException("login invalid for user " + requested.getUsername());
 		}
+		requested.setAllUsernames(getAllUsernames(getJooq()));
 		return requested;
+	}
+
+	/**
+	 * get all usernames from db
+	 * 
+	 * @param jooq
+	 *          to be used as DSLContext
+	 * @return list of found usernames; at least an empty list
+	 * @throws DataAccessException
+	 */
+	private List<String> getAllUsernames(DSLContext jooq) throws DataAccessException {
+		SelectJoinStep<Record1<String>> sql = jooq
+		// @formatter:off
+			.selectDistinct(T_PROFILE.USERNAME)
+			.from(T_PROFILE);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<String> list = new ArrayList<>();
+		list.addAll(sql.fetchSet(T_PROFILE.USERNAME));
+		return list;
 	}
 
 	/**
@@ -144,6 +166,8 @@ public class ProfileGateway extends JooqGateway {
 		  // @formatter:on
 			LOGGER.debug("{}", sql.toString());
 			lrw.setNumber(sql.fetchOne().get(T_PROFILE.PK));
+			bean.setPk(lrw.getNumber());
+			bean.setAllUsernames(getAllUsernames(DSL.using(t)));
 			if (addSubscriber) {
 				InsertValuesStep2<TProfileroleRecord, Integer, EnumRole> sql2 = DSL.using(t)
 				// @formatter:off
@@ -205,7 +229,7 @@ public class ProfileGateway extends JooqGateway {
 			// @formatter:on
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();
-			
+
 			InsertValuesStep1<TRssRecord, String> sql3 = DSL.using(t)
 			// @formatter:off
 				.insertInto(T_RSS,
@@ -490,5 +514,25 @@ public class ProfileGateway extends JooqGateway {
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		sql.execute();
+	}
+
+	/**
+	 * update bean's names
+	 * 
+	 * @param bean to be used
+	 * @throws DataAccessException
+	 */
+	public void changeNames(ProfileBean bean) throws DataAccessException {
+		UpdateConditionStep<TProfileRecord> sql = getJooq()
+		// @formatter:off
+			.update(T_PROFILE)
+			.set(T_PROFILE.FORENAME, bean.getForename())
+			.set(T_PROFILE.SURNAME, bean.getSurname())
+			.set(T_PROFILE.USERNAME, bean.getUsername())
+			.where(T_PROFILE.PK.eq(bean.getPk()));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		sql.execute();
+		bean.setAllUsernames(getAllUsernames(getJooq()));
 	}
 }

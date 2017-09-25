@@ -2,23 +2,50 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:b="http://bootsfaces.net/ui">
+	xmlns:b="http://bootsfaces.net/ui" xmlns:f="http://java.sun.com/jsf/core">
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel>
-				<h:form>
-					<b:panelGrid colSpans="3,9" size="xs">
-						<h:outputText value="Passwort" />
-						<b:inputSecret value="#{profileBean.password}" />
-						<h:outputText value="Passwort (nochmal)" />
-						<b:inputSecret value="#{profileBean.passwordAgain}" />
-						<b:dropButton value="Profil löschen" look="danger">
-							<b:commandButton action="#{profileController.doRemoveLogin}" value="ja, Profil unwiederbringlich löschen" look="danger" />
-						</b:dropButton>
-						<b:commandButton action="#{profileController.doChangePassword}" value="Passwort ändern" look="primary" />
-					</b:panelGrid>
-				</h:form>
+				<b:tabView>
+					<b:tab title="Namen ändern">
+						<b:form>
+							<b:panelGrid colSpans="3,9" size="xs">
+								<h:outputText value="Vorname" />
+								<b:inputText value="#{profileBean.forename}" />
+								<h:outputText value="Nachname" />
+								<b:inputText value="#{profileBean.surname}" />
+								<h:outputText value="Benutzername" />
+								<b:inputText id="username" value="#{profileBean.username}" required="true" requiredMessage="Das Feld Benutzername darf nicht leer bleiben.">
+								  <f:attribute name="listOfNames" value="#{profileBean.allUsernames}" />
+									<f:validator validatorId="de.jottyfan.camporganizer.jsf.NameValidator" />
+									<f:ajax event="blur" />
+								</b:inputText>
+								<h:outputText value="" />
+								<b:commandButton action="#{profileController.doChangeNames}" value="Namen ändern" look="primary" />
+							</b:panelGrid>
+						</b:form>
+					</b:tab>
+					<b:tab title="Passwort ändern">
+						<b:form>
+							<b:panelGrid colSpans="3,9" size="xs">
+								<h:outputText value="Passwort" />
+								<b:inputSecret value="#{profileBean.password}" />
+								<h:outputText value="Passwort (nochmal)" />
+								<b:inputSecret value="#{profileBean.passwordAgain}" />
+								<h:outputText value="" />
+								<b:commandButton action="#{profileController.doChangePassword}" value="Passwort ändern" look="primary" />
+							</b:panelGrid>
+						</b:form>
+					</b:tab>
+					<b:tab title="Zugang löschen">
+						<b:form>
+							<b:dropButton value="Profil löschen" look="danger">
+								<b:commandButton action="#{profileController.doRemoveLogin}" value="ja, Profil unwiederbringlich löschen" look="danger" />
+							</b:dropButton>
+						</b:form>
+					</b:tab>
+				</b:tabView>
 			</b:panel>
 		</ui:define>
 	</ui:composition>
