@@ -30,8 +30,8 @@ public class BookController extends Controller {
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
-	@ManagedProperty(value = "#{bookBean}")
-	private BookBean bean;
+	@ManagedProperty(value = "#{personBean}")
+	private PersonBean bean;
 
 	@ManagedProperty(value = "#{profileBean}")
 	private ProfileBean profileBean;
@@ -87,11 +87,11 @@ public class BookController extends Controller {
 		this.facesContext = facesContext;
 	}
 
-	public BookBean getBean() {
+	public PersonBean getBean() {
 		return bean;
 	}
 
-	public void setBean(BookBean bean) {
+	public void setBean(PersonBean bean) {
 		this.bean = bean;
 	}
 

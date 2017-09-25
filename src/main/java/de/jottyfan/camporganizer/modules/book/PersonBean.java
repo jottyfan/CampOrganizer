@@ -15,7 +15,7 @@ import de.jottyfan.camporganizer.CampBean;
  */
 @ManagedBean
 @SessionScoped
-public class BookBean {
+public class PersonBean {
 	private String forename;
 	private String surname;
 	private String street;

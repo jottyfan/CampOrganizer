@@ -11,6 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep11;
+import org.jooq.Record;
+import org.jooq.Record9;
+import org.jooq.SelectConditionStep;
+import org.jooq.UpdateSetMoreStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
@@ -18,7 +22,7 @@ import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
-import de.jottyfan.camporganizer.modules.book.BookBean;
+import de.jottyfan.camporganizer.modules.book.PersonBean;
 
 /**
  * 
@@ -40,7 +44,7 @@ public class BookGateway extends JooqGateway {
 	 *          to be stored
 	 * @throws DataAccessException
 	 */
-	public void insert(BookBean bean) throws DataAccessException {
+	public void insert(PersonBean bean) throws DataAccessException {
 		getJooq().transaction(t -> {
 			Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
 			InsertValuesStep11<TPersonRecord, String, String, String, String, String, String, Date, EnumCamprole, String, Integer, Integer> sql = DSL
@@ -76,5 +80,69 @@ public class BookGateway extends JooqGateway {
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();
 		});
+	}
+
+	/**
+	 * load person entry from db
+	 * 
+	 * @param pk
+	 *          to be used as reference
+	 * @return loaded bean
+	 * @throws DataAccessException
+	 */
+	public PersonBean getPerson(Integer pk) throws DataAccessException {
+		SelectConditionStep<Record9<String, String, String, String, String, Date, String, String, EnumCamprole>> sql = getJooq()
+		// @formatter:off
+			.select(T_PERSON.FORENAME,
+					    T_PERSON.SURNAME,
+					    T_PERSON.STREET,
+					    T_PERSON.ZIP,
+					    T_PERSON.CITY,
+					    T_PERSON.BIRTHDATE,
+					    T_PERSON.PHONE,
+					    T_PERSON.EMAIL,
+					    T_PERSON.CAMPROLE)
+			.from(T_PERSON)
+			.where(T_PERSON.PK.eq(pk));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		Record r = sql.fetchOne();
+		PersonBean bean = new PersonBean();
+		bean.setForename(r.get(T_PERSON.FORENAME));
+		bean.setSurname(r.get(T_PERSON.SURNAME));
+		bean.setStreet(r.get(T_PERSON.STREET));
+		bean.setZip(r.get(T_PERSON.ZIP));
+		bean.setCity(r.get(T_PERSON.CITY));
+		bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
+		bean.setPhone(r.get(T_PERSON.PHONE));
+		bean.setEmail(r.get(T_PERSON.EMAIL));
+		bean.setCamprole(r.get(T_PERSON.CAMPROLE).getLiteral());
+		return bean;
+	}
+
+	/**
+	 * update subscriber relevant fields in db
+	 * 
+	 * @param bean
+	 *          to be updated
+	 * @throws DataAccessException
+	 */
+	public void update(PersonBean bean) throws DataAccessException {
+		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
+		UpdateSetMoreStep<TPersonRecord> sql = getJooq()
+		// @formatter:off
+			.update(T_PERSON)
+			.set(T_PERSON.FORENAME, bean.getForename())
+			.set(T_PERSON.SURNAME, bean.getSurname())
+			.set(T_PERSON.STREET, bean.getStreet())
+			.set(T_PERSON.ZIP, bean.getZip())
+			.set(T_PERSON.CITY, bean.getCity())
+			.set(T_PERSON.BIRTHDATE, birthDate)
+			.set(T_PERSON.PHONE, bean.getPhone())
+			.set(T_PERSON.EMAIL, bean.getEmail())
+			.set(T_PERSON.CAMPROLE, new EnumConverter().getEnumCamprole(bean.getCamprole()));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		sql.execute();
 	}
 }

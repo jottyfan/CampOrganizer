@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+<h:body>
+	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="content">
+			<b:panel title="Korrektur der Anmeldung" collapsible="false">
+				<b:form>
+					<b:panelGrid colSpans="3,9" size="xs">
+						<h:outputText value="Vorname" />
+						<b:inputText value="#{subscriberModel.bean.forename}" />
+						<h:outputText value="Nachname" />
+						<b:inputText value="#{subscriberModel.bean.surname}" />
+						<h:outputText value="Strasse" />
+						<b:inputText value="#{subscriberModel.bean.street}" />
+						<h:outputText value="PLZ" />
+						<b:inputText value="#{subscriberModel.bean.zip}" />
+						<h:outputText value="Ort" />
+						<b:inputText value="#{subscriberModel.bean.city}" />
+						<h:outputText value="Geburtstag" />
+						<b:datepicker value="#{subscriberModel.bean.birthdate}" />
+						<h:outputText value="Telefon" />
+						<b:inputText value="#{subscriberModel.bean.phone}" />
+						<h:outputText value="E-Mail" />
+						<b:inputText value="#{subscriberModel.bean.email}" />
+						<h:outputText value="Rolle" />
+						<b:selectOneMenu value="#{subscriberModel.bean.camprole}">
+							<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+							<f:selectItem itemValue="girl" itemLabel="Mädchen" />
+							<f:selectItem itemValue="boy" itemLabel="Junge" />
+							<f:selectItem itemValue="helpergirl" itemLabel="Mitarbeiterin" />
+							<f:selectItem itemValue="helperboy" itemLabel="Mitarbeiter" />
+							<f:selectItem itemValue="kitchen" itemLabel="Küche" />
+						</b:selectOneMenu>
+						<b:commandButton action="#{subscriberController.toMain}" value="abbrechen" imediate="true" />
+						<b:commandButton action="#{subscriberController.doUpdate}" value="korrigieren" look="warning" />
+					</b:panelGrid>
+				</b:form>
+			</b:panel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

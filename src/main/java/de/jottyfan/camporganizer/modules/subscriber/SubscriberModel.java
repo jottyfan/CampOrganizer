@@ -11,9 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.exception.DataAccessException;
 
-import de.jottyfan.camporganizer.CampBean;
+import de.jottyfan.camporganizer.db.BookGateway;
 import de.jottyfan.camporganizer.db.SubscriberGateway;
-import de.jottyfan.camporganizer.modules.businessman.SalesController;
+import de.jottyfan.camporganizer.modules.book.PersonBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
@@ -27,6 +27,7 @@ public class SubscriberModel {
 	private final static Logger LOGGER = LogManager.getLogger(SubscriberModel.class);
 
 	private List<SubscriberBean> camps;
+	private PersonBean bean;
 
 	public List<SubscriberBean> getCamps() {
 		return camps;
@@ -51,6 +52,41 @@ public class SubscriberModel {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("SubscriberModel.load", e);
+		}
+	}
+
+	public PersonBean getBean() {
+		return bean;
+	}
+
+	/**
+	 * load person from db
+	 * 
+	 * @param facesContext
+	 *          current faces context
+	 * @param pk
+	 *          primary key of person to be loaded
+	 */
+	public void loadPerson(FacesContext facesContext, Integer pk) {
+		try {
+			bean = new BookGateway(facesContext).getPerson(pk);
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("SubscriberModel.loadPerson", e);
+		}
+	}
+
+	/**
+	 * update person in db
+	 * 
+	 * @param facesContext current faces context
+	 */
+	public void doUpdate(FacesContext facesContext) {
+		try {
+			new BookGateway(facesContext).update(bean);
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("SubscriberModel.doUpdate", e);
 		}
 	}
 }

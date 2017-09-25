@@ -35,6 +35,7 @@
 							<h:outputText
 								value="Dir wurde ein Freizeitplatz reserviert. Bitte fülle die hier downloadbaren Formulare vollständig aus und schicke sie zügig an uns zurück."
 								rendered="#{c.accept}" />
+							<b:commandButton action="#{subscriberController.toEdit(c)}" value="bearbeiten" look="warning" iconAwesome="pencil" rendered="#{!c.accept}" />
 							<h:dataTable value="#{c.documents}" var="d" rendered="#{c.accept}">
 								<h:column>
 									<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />

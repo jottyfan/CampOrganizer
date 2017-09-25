@@ -48,6 +48,16 @@ public class SubscriberController extends Controller {
 		super.doDownloadBase64(facesContext, d.getDocument(), d.getName(), d.getFiletype().getLiteral());
 		return toMain();
 	}
+	
+	public String toEdit(SubscriberBean bean) {
+		model.loadPerson(facesContext, bean.getPkPerson());
+		return "/pages/subscriber/edit.jsf";
+	}
+	
+	public String doUpdate() {
+		model.doUpdate(facesContext);
+		return toMain();
+	}
 
 	public void setFacesContext(FacesContext facesContext) {
 		this.facesContext = facesContext;

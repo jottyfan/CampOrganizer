@@ -19,8 +19,8 @@ import de.jottyfan.camporganizer.db.CampGateway;
 @RequestScoped
 public class BookModel {
 
-	@ManagedProperty(value = "#{bookBean}")
-	private BookBean bean;
+	@ManagedProperty(value = "#{personBean}")
+	private PersonBean bean;
 
 	/**
 	 * get all camps; as there is no toLogin method, all camps are read from db just here
@@ -34,11 +34,11 @@ public class BookModel {
 		return bean.getCamps();
 	}
 
-	public BookBean getBean() {
+	public PersonBean getBean() {
 		return bean;
 	}
 
-	public void setBean(BookBean bean) {
+	public void setBean(PersonBean bean) {
 		this.bean = bean;
 	}
 }
