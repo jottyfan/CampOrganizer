@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.subscriber;
+package de.jottyfan.camporganizer.modules.subscriber;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -11,10 +11,10 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.Controller;
-import de.jottyfan.camporganizer.admin.DocumentBean;
 import de.jottyfan.camporganizer.db.SubscriberGateway;
+import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.businessman.SalesController;
 import de.jottyfan.camporganizer.profile.ProfileBean;
-import de.jottyfan.camporganizer.sales.SalesController;
 
 /**
  * 

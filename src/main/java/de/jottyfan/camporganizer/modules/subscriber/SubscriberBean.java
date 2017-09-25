@@ -1,10 +1,10 @@
-package de.jottyfan.camporganizer.subscriber;
+package de.jottyfan.camporganizer.modules.subscriber;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.jottyfan.camporganizer.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.admin.DocumentBean;
 
 /**
  * 

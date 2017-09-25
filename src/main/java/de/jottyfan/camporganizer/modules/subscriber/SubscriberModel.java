@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.subscriber;
+package de.jottyfan.camporganizer.modules.subscriber;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.SubscriberGateway;
+import de.jottyfan.camporganizer.modules.businessman.SalesController;
 import de.jottyfan.camporganizer.profile.ProfileBean;
-import de.jottyfan.camporganizer.sales.SalesController;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.registrator;
+package de.jottyfan.camporganizer.modules.registrator;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;

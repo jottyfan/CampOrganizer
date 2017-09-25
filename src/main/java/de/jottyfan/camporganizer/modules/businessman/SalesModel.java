@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.sales;
+package de.jottyfan.camporganizer.modules.businessman;
 
 import java.util.ArrayList;
 import java.util.List;

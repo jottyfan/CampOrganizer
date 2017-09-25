@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.admin;
+package de.jottyfan.camporganizer.modules.admin;
 
 import java.io.IOException;
 import java.io.InputStream;

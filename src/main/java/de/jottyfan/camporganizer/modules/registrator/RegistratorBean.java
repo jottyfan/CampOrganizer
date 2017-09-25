@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.registrator;
+package de.jottyfan.camporganizer.modules.registrator;
 
 import java.time.LocalDate;
 import java.time.Period;

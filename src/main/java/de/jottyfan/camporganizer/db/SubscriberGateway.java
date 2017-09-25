@@ -28,13 +28,13 @@ import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.LambdaResultWrapper;
-import de.jottyfan.camporganizer.admin.DocumentBean;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
+import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.subscriber.SubscriberBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
-import de.jottyfan.camporganizer.subscriber.SubscriberBean;
 
 /**
  * 

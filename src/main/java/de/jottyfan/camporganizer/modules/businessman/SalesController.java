@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.sales;
+package de.jottyfan.camporganizer.modules.businessman;
 
 import java.io.IOException;
 import java.io.OutputStream;

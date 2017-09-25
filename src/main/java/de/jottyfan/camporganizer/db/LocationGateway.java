@@ -13,9 +13,9 @@ import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
-import de.jottyfan.camporganizer.admin.LocationBean;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
+import de.jottyfan.camporganizer.modules.admin.LocationBean;
 
 /**
  * 

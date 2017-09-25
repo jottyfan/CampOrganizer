@@ -21,7 +21,7 @@ import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
-import de.jottyfan.camporganizer.sales.SalesBean;
+import de.jottyfan.camporganizer.modules.businessman.SalesBean;
 
 /**
  * 

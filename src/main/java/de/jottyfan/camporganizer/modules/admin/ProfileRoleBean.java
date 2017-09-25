@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.admin;
+package de.jottyfan.camporganizer.modules.admin;
 
 import de.jottyfan.camporganizer.profile.ProfileBean;
 

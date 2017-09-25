@@ -22,7 +22,7 @@ import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
-import de.jottyfan.camporganizer.registrator.RegistratorBean;
+import de.jottyfan.camporganizer.modules.registrator.RegistratorBean;
 
 /**
  * 

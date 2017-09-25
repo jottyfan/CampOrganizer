@@ -34,9 +34,6 @@ import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
-import de.jottyfan.camporganizer.admin.DocumentBean;
-import de.jottyfan.camporganizer.admin.LocationBean;
-import de.jottyfan.camporganizer.admin.ProfileRoleBean;
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
@@ -45,6 +42,9 @@ import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
+import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.admin.LocationBean;
+import de.jottyfan.camporganizer.modules.admin.ProfileRoleBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
