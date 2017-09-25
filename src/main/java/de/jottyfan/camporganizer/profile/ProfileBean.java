@@ -25,6 +25,17 @@ public class ProfileBean {
 	private String encryptedPassword;
 	private String roles;
 
+	public void clear() {
+		this.pk = null;
+		this.forename = null;
+		this.surname = null;
+		this.username = null;
+		this.password = null;
+		this.passwordAgain = null;
+		this.encryptedPassword = null;
+		this.roles = null;
+	}
+
 	public boolean checkPasswordAndForgetPlainOne() throws DataAccessException {
 		boolean result = false;
 		try {

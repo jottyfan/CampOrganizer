@@ -35,13 +35,13 @@ public class ProfileController extends Controller {
 		} catch (DataAccessException e) {
 			facesContext.addMessage("login failed",
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "wrong login", e.getMessage()));
-			bean.setForename(null);
-			bean.setSurname(null);
+			bean.clear();
 			return toLogin();
 		}
 	}
 
 	public String doLogout() {
+		bean.clear();
 		facesContext.getExternalContext().getSessionMap().clear();
 		return toLogin();
 	}
@@ -57,8 +57,7 @@ public class ProfileController extends Controller {
 		} catch (DataAccessException e) {
 			facesContext.addMessage("registering failed",
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "error on registering", e.getMessage()));
-			bean.setForename(null);
-			bean.setSurname(null);
+			bean.clear();
 			return toRegister();
 		}
 	}

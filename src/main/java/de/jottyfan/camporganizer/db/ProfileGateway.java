@@ -95,6 +95,7 @@ public class ProfileGateway extends JooqGateway {
 		}
 		requested.setRoles(roles.toString());
 		if (!requested.checkPasswordAndForgetPlainOne()) {
+			requested.clear();
 			throw new DataAccessException("login invalid for user " + requested.getUsername());
 		}
 		return requested;
