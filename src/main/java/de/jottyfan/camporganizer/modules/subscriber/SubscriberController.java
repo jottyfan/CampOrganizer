@@ -34,19 +34,19 @@ public class SubscriberController extends Controller {
 	@ManagedProperty(value = "#{profileBean}")
 	private ProfileBean profileBean;
 
-	public String toSubscriber() {
+	public String toMain() {
 		model.load(facesContext, profileBean.getPk());
-		return "/pages/subscriber.jsf";
+		return "/pages/main.jsf";
 	}
 	
 	public String doDelete(SubscriberBean bean) {
 		model.doDelete(facesContext, profileBean, bean);
-	  return toSubscriber();
+	  return toMain();
 	}
 	
 	public String doDownloadDocument(DocumentBean d) {
 		super.doDownloadBase64(facesContext, d.getDocument(), d.getName(), d.getFiletype().getLiteral());
-		return toSubscriber();
+		return toMain();
 	}
 
 	public void setFacesContext(FacesContext facesContext) {

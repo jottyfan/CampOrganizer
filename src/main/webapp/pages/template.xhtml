@@ -16,7 +16,7 @@
 					<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
 				</b:buttonGroup>
 				<b:buttonGroup rendered="#{profileBean.fullname != ' '}" style="margin-left: 8px">
-					<b:commandButton action="#{subscriberController.toSubscriber}" value="Buchung" iconAwesome="smile"
+					<b:commandButton action="#{subscriberController.toMain}" value="Buchung" iconAwesome="smile"
 						rendered="#{profileBean.hasRole('subscriber')}" />
 					<b:commandButton action="#{salesController.toSales}" value="Abrechnung" iconAwesome="money"
 						rendered="#{profileBean.hasRole('businessman')}" />
