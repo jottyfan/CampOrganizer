@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jooq.DeleteConditionStep;
+import org.jooq.InsertValuesStep1;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record2;
@@ -19,13 +21,19 @@ import org.jooq.Record5;
 import org.jooq.Record6;
 import org.jooq.Record7;
 import org.jooq.Record8;
+import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
 import org.jooq.exception.DataAccessException;
+import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.CampBean;
+import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.admin.DocumentBean;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 import de.jottyfan.camporganizer.subscriber.SubscriberBean;
 
 /**
@@ -37,8 +45,11 @@ public class SubscriberGateway extends JooqGateway {
 
 	private static final Logger LOGGER = LogManager.getLogger(BookGateway.class);
 
+	private FacesContext facesContext;
+
 	public SubscriberGateway(FacesContext facesContext) throws DataAccessException {
 		super(facesContext);
+		this.facesContext = facesContext;
 	}
 
 	/**
@@ -51,9 +62,10 @@ public class SubscriberGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<SubscriberBean> getCamps(Integer pk) throws DataAccessException {
-		SelectConditionStep<Record8<Integer, String, Timestamp, Timestamp, Integer, String, String, Boolean>> sql = getJooq()
+		SelectConditionStep<Record9<Integer, Integer, String, Timestamp, Timestamp, Integer, String, String, Boolean>> sql = getJooq()
 		// @formatter:off
-		  .select(T_CAMP.FK_DOCUMENT,
+		  .select(T_PERSON.PK,
+		  		      T_CAMP.FK_DOCUMENT,
 		  				  T_CAMP.NAME,
 		  		      T_CAMP.ARRIVE,
 		  		      T_CAMP.DEPART,
@@ -66,10 +78,10 @@ public class SubscriberGateway extends JooqGateway {
 		  .leftJoin(T_LOCATION).on(T_LOCATION.PK.eq(T_CAMP.FK_LOCATION))
 		  .where(T_PERSON.FK_PROFILE.eq(pk));
 		// @formatter:on
-		LOGGER.debug("{}", sql.toString());		
+		LOGGER.debug("{}", sql.toString());
 		List<SubscriberBean> list = new ArrayList<>();
 		for (Record r : sql.fetch()) {
-			SubscriberBean bean = new SubscriberBean();
+			SubscriberBean bean = new SubscriberBean(r.get(T_PERSON.PK));
 			bean.setArrive(r.get(T_CAMP.ARRIVE));
 			bean.setDepart(r.get(T_CAMP.DEPART));
 			bean.setCampname(r.get(T_CAMP.NAME));
@@ -77,10 +89,10 @@ public class SubscriberGateway extends JooqGateway {
 			bean.setAccept(r.get(T_PERSON.ACCEPT));
 			bean.setUrl(r.get(T_LOCATION.URL));
 			bean.setDocuments(new ArrayList<>());
-			
+
 			Integer locationDoc = r.get(T_LOCATION.FK_DOCUMENT);
 			Integer campDoc = r.get(T_CAMP.FK_DOCUMENT);
-			
+
 			SelectConditionStep<Record4<String, EnumDocument, EnumFiletype, String>> sql2 = getJooq()
 			// @formatter:off
 				.select(T_DOCUMENT.NAME,
@@ -101,10 +113,42 @@ public class SubscriberGateway extends JooqGateway {
 				doc.setName(rec.get(T_DOCUMENT.NAME));
 				bean.getDocuments().add(doc);
 			}
-			
+
 			list.add(bean);
 		}
 		return list;
 	}
 
+	/**
+	 * delete entry from t_person
+	 * 
+	 * @param profileBean
+	 *          of current user
+	 * @param bean
+	 *          to be used as reference
+	 * @return number of affected rows
+	 * @throws DataAccessException
+	 */
+	public Integer delete(ProfileBean profileBean, SubscriberBean bean) throws DataAccessException {
+		LambdaResultWrapper lrw = new LambdaResultWrapper();
+		getJooq().transaction(t -> {
+			DeleteConditionStep<TPersonRecord> sql = DSL.using(t)
+			// @formatter:off
+				.deleteFrom(T_PERSON)
+				.where(T_PERSON.PK.eq(bean.getPkPerson()));
+			// @formatter:on
+			LOGGER.debug("{}", sql.toString());
+			lrw.setNumber(sql.execute());
+
+			InsertValuesStep1<TRssRecord, String> sql2 = DSL.using(t)
+			// @formatter:off
+				.insertInto(T_RSS,
+                    T_RSS.MSG)
+				.values(profileBean.getFullname() + " hat ihre/seine Buchung an " + bean.getCampname() + " storniert.");
+			// @formatter:on
+			LOGGER.debug("{}", sql2.toString());
+			sql2.execute();
+		});
+		return lrw.getNumber();
+	}
 }

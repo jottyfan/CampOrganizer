@@ -25,8 +25,6 @@ import de.jottyfan.camporganizer.sales.SalesController;
 @RequestScoped
 public class SubscriberController extends Controller {
 
-	private final static Logger LOGGER = LogManager.getLogger(SalesController.class);
-
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
@@ -37,13 +35,13 @@ public class SubscriberController extends Controller {
 	private ProfileBean profileBean;
 
 	public String toSubscriber() {
-		try {
-			model.setCamps(new SubscriberGateway(facesContext).getCamps(profileBean.getPk()));
-		} catch (DataAccessException e) {
-			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
-			LOGGER.error("SubscriberController.toSubscriber", e);
-		}
+		model.load(facesContext, profileBean.getPk());
 		return "/pages/subscriber.jsf";
+	}
+	
+	public String doDelete(SubscriberBean bean) {
+		model.doDelete(facesContext, profileBean, bean);
+	  return toSubscriber();
 	}
 	
 	public String doDownloadDocument(DocumentBean d) {

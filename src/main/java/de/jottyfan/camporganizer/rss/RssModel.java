@@ -22,12 +22,12 @@ public class RssModel {
 		feed.setFeedType("rss_2.0");
 		feed.setTitle("Onkel Werner Freizeiten e.V. Anmeldungsnotifier");
 		feed.setLink("https://onkelwernerfreizeiten.de/camporganizer/rss.jsf");
-		feed.setDescription("In diesem Feed werden neue Anmeldungen gesammelt.");
+		feed.setDescription("In diesem Feed werden Portalaktivitäten gesammelt.");
 		feed.setEncoding("UTF-8");
 		List<SyndEntry> entries = new ArrayList<>();
 		for (RssBean bean : beans) {
 			SyndEntry entry = new SyndEntryImpl();
-			entry.setTitle("neue Anmeldung");
+			entry.setTitle("neue Aktivität");
 			entry.setLink("https://onkelwernerfreizeiten.de/camporganizer/");
 			entry.setUri(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(bean.getPubdate()));
 			entry.setPublishedDate(bean.getPubdate());	

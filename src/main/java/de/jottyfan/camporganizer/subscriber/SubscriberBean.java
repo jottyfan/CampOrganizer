@@ -12,6 +12,7 @@ import de.jottyfan.camporganizer.admin.DocumentBean;
  *
  */
 public class SubscriberBean {
+	private final Integer pkPerson;
 	private String locationname;
 	private String campname;
 	private Date arrive;
@@ -20,6 +21,10 @@ public class SubscriberBean {
 	private String url;
 	private List<DocumentBean> documents;
 
+	public SubscriberBean(Integer pkPerson) {
+		this.pkPerson = pkPerson;
+	}
+	
 	public String getCamptime() {
 		StringBuilder buf = new StringBuilder();
 		buf.append(new SimpleDateFormat("dd.MM").format(arrive).toString());
@@ -82,5 +87,9 @@ public class SubscriberBean {
 
 	public void setDocuments(List<DocumentBean> documents) {
 		this.documents = documents;
+	}
+
+	public Integer getPkPerson() {
+		return pkPerson;
 	}
 }
