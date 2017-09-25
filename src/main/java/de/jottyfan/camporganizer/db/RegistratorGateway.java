@@ -130,4 +130,30 @@ public class RegistratorGateway extends JooqGateway {
 		LOGGER.debug("{}", sql.toString());
 		return sql.execute();
 	}
+
+	/**
+	 * update registration
+	 * 
+	 * @param bean to be used for update
+	 * @return number of affected rows
+	 * @throws DataAccessException
+	 */
+	public Integer update(RegistratorBean bean) throws DataAccessException {
+		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
+		UpdateConditionStep<TPersonRecord> sql = getJooq()
+		// @formatter:off
+			.update(T_PERSON)
+			.set(T_PERSON.FORENAME, bean.getForename())
+			.set(T_PERSON.SURNAME, bean.getSurname())
+			.set(T_PERSON.STREET, bean.getStreet())
+			.set(T_PERSON.ZIP, bean.getZip())
+			.set(T_PERSON.CITY, bean.getCity())
+			.set(T_PERSON.BIRTHDATE, birthDate)
+			.set(T_PERSON.PHONE, bean.getPhone())
+			.set(T_PERSON.EMAIL, bean.getEmail())
+			.where(T_PERSON.PK.eq(bean.getPk()));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		return sql.execute();
+	}
 }

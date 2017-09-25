@@ -7,7 +7,7 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('registrator')}" title="Bestätigung" collapsible="false">
-				<h:form>
+				<b:form>
 					<b:dataTable value="#{registratorModel.list}" var="l" lang="de">
 						<b:dataTableColumn label="Bestätigung">
 							<h:outputText value="erledigt" rendered="#{l.accept}" />
@@ -47,8 +47,11 @@
 						<b:dataTableColumn label="Bemerkungen">
 							<h:outputText value="#{l.note}" />
 						</b:dataTableColumn>
+						<b:dataTableColumn label="">
+						  <b:commandButton action="#{registratorController.toEdit(l)}" value="korrigieren" look="warning" />
+						</b:dataTableColumn>
 					</b:dataTable>
-				</h:form>
+				</b:form>
 			</b:panel>
 		</ui:define>
 	</ui:composition>

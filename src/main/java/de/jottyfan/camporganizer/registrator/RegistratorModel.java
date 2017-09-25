@@ -22,6 +22,7 @@ import de.jottyfan.camporganizer.db.RegistratorGateway;
 public class RegistratorModel {
 
 	private List<RegistratorBean> list;
+	private RegistratorBean bean;
 
 	/**
 	 * prepare everything for the page registrator
@@ -47,7 +48,7 @@ public class RegistratorModel {
 	public void acceptRegistration(FacesContext facesContext, Integer pk) {
 		try {
 			new RegistratorGateway(facesContext).acceptUser(pk);
-		}catch (DataAccessException e) {
+		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on accepting user", e.getMessage()));
 		}
@@ -62,13 +63,50 @@ public class RegistratorModel {
 	public void rejectRegistration(FacesContext facesContext, Integer pk) {
 		try {
 			new RegistratorGateway(facesContext).rejectUser(pk);
-		}catch (DataAccessException e) {
+		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on rejecting user", e.getMessage()));
 		}
 	}
 
+	/**
+	 * prepare edit page of current entry referenced by bean
+	 * 
+	 * @param bean
+	 *          to be edited
+	 */
+	public void prepareEdit(RegistratorBean bean) {
+		this.bean = bean;
+	}
+
+	/**
+	 * update current bean in database
+	 * 
+	 * @param facesContext
+	 *          to be used
+	 */
+	public void update(FacesContext facesContext) {
+		try {
+			Integer affectedRows = new RegistratorGateway(facesContext).update(bean);
+			if (affectedRows != 1) {
+				facesContext.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "mysterious behavior", "Es wurde eine seltsame Anzahl an Datensätzen geändert: " + affectedRows + " statt üblicherweise 1 Eintrag"));				
+			}
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on updating registration", e.getMessage()));
+		}
+	}
+
 	public List<RegistratorBean> getList() {
 		return list;
+	}
+
+	public RegistratorBean getBean() {
+		return bean;
+	}
+
+	public void setBean(RegistratorBean bean) {
+		this.bean = bean;
 	}
 }

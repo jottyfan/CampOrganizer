@@ -22,19 +22,29 @@ public class RegistratorController extends Controller {
 	@ManagedProperty(value="#{registratorModel}")
 	private RegistratorModel model;
 	
-	public String toRegistrator() {
+	public String toMain() {
 		model.loadRegistratorPageContent(facesContext);
-		return "/pages/registrator.jsf";
+		return "/pages/registrator/main.jsf";
+	}
+	
+	public String toEdit(RegistratorBean bean) {
+		model.prepareEdit(bean);
+		return "/pages/registrator/edit.jsf";
+	}
+	
+	public String doUpdate() {
+		model.update(facesContext);
+		return toMain();
 	}
 	
 	public String doAccept(Integer pk) {
 		model.acceptRegistration(facesContext, pk);
-		return toRegistrator();
+		return toMain();
 	}
 	
 	public String doReject(Integer pk) {
 		model.rejectRegistration(facesContext, pk);
-		return toRegistrator();
+		return toMain();
 	}
 	
 	public void setFacesContext(FacesContext facesContext) {
