@@ -7,6 +7,9 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('subscriber')}" title="Buchung" collapsible="false">
+				<b:alert severity="info" closable="true">
+					Für alle Freizeiten gelten diese <a href="http://www.crg-reisen.de/agbs/" target="_blank">AGB</a>
+				</b:alert>
 				<b:form>
 					<h:outputText value="Du hast dich für folgende Freizeiten angemeldet:" />
 					<b:dataTable value="#{subscriberModel.camps}" var="c" lang="de">
