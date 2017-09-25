@@ -20,6 +20,9 @@
 									look="danger" />
 							</b:dropButton>
 						</b:dataTableColumn>
+						<b:dataTableColumn label="Teilnehmer">
+						  <h:outputText value="#{c.fullname}" />
+						</b:dataTableColumn>
 						<b:dataTableColumn label="Freizeit">
 							<h:outputText value="#{c.campname} #{c.camptime}" />
 						</b:dataTableColumn>

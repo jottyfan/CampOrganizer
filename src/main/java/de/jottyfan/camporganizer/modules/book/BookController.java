@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.book;
+package de.jottyfan.camporganizer.modules.book;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -54,7 +54,7 @@ public class BookController extends Controller {
 
 	public String doBook() {
 		try {
-			if (profileBean.getUsername() != null && !profileBean.getUsername().isEmpty()) {
+			if (profileBean.getIsEmpty()) {
 				profileBean.setForename(bean.getForename());
 				profileBean.setSurname(bean.getSurname());
 				if (new ProfileGateway(facesContext).checkUsernameExists(profileBean)) {
@@ -65,6 +65,9 @@ public class BookController extends Controller {
 				} else {
 					throw new DataAccessException("Die eingegebenen Passwörter sind nicht gleich.");
 				}
+			} else {
+				bean.setFkProfile(profileBean.getPk());
+				new ProfileGateway(facesContext).ensureSubscriberRole(profileBean);
 			}
 			new BookGateway(facesContext).insert(bean);
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "booking finished",
@@ -72,10 +75,11 @@ public class BookController extends Controller {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on booking", e.getMessage()));
 		}
-		profileBean.setForename(null);
-		profileBean.setSurname(null);
-		profileBean.setPk(null);
-		profileBean.setUsername(null);
+		if (profileBean.getIsEmpty()) {
+			profileBean.setForename(null);
+			profileBean.setSurname(null);
+			profileBean.setUsername(null);
+		}
 		return toBook();
 	}
 

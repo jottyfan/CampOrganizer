@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.jooq.DeleteConditionStep;
+import org.jooq.InsertFinalStep;
 import org.jooq.InsertResultStep;
 import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep2;
@@ -453,8 +454,9 @@ public class ProfileGateway extends JooqGateway {
 	 * @param bean
 	 *          to be used
 	 * @return new password
+	 * @throws DataAccessException
 	 */
-	public String resetPassword(ProfileBean bean) {
+	public String resetPassword(ProfileBean bean) throws DataAccessException {
 		String uuid = UUID.randomUUID().toString();
 		String password = new StrongPasswordEncryptor().encryptPassword(uuid);
 		bean.setPassword(password);
@@ -467,5 +469,25 @@ public class ProfileGateway extends JooqGateway {
 		LOGGER.debug("{}", sql.toString());
 		sql.execute();
 		return password;
+	}
+
+	/**
+	 * make sure that user has role subscriber
+	 * 
+	 * @param profileBean
+	 * @throws DataAccessException
+	 */
+	public void ensureSubscriberRole(ProfileBean profileBean) throws DataAccessException {
+		InsertFinalStep<TProfileroleRecord> sql = getJooq()
+		// @formatter:off
+			.insertInto(T_PROFILEROLE,
+					        T_PROFILEROLE.FK_PROFILE,
+					        T_PROFILEROLE.ROLE)
+			.values(profileBean.getPk(), EnumRole.subscriber)
+			.onConflict(T_PROFILEROLE.FK_PROFILE, T_PROFILEROLE.ROLE)
+			.doNothing();
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		sql.execute();
 	}
 }

@@ -13,6 +13,7 @@ import de.jottyfan.camporganizer.modules.admin.DocumentBean;
  */
 public class SubscriberBean {
 	private final Integer pkPerson;
+	private final String fullname;
 	private String locationname;
 	private String campname;
 	private Date arrive;
@@ -21,8 +22,9 @@ public class SubscriberBean {
 	private String url;
 	private List<DocumentBean> documents;
 
-	public SubscriberBean(Integer pkPerson) {
+	public SubscriberBean(Integer pkPerson, String fullname) {
 		this.pkPerson = pkPerson;
+		this.fullname = fullname;
 	}
 	
 	public String getCamptime() {
@@ -91,5 +93,9 @@ public class SubscriberBean {
 
 	public Integer getPkPerson() {
 		return pkPerson;
+	}
+
+	public String getFullname() {
+		return fullname;
 	}
 }

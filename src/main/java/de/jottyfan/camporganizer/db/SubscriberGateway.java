@@ -15,6 +15,7 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep1;
 import org.jooq.Record;
 import org.jooq.Record1;
+import org.jooq.Record11;
 import org.jooq.Record2;
 import org.jooq.Record4;
 import org.jooq.Record5;
@@ -62,9 +63,11 @@ public class SubscriberGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<SubscriberBean> getCamps(Integer pk) throws DataAccessException {
-		SelectConditionStep<Record9<Integer, Integer, String, Timestamp, Timestamp, Integer, String, String, Boolean>> sql = getJooq()
+		SelectConditionStep<Record11<Integer, String, String, Integer, String, Timestamp, Timestamp, Integer, String, String, Boolean>> sql = getJooq()
 		// @formatter:off
 		  .select(T_PERSON.PK,
+		  		      T_PERSON.FORENAME,
+		  		      T_PERSON.SURNAME,
 		  		      T_CAMP.FK_DOCUMENT,
 		  				  T_CAMP.NAME,
 		  		      T_CAMP.ARRIVE,
@@ -81,7 +84,11 @@ public class SubscriberGateway extends JooqGateway {
 		LOGGER.debug("{}", sql.toString());
 		List<SubscriberBean> list = new ArrayList<>();
 		for (Record r : sql.fetch()) {
-			SubscriberBean bean = new SubscriberBean(r.get(T_PERSON.PK));
+			StringBuilder fullname = new StringBuilder();
+			fullname.append(r.get(T_PERSON.FORENAME));
+			fullname.append(" ");
+			fullname.append(r.get(T_PERSON.SURNAME));
+			SubscriberBean bean = new SubscriberBean(r.get(T_PERSON.PK), fullname.toString());
 			bean.setArrive(r.get(T_CAMP.ARRIVE));
 			bean.setDepart(r.get(T_CAMP.DEPART));
 			bean.setCampname(r.get(T_CAMP.NAME));

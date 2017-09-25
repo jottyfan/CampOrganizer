@@ -40,6 +40,11 @@ public class ProfileBean {
 		}
 	}
 	
+	public Boolean getIsEmpty()
+	{
+		return pk == null;
+	}
+	
 	public boolean hasRole(String role) {
 		return roles == null ? false : roles.contains(role);
 	}

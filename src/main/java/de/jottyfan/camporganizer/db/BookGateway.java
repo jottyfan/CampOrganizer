@@ -14,11 +14,11 @@ import org.jooq.InsertValuesStep11;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
-import de.jottyfan.camporganizer.book.BookBean;
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
+import de.jottyfan.camporganizer.modules.book.BookBean;
 
 /**
  * 

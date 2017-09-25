@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.book;
+package de.jottyfan.camporganizer.modules.book;
 
 import java.util.Date;
 import java.util.List;

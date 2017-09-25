@@ -36,7 +36,7 @@ public class SubscriberController extends Controller {
 
 	public String toMain() {
 		model.load(facesContext, profileBean.getPk());
-		return "/pages/main.jsf";
+		return "/pages/subscriber/main.jsf";
 	}
 	
 	public String doDelete(SubscriberBean bean) {
