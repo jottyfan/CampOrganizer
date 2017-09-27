@@ -54,6 +54,7 @@ public class BookController extends Controller {
 
 	public String doBook() {
 		try {
+			// TODO: make to one transaction to ensure complete registrations only
 			if (profileBean.getIsEmpty()) {
 				profileBean.setForename(bean.getForename());
 				profileBean.setSurname(bean.getSurname());

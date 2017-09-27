@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep11;
+import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
@@ -71,11 +72,12 @@ public class BookGateway extends JooqGateway {
 			buf.append(bean.getForename()).append(" ").append(bean.getSurname());
 			buf.append(" zur Freizeit ").append(bean.getFkCamp()).append(" ist soeben eingetroffen.");
 
-			InsertValuesStep1<TRssRecord, String> sql2 = DSL.using(t)
+			InsertValuesStep2<TRssRecord, String, String> sql2 = DSL.using(t)
 			// @formatter:off
 				.insertInto(T_RSS,
-						        T_RSS.MSG)
-				.values(buf.toString());
+						        T_RSS.MSG,
+						        T_RSS.RECIPIENT)
+				.values(buf.toString(), "registrator");
 			// @formatter:on
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();
@@ -129,20 +131,32 @@ public class BookGateway extends JooqGateway {
 	 */
 	public void update(PersonBean bean) throws DataAccessException {
 		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
-		UpdateSetMoreStep<TPersonRecord> sql = getJooq()
-		// @formatter:off
-			.update(T_PERSON)
-			.set(T_PERSON.FORENAME, bean.getForename())
-			.set(T_PERSON.SURNAME, bean.getSurname())
-			.set(T_PERSON.STREET, bean.getStreet())
-			.set(T_PERSON.ZIP, bean.getZip())
-			.set(T_PERSON.CITY, bean.getCity())
-			.set(T_PERSON.BIRTHDATE, birthDate)
-			.set(T_PERSON.PHONE, bean.getPhone())
-			.set(T_PERSON.EMAIL, bean.getEmail())
-			.set(T_PERSON.CAMPROLE, new EnumConverter().getEnumCamprole(bean.getCamprole()));
-		// @formatter:on
-		LOGGER.debug("{}", sql.toString());
-		sql.execute();
+		getJooq().transaction(t->{
+			UpdateSetMoreStep<TPersonRecord> sql = DSL.using(t)
+			// @formatter:off
+				.update(T_PERSON)
+				.set(T_PERSON.FORENAME, bean.getForename())
+				.set(T_PERSON.SURNAME, bean.getSurname())
+				.set(T_PERSON.STREET, bean.getStreet())
+				.set(T_PERSON.ZIP, bean.getZip())
+				.set(T_PERSON.CITY, bean.getCity())
+				.set(T_PERSON.BIRTHDATE, birthDate)
+				.set(T_PERSON.PHONE, bean.getPhone())
+				.set(T_PERSON.EMAIL, bean.getEmail())
+				.set(T_PERSON.CAMPROLE, new EnumConverter().getEnumCamprole(bean.getCamprole()));
+			// @formatter:on
+			LOGGER.debug("{}", sql.toString());
+			sql.execute();
+			
+			InsertValuesStep2<TRssRecord, String, String> sql2 = DSL.using(t)
+			// @formatter:off
+				.insertInto(T_RSS,
+						        T_RSS.MSG,
+						        T_RSS.RECIPIENT)
+				.values(new StringBuilder("Es gab eine Adressänderung für Freizeit ").append(bean.getFkCamp()).toString(), "registrator");
+			// @formatter:on
+			LOGGER.debug("{}", sql2.toString());
+			sql2.execute();
+		});
 	}
 }

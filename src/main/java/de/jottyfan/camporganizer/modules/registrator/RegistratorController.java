@@ -37,8 +37,8 @@ public class RegistratorController extends Controller {
 		return toMain();
 	}
 	
-	public String doAccept(Integer pk) {
-		model.acceptRegistration(facesContext, pk);
+	public String doAccept(RegistratorBean bean) {
+		model.acceptRegistration(facesContext, bean);
 		return toMain();
 	}
 	

@@ -45,9 +45,9 @@ public class RegistratorModel {
 	 * @param facesContext
 	 * @param pk
 	 */
-	public void acceptRegistration(FacesContext facesContext, Integer pk) {
+	public void acceptRegistration(FacesContext facesContext, RegistratorBean bean) {
 		try {
-			new RegistratorGateway(facesContext).acceptUser(pk);
+			new RegistratorGateway(facesContext).acceptUser(bean);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on accepting user", e.getMessage()));

@@ -31,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TRss extends TableImpl<TRssRecord> {
 
-    private static final long serialVersionUID = -487352647;
+    private static final long serialVersionUID = 761258327;
 
     /**
      * The reference instance of <code>camp.t_rss</code>
@@ -55,6 +55,11 @@ public class TRss extends TableImpl<TRssRecord> {
      * The column <code>camp.t_rss.regdate</code>.
      */
     public final TableField<TRssRecord, Timestamp> REGDATE = createField("regdate", org.jooq.impl.SQLDataType.TIMESTAMP.defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+
+    /**
+     * The column <code>camp.t_rss.recipient</code>.
+     */
+    public final TableField<TRssRecord, String> RECIPIENT = createField("recipient", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>camp.t_rss</code> table reference

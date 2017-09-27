@@ -13,15 +13,19 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
+import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record18;
 import org.jooq.Record20;
+import org.jooq.Record21;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
 
+import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.modules.registrator.RegistratorBean;
 
 /**
@@ -37,7 +41,7 @@ public class RegistratorGateway extends JooqGateway {
 	}
 
 	public List<RegistratorBean> loadUsers() throws DataAccessException {
-		SelectOnConditionStep<Record20<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, String, Integer, Integer, Timestamp, Timestamp, Double, String, String, String>> sql = getJooq()
+		SelectOnConditionStep<Record21<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, String, Integer, Integer, Timestamp, Timestamp, Double, String, String, String, String>> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
 							T_PERSON.FORENAME,
@@ -58,7 +62,8 @@ public class RegistratorGateway extends JooqGateway {
 					    V_CAMP.YEAR,
 					    V_CAMP.LOCATION_NAME,
 					    T_PROFILE.FORENAME,
-					    T_PROFILE.SURNAME)
+					    T_PROFILE.SURNAME,
+					    T_PROFILE.UUID)
 			.from(T_PERSON)
 			.leftJoin(V_CAMP).on(V_CAMP.PK.eq(T_PERSON.FK_CAMP))
 			.leftJoin(T_PROFILE).on(T_PROFILE.PK.eq(T_PERSON.FK_PROFILE));
@@ -89,6 +94,7 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setAccept(r.get(T_PERSON.ACCEPT));
 			bean.setProfileForename(r.get(T_PROFILE.FORENAME));
 			bean.setProfileSurname(r.get(T_PROFILE.SURNAME));
+			bean.setProfileUUID(r.get(T_PROFILE.UUID));
 			list.add(bean);
 		}
 		return list;
@@ -97,20 +103,38 @@ public class RegistratorGateway extends JooqGateway {
 	/**
 	 * set accept flag to true for person referenced by pk
 	 * 
-	 * @param pk
-	 *          of t_person
+	 * @param bean
+	 *          containing registration information
 	 * @return number of affected rows
 	 * @throws DataAccessException
 	 */
-	public Integer acceptUser(Integer pk) throws DataAccessException {
-		UpdateConditionStep<TPersonRecord> sql = getJooq()
-		// @formatter:off
-			.update(T_PERSON)
-			.set(T_PERSON.ACCEPT, true)
-			.where(T_PERSON.PK.eq(pk));
-		// @formatter:on
-		LOGGER.debug("{}", sql.toString());
-		return sql.execute();
+	public Integer acceptUser(RegistratorBean bean) throws DataAccessException {
+		LambdaResultWrapper lrw = new LambdaResultWrapper();
+		getJooq().transaction(t -> {
+			UpdateConditionStep<TPersonRecord> sql = getJooq()
+			// @formatter:off
+				.update(T_PERSON)
+				.set(T_PERSON.ACCEPT, true)
+				.where(T_PERSON.PK.eq(bean.getPk()));
+			// @formatter:on
+			LOGGER.debug("{}", sql.toString());
+			lrw.setNumber(sql.execute());
+
+			StringBuilder buf = new StringBuilder("Deine Anmeldung zur Freizeit ");
+			buf.append(bean.getCampname());
+			buf.append(" wurde bestätigt. Melde Dich jetzt unter https://onkelwernerfreizeiten.de/camporganizer an, um die Bestätigungen herunterzuladen.");
+			
+			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
+			// @formatter:off
+				.insertInto(T_RSS,
+						        T_RSS.MSG,
+						        T_RSS.RECIPIENT)
+				.values(buf.toString(), bean.getProfileUUID());
+			// @formatter:on
+			LOGGER.debug("{}", sql2.toString());
+			sql2.execute();
+		});
+		return lrw.getNumber();
 	}
 
 	/**
@@ -140,20 +164,34 @@ public class RegistratorGateway extends JooqGateway {
 	 */
 	public Integer update(RegistratorBean bean) throws DataAccessException {
 		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
-		UpdateConditionStep<TPersonRecord> sql = getJooq()
-		// @formatter:off
-			.update(T_PERSON)
-			.set(T_PERSON.FORENAME, bean.getForename())
-			.set(T_PERSON.SURNAME, bean.getSurname())
-			.set(T_PERSON.STREET, bean.getStreet())
-			.set(T_PERSON.ZIP, bean.getZip())
-			.set(T_PERSON.CITY, bean.getCity())
-			.set(T_PERSON.BIRTHDATE, birthDate)
-			.set(T_PERSON.PHONE, bean.getPhone())
-			.set(T_PERSON.EMAIL, bean.getEmail())
-			.where(T_PERSON.PK.eq(bean.getPk()));
-		// @formatter:on
-		LOGGER.debug("{}", sql.toString());
-		return sql.execute();
+		LambdaResultWrapper lrw = new LambdaResultWrapper();
+		getJooq().transaction(t->{
+			UpdateConditionStep<TPersonRecord> sql = getJooq()
+			// @formatter:off
+				.update(T_PERSON)
+				.set(T_PERSON.FORENAME, bean.getForename())
+				.set(T_PERSON.SURNAME, bean.getSurname())
+				.set(T_PERSON.STREET, bean.getStreet())
+				.set(T_PERSON.ZIP, bean.getZip())
+				.set(T_PERSON.CITY, bean.getCity())
+				.set(T_PERSON.BIRTHDATE, birthDate)
+				.set(T_PERSON.PHONE, bean.getPhone())
+				.set(T_PERSON.EMAIL, bean.getEmail())
+				.where(T_PERSON.PK.eq(bean.getPk()));
+			// @formatter:on
+			LOGGER.debug("{}", sql.toString());
+			lrw.setNumber(sql.execute());
+
+			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
+			// @formatter:off
+		    .insertInto(T_RSS,
+				            T_RSS.MSG,
+				            T_RSS.RECIPIENT)
+		    .values(new StringBuilder("Eine Anmeldung für ").append(bean.getCampname()).append(" wurde korrigiert.").toString(), "registrator");
+		  // @formatter:on
+			LOGGER.debug("{}", sql2.toString());
+			sql2.execute();
+		});
+		return lrw.getNumber();
 	}
 }

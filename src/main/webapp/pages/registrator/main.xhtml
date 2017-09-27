@@ -12,7 +12,7 @@
 						<b:dataTableColumn label="Bestätigung">
 							<h:outputText value="erledigt" rendered="#{l.accept}" />
 							<b:buttonGroup>
-								<b:commandButton action="#{registratorController.doAccept(l.pk)}" value="" title="bestätigen" look="success" iconAwesome="check"
+								<b:commandButton action="#{registratorController.doAccept(l)}" value="" title="bestätigen" look="success" iconAwesome="check"
 									rendered="#{!l.accept}" />
 								<b:dropButton value=" x " title="ablehnen" look="danger" rendered="#{!l.accept}">
 									<b:commandButton action="#{registratorController.doReject(l.pk)}" value="ja, unwiederbringlich löschen" look="danger"

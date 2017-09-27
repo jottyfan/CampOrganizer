@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TProfile extends TableImpl<TProfileRecord> {
 
-    private static final long serialVersionUID = 1885289720;
+    private static final long serialVersionUID = 1252353857;
 
     /**
      * The reference instance of <code>camp.t_profile</code>
@@ -80,6 +80,11 @@ public class TProfile extends TableImpl<TProfileRecord> {
      * The column <code>camp.t_profile.duedate</code>.
      */
     public final TableField<TProfileRecord, Timestamp> DUEDATE = createField("duedate", org.jooq.impl.SQLDataType.TIMESTAMP.defaultValue(org.jooq.impl.DSL.field("(now() + '1 year'::interval)", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+
+    /**
+     * The column <code>camp.t_profile.uuid</code>.
+     */
+    public final TableField<TProfileRecord, String> UUID = createField("uuid", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * Create a <code>camp.t_profile</code> table reference
@@ -132,7 +137,7 @@ public class TProfile extends TableImpl<TProfileRecord> {
      */
     @Override
     public List<UniqueKey<TProfileRecord>> getKeys() {
-        return Arrays.<UniqueKey<TProfileRecord>>asList(Keys.T_PROFILE_PKEY, Keys.T_PROFILE_USERNAME_KEY);
+        return Arrays.<UniqueKey<TProfileRecord>>asList(Keys.T_PROFILE_PKEY, Keys.T_PROFILE_USERNAME_KEY, Keys.T_PROFILE_UUID_KEY);
     }
 
     /**

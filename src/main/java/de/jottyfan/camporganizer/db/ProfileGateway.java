@@ -28,6 +28,7 @@ import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record4;
 import org.jooq.Record5;
+import org.jooq.Record6;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectOnConditionStep;
@@ -71,18 +72,19 @@ public class ProfileGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public ProfileBean getProfile(ProfileBean requested) throws DataAccessException {
-		SelectConditionStep<Record5<Integer, String, String, String, EnumRole[]>> sql = getJooq()
+		SelectConditionStep<Record6<Integer, String, String, String, String, EnumRole[]>> sql = getJooq()
 		// @formatter:off
 			.select(V_PROFILE.PK,
 						  V_PROFILE.FORENAME,
 					    V_PROFILE.SURNAME,
 					    V_PROFILE.PASSWORD,
+					    V_PROFILE.UUID,
 					    V_PROFILE.ROLES)
 			.from(V_PROFILE)
 			.where(V_PROFILE.USERNAME.eq(requested.getUsername()));
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
-		Record5<Integer, String, String, String, EnumRole[]> r = sql.fetchOne();
+		Record6<Integer, String, String, String, String, EnumRole[]> r = sql.fetchOne();
 		if (r == null) {
 			throw new DataAccessException("login invalid, no such user " + requested.getUsername());
 		}
@@ -90,6 +92,7 @@ public class ProfileGateway extends JooqGateway {
 		requested.setEncryptedPassword(r.get(V_PROFILE.PASSWORD));
 		requested.setForename(r.get(V_PROFILE.FORENAME));
 		requested.setSurname(r.get(V_PROFILE.SURNAME));
+		requested.setUuid(r.get(V_PROFILE.UUID));
 		StringBuilder roles = new StringBuilder();
 		for (EnumRole enumRole : r.get(V_PROFILE.ROLES)) {
 			roles.append(enumRole != null ? enumRole.getLiteral() : "").append("|");
@@ -152,6 +155,7 @@ public class ProfileGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public Integer register(ProfileBean bean, boolean addSubscriber) throws DataAccessException {
+		String uuid = UUID.randomUUID().toString();
 		LambdaResultWrapper lrw = new LambdaResultWrapper();
 		getJooq().transaction(t -> {
 			InsertResultStep<TProfileRecord> sql = DSL.using(t)
@@ -160,8 +164,9 @@ public class ProfileGateway extends JooqGateway {
 						        T_PROFILE.FORENAME,
 						        T_PROFILE.SURNAME,
 						        T_PROFILE.USERNAME,
-						        T_PROFILE.PASSWORD)
-				.values(bean.getForename(), bean.getSurname(), bean.getUsername(), bean.getEncryptedPassword())
+						        T_PROFILE.PASSWORD,
+						        T_PROFILE.UUID)
+				.values(bean.getForename(), bean.getSurname(), bean.getUsername(), bean.getEncryptedPassword(), uuid)
 				.returning(T_PROFILE.PK);
 		  // @formatter:on
 			LOGGER.debug("{}", sql.toString());
@@ -179,11 +184,12 @@ public class ProfileGateway extends JooqGateway {
 				LOGGER.debug("{}", sql2.toString());
 				sql2.execute();
 			}
-			InsertValuesStep1<TRssRecord, String> sql3 = DSL.using(t)
+			InsertValuesStep2<TRssRecord, String, String> sql3 = DSL.using(t)
 			// @formatter:off
 				.insertInto(T_RSS,
-						        T_RSS.MSG)
-				.values(new StringBuilder(bean.getFullname()).append(" hat sich als Nutzer im camporganizer registriert.").toString());
+						        T_RSS.MSG,
+						        T_RSS.RECIPIENT)
+				.values(new StringBuilder(bean.getFullname()).append(" hat sich als Nutzer im camporganizer registriert.").toString(), "admin");
 			// @formatter:on
 			LOGGER.debug("{}", sql3.toString());
 			sql3.execute();
@@ -230,11 +236,12 @@ public class ProfileGateway extends JooqGateway {
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();
 
-			InsertValuesStep1<TRssRecord, String> sql3 = DSL.using(t)
+			InsertValuesStep2<TRssRecord, String, String> sql3 = DSL.using(t)
 			// @formatter:off
 				.insertInto(T_RSS,
-						        T_RSS.MSG)
-				.values(new StringBuilder(bean.getFullname()).append(" hat sich vom Portal abgemeldet.").toString());
+						        T_RSS.MSG,
+						        T_RSS.RECIPIENT)
+				.values(new StringBuilder(bean.getFullname()).append(" hat sich vom Portal abgemeldet.").toString(), "admin");
 			// @formatter:on
 			LOGGER.debug("{}", sql3.toString());
 			sql3.execute();

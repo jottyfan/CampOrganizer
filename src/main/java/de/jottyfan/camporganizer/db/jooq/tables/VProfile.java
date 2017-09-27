@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VProfile extends TableImpl<VProfileRecord> {
 
-    private static final long serialVersionUID = -2105591939;
+    private static final long serialVersionUID = -1704269243;
 
     /**
      * The reference instance of <code>camp.v_profile</code>
@@ -69,6 +69,11 @@ public class VProfile extends TableImpl<VProfileRecord> {
      * The column <code>camp.v_profile.password</code>.
      */
     public final TableField<VProfileRecord, String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>camp.v_profile.uuid</code>.
+     */
+    public final TableField<VProfileRecord, String> UUID = createField("uuid", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>camp.v_profile.roles</code>.

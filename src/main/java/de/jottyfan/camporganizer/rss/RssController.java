@@ -31,10 +31,12 @@ public class RssController {
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
+	private String recipientCode;
+	
 	public String toRss() {
 		List<RssBean> beans = new ArrayList<>();
 		try {
-			beans = new RssGateway(facesContext).getRss();
+			beans = new RssGateway(facesContext).getRss(recipientCode);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on reading rss from db", e.getMessage()));
@@ -58,6 +60,10 @@ public class RssController {
 		return "";
 	}
 
+	public void setRecipientCode(String recipientCode) {
+		this.recipientCode = recipientCode;
+	}
+	
 	public void setFacesContext(FacesContext facesContext) {
 		this.facesContext = facesContext;
 	}

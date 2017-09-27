@@ -2,6 +2,7 @@ package de.jottyfan.camporganizer.rss;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.rometools.rome.feed.synd.SyndContent;
@@ -26,16 +27,16 @@ public class RssModel {
 		feed.setEncoding("UTF-8");
 		List<SyndEntry> entries = new ArrayList<>();
 		for (RssBean bean : beans) {
-			SyndEntry entry = new SyndEntryImpl();
-			entry.setTitle("neue Aktivität");
-			entry.setLink("https://onkelwernerfreizeiten.de/camporganizer/");
-			entry.setUri(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(bean.getPubdate()));
-			entry.setPublishedDate(bean.getPubdate());	
-			SyndContent description = new SyndContentImpl();
-			description.setType("text/plain");
-			description.setValue(bean.getMessage());
-			entry.setDescription(description);
-			entries.add(entry);
+				SyndEntry entry = new SyndEntryImpl();
+				entry.setTitle("neue Aktivität");
+				entry.setLink("https://onkelwernerfreizeiten.de/camporganizer/");
+				entry.setUri(new SimpleDateFormat("yyyyMMddHHmmssSSS").format(bean.getPubdate()));
+				entry.setPublishedDate(bean.getPubdate());
+				SyndContent description = new SyndContentImpl();
+				description.setType("text/plain");
+				description.setValue(bean.getMessage());
+				entry.setDescription(description);
+				entries.add(entry);
 		}
 		feed.setEntries(entries);
 		return feed;

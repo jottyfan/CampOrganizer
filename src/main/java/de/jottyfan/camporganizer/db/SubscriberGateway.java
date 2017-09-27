@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep1;
+import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record11;
@@ -147,11 +148,12 @@ public class SubscriberGateway extends JooqGateway {
 			LOGGER.debug("{}", sql.toString());
 			lrw.setNumber(sql.execute());
 
-			InsertValuesStep1<TRssRecord, String> sql2 = DSL.using(t)
+			InsertValuesStep2<TRssRecord, String, String> sql2 = DSL.using(t)
 			// @formatter:off
 				.insertInto(T_RSS,
-                    T_RSS.MSG)
-				.values(profileBean.getFullname() + " hat ihre/seine Buchung an " + bean.getCampname() + " storniert.");
+                    T_RSS.MSG,
+                    T_RSS.RECIPIENT)
+				.values(new StringBuilder(profileBean.getFullname()).append(" hat ihre/seine Buchung an ").append(bean.getCampname()).append(" storniert.").toString(), "registrator");
 			// @formatter:on
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();

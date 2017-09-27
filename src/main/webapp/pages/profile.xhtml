@@ -7,6 +7,10 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel>
+			  <b:alert severity="info" rendered="#{profileBean.uuid != null}">
+			    <h:outputText value="Dein persönlicher RSS-Feed lautet: " />
+			    <b:navLink href="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=#{profileBean.uuid}" value="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=#{profileBean.uuid}" iconAwesome="rss" />
+			  </b:alert>
 				<b:tabView>
 					<b:tab title="Namen ändern">
 						<b:form>

@@ -24,6 +24,7 @@ public class ProfileBean {
 	private String username;
 	private String password;
 	private String passwordAgain;
+	private String uuid;
 	private String encryptedPassword;
 	private String roles;
 	private List<String> allUsernames;
@@ -35,6 +36,7 @@ public class ProfileBean {
 		this.username = null;
 		this.password = null;
 		this.passwordAgain = null;
+		this.uuid = null;
 		this.encryptedPassword = null;
 		this.roles = null;
 	}
@@ -153,5 +155,13 @@ public class ProfileBean {
 
 	public void setAllUsernames(List<String> allUsernames) {
 		this.allUsernames = allUsernames;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 }

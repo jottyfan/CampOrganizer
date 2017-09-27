@@ -33,6 +33,7 @@ public class RegistratorBean {
 	private Boolean accept;
 	private String profileForename;
 	private String profileSurname;
+	private String profileUUID;
 
 	public RegistratorBean(Integer pk) {
 		super();
@@ -220,5 +221,13 @@ public class RegistratorBean {
 
 	public void setProfileSurname(String profileSurname) {
 		this.profileSurname = profileSurname;
+	}
+
+	public String getProfileUUID() {
+		return profileUUID;
+	}
+
+	public void setProfileUUID(String profileUUID) {
+		this.profileUUID = profileUUID;
 	}
 }

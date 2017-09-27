@@ -23,7 +23,9 @@ create table t_profile (pk serial primary key,
                         username text not null, 
                         password text not null,
                         duedate timestamp default now() + interval '1 year',
-                        unique(username));
+                        uuid text not null,
+                        unique(username),
+                        unique(uuid));
 
 grant select,insert,update,delete on t_profile to camp;                        
 grant usage on t_profile_pk_seq to camp;
@@ -91,6 +93,7 @@ select pk,
        surname,
        username,
        password,
+       uuid,
        array_agg(role) as roles
 from t_profile 
 left join t_profilerole on fk_profile = pk

@@ -67,6 +67,7 @@ public class Keys {
     public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = UniqueKeys0.T_PERSON_PKEY;
     public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = UniqueKeys0.T_PROFILE_PKEY;
     public static final UniqueKey<TProfileRecord> T_PROFILE_USERNAME_KEY = UniqueKeys0.T_PROFILE_USERNAME_KEY;
+    public static final UniqueKey<TProfileRecord> T_PROFILE_UUID_KEY = UniqueKeys0.T_PROFILE_UUID_KEY;
     public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = UniqueKeys0.T_PROFILEROLE_FK_PROFILE_ROLE_KEY;
     public static final UniqueKey<TSalesRecord> T_SALES_PKEY = UniqueKeys0.T_SALES_PKEY;
     public static final UniqueKey<TSalescontentRecord> T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = UniqueKeys0.T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY;
@@ -105,6 +106,7 @@ public class Keys {
         public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = createUniqueKey(TPerson.T_PERSON, "t_person_pkey", TPerson.T_PERSON.PK);
         public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_pkey", TProfile.T_PROFILE.PK);
         public static final UniqueKey<TProfileRecord> T_PROFILE_USERNAME_KEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_username_key", TProfile.T_PROFILE.USERNAME);
+        public static final UniqueKey<TProfileRecord> T_PROFILE_UUID_KEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_uuid_key", TProfile.T_PROFILE.UUID);
         public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = createUniqueKey(TProfilerole.T_PROFILEROLE, "t_profilerole_fk_profile_role_key", TProfilerole.T_PROFILEROLE.FK_PROFILE, TProfilerole.T_PROFILEROLE.ROLE);
         public static final UniqueKey<TSalesRecord> T_SALES_PKEY = createUniqueKey(TSales.T_SALES, "t_sales_pkey", TSales.T_SALES.PK);
         public static final UniqueKey<TSalescontentRecord> T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = createUniqueKey(TSalescontent.T_SALESCONTENT, "t_salescontent_fk_sales_fk_salescontenttype_key", TSalescontent.T_SALESCONTENT.FK_SALES, TSalescontent.T_SALESCONTENT.FK_SALESCONTENTTYPE);
