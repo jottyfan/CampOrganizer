@@ -131,7 +131,9 @@ create view v_role as select unnest(enum_range(NULL::enum_role));
 
 grant select on v_role to camp;
 
-create table t_rss (msg text, regdate timestamp default now());
+create table t_rss (recipient text,
+                    msg text, 
+                    regdate timestamp default now());
 
 grant select,insert,update,delete on t_rss to camp;
 
