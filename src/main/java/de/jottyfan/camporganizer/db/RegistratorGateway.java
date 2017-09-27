@@ -120,7 +120,11 @@ public class RegistratorGateway extends JooqGateway {
 			LOGGER.debug("{}", sql.toString());
 			lrw.setNumber(sql.execute());
 
-			StringBuilder buf = new StringBuilder("Deine Anmeldung zur Freizeit ");
+			StringBuilder buf = new StringBuilder("Die Anmeldung von ");
+			buf.append(bean.getForename());
+			buf.append(" ");
+			buf.append(bean.getSurname());
+			buf.append(" zur Freizeit ");
 			buf.append(bean.getCampname());
 			buf.append(" wurde bestätigt. Melde Dich jetzt unter https://onkelwernerfreizeiten.de/camporganizer an, um die Bestätigungen herunterzuladen.");
 			

@@ -3,8 +3,10 @@ package de.jottyfan.camporganizer.rss;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -31,15 +33,23 @@ public class RssController {
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
+	@ManagedProperty(value = "#{param.recipientCode}")
 	private String recipientCode;
-	
+
 	public String toRss() {
 		List<RssBean> beans = new ArrayList<>();
-		try {
-			beans = new RssGateway(facesContext).getRss(recipientCode);
-		} catch (DataAccessException e) {
-			facesContext.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on reading rss from db", e.getMessage()));
+		if (recipientCode != null) {
+			try {
+				beans = new RssGateway(facesContext).getRss(recipientCode);
+			} catch (DataAccessException e) {
+				facesContext.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on reading rss from db", e.getMessage()));
+			}
+		} else {
+			RssBean bean = new RssBean();
+			bean.setPubdate(new Date());
+			bean.setMessage("Dieser Feed ist nicht mehr aktuell. Bitte gib einen recipientCode an.");
+			beans.add(bean);
 		}
 		SyndFeed feed = new RssModel().getRss(beans);
 		ExternalContext ec = facesContext.getExternalContext();
@@ -63,7 +73,7 @@ public class RssController {
 	public void setRecipientCode(String recipientCode) {
 		this.recipientCode = recipientCode;
 	}
-	
+
 	public void setFacesContext(FacesContext facesContext) {
 		this.facesContext = facesContext;
 	}
