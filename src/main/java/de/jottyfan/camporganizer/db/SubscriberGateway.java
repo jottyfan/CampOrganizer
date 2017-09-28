@@ -1,7 +1,11 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.*;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMP;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_DOCUMENT;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_LOCATION;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSON;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSONDOCUMENT;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,29 +16,21 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
-import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
-import org.jooq.Record1;
 import org.jooq.Record11;
-import org.jooq.Record2;
 import org.jooq.Record4;
-import org.jooq.Record5;
-import org.jooq.Record6;
-import org.jooq.Record7;
-import org.jooq.Record8;
-import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
-import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 import de.jottyfan.camporganizer.modules.subscriber.SubscriberBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
@@ -97,6 +93,7 @@ public class SubscriberGateway extends JooqGateway {
 			bean.setAccept(r.get(T_PERSON.ACCEPT));
 			bean.setUrl(r.get(T_LOCATION.URL));
 			bean.setDocuments(new ArrayList<>());
+			bean.setPersondocuments(new ArrayList<>());
 
 			Integer locationDoc = r.get(T_LOCATION.FK_DOCUMENT);
 			Integer campDoc = r.get(T_CAMP.FK_DOCUMENT);
@@ -112,7 +109,7 @@ public class SubscriberGateway extends JooqGateway {
 				.or(T_DOCUMENT.DOCTYPE.eq(EnumDocument.camppass))
 				);
 			// @formatter:on
-			LOGGER.debug("{}", sql.toString());
+			LOGGER.debug("{}", sql2.toString());
 			for (Record rec : sql2.fetch()) {
 				DocumentBean doc = new DocumentBean(null);
 				doc.setDoctype(rec.get(T_DOCUMENT.DOCTYPE));
@@ -120,6 +117,25 @@ public class SubscriberGateway extends JooqGateway {
 				doc.setFiletype(rec.get(T_DOCUMENT.FILETYPE));
 				doc.setName(rec.get(T_DOCUMENT.NAME));
 				bean.getDocuments().add(doc);
+			}
+
+			SelectConditionStep<Record4<Integer, String, EnumFiletype, String>> sql3 = getJooq()
+			// @formatter:off
+				.select(T_PERSONDOCUMENT.PK,
+						    T_PERSONDOCUMENT.NAME,
+						    T_PERSONDOCUMENT.FILETYPE,
+						    T_PERSONDOCUMENT.DOCUMENT)
+				.from(T_PERSONDOCUMENT)
+				.where(T_PERSONDOCUMENT.FK_PERSON.eq(bean.getPkPerson()));
+			// @formatter:on
+			LOGGER.debug("{}", sql3.toString());
+			for (Record rec : sql3.fetch()) {
+				PersondocumentBean doc = new PersondocumentBean(rec.get(T_PERSONDOCUMENT.PK));
+				doc.setFkPerson(bean.getPkPerson());
+				doc.setDocument(rec.get(T_PERSONDOCUMENT.DOCUMENT));
+				doc.setFiletype(rec.get(T_PERSONDOCUMENT.FILETYPE));
+				doc.setName(rec.get(T_PERSONDOCUMENT.NAME));
+				bean.getPersondocuments().add(doc);
 			}
 
 			list.add(bean);

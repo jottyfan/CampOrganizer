@@ -49,6 +49,16 @@ public class SubscriberController extends Controller {
 		return toMain();
 	}
 	
+	public String doDeleteUserDoc(PersondocumentBean d) {
+		model.doDeleteUserDoc(facesContext, d);
+		return toMain();
+	}
+	
+	public String doAddUserDoc(SubscriberBean bean) {
+		model.doAddUserDoc(facesContext, bean);
+		return toMain();
+	}
+	
 	public String toEdit(SubscriberBean bean) {
 		model.loadPerson(facesContext, bean.getPkPerson());
 		return "/pages/subscriber/edit.jsf";

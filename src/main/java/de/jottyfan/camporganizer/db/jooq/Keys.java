@@ -8,6 +8,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
+import de.jottyfan.camporganizer.db.jooq.tables.TPersondocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
@@ -17,6 +18,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TDocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
@@ -53,6 +55,7 @@ public class Keys {
     public static final Identity<TDocumentRecord, Integer> IDENTITY_T_DOCUMENT = Identities0.IDENTITY_T_DOCUMENT;
     public static final Identity<TLocationRecord, Integer> IDENTITY_T_LOCATION = Identities0.IDENTITY_T_LOCATION;
     public static final Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = Identities0.IDENTITY_T_PERSON;
+    public static final Identity<TPersondocumentRecord, Integer> IDENTITY_T_PERSONDOCUMENT = Identities0.IDENTITY_T_PERSONDOCUMENT;
     public static final Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = Identities0.IDENTITY_T_PROFILE;
     public static final Identity<TSalesRecord, Integer> IDENTITY_T_SALES = Identities0.IDENTITY_T_SALES;
 
@@ -82,6 +85,7 @@ public class Keys {
     public static final ForeignKey<TLocationRecord, TDocumentRecord> T_LOCATION__T_LOCATION_FK_DOCUMENT_FKEY = ForeignKeys0.T_LOCATION__T_LOCATION_FK_DOCUMENT_FKEY;
     public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = ForeignKeys0.T_PERSON__T_PERSON_FK_CAMP_FKEY;
     public static final ForeignKey<TPersonRecord, TProfileRecord> T_PERSON__T_PERSON_FK_PROFILE_FKEY = ForeignKeys0.T_PERSON__T_PERSON_FK_PROFILE_FKEY;
+    public static final ForeignKey<TPersondocumentRecord, TPersonRecord> T_PERSONDOCUMENT__T_PERSONDOCUMENT_FK_PERSON_FKEY = ForeignKeys0.T_PERSONDOCUMENT__T_PERSONDOCUMENT_FK_PERSON_FKEY;
     public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = ForeignKeys0.T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY;
     public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = ForeignKeys0.T_SALES__T_SALES_FK_CAMP_FKEY;
 
@@ -94,6 +98,7 @@ public class Keys {
         public static Identity<TDocumentRecord, Integer> IDENTITY_T_DOCUMENT = createIdentity(TDocument.T_DOCUMENT, TDocument.T_DOCUMENT.PK);
         public static Identity<TLocationRecord, Integer> IDENTITY_T_LOCATION = createIdentity(TLocation.T_LOCATION, TLocation.T_LOCATION.PK);
         public static Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = createIdentity(TPerson.T_PERSON, TPerson.T_PERSON.PK);
+        public static Identity<TPersondocumentRecord, Integer> IDENTITY_T_PERSONDOCUMENT = createIdentity(TPersondocument.T_PERSONDOCUMENT, TPersondocument.T_PERSONDOCUMENT.PK);
         public static Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = createIdentity(TProfile.T_PROFILE, TProfile.T_PROFILE.PK);
         public static Identity<TSalesRecord, Integer> IDENTITY_T_SALES = createIdentity(TSales.T_SALES, TSales.T_SALES.PK);
     }
@@ -119,6 +124,7 @@ public class Keys {
         public static final ForeignKey<TLocationRecord, TDocumentRecord> T_LOCATION__T_LOCATION_FK_DOCUMENT_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_DOCUMENT_PKEY, TLocation.T_LOCATION, "t_location__t_location_fk_document_fkey", TLocation.T_LOCATION.FK_DOCUMENT);
         public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TPerson.T_PERSON, "t_person__t_person_fk_camp_fkey", TPerson.T_PERSON.FK_CAMP);
         public static final ForeignKey<TPersonRecord, TProfileRecord> T_PERSON__T_PERSON_FK_PROFILE_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PROFILE_PKEY, TPerson.T_PERSON, "t_person__t_person_fk_profile_fkey", TPerson.T_PERSON.FK_PROFILE);
+        public static final ForeignKey<TPersondocumentRecord, TPersonRecord> T_PERSONDOCUMENT__T_PERSONDOCUMENT_FK_PERSON_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PERSON_PKEY, TPersondocument.T_PERSONDOCUMENT, "t_persondocument__t_persondocument_fk_person_fkey", TPersondocument.T_PERSONDOCUMENT.FK_PERSON);
         public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PROFILE_PKEY, TProfilerole.T_PROFILEROLE, "t_profilerole__t_profilerole_fk_profile_fkey", TProfilerole.T_PROFILEROLE.FK_PROFILE);
         public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TSales.T_SALES, "t_sales__t_sales_fk_camp_fkey", TSales.T_SALES.FK_CAMP);
     }

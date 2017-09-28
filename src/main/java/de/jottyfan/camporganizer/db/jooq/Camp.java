@@ -8,6 +8,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
+import de.jottyfan.camporganizer.db.jooq.tables.TPersondocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
 import de.jottyfan.camporganizer.db.jooq.tables.TRss;
@@ -46,7 +47,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Camp extends SchemaImpl {
 
-    private static final long serialVersionUID = 921209552;
+    private static final long serialVersionUID = 540593014;
 
     /**
      * The reference instance of <code>camp</code>
@@ -72,6 +73,11 @@ public class Camp extends SchemaImpl {
      * The table <code>camp.t_person</code>.
      */
     public final TPerson T_PERSON = de.jottyfan.camporganizer.db.jooq.tables.TPerson.T_PERSON;
+
+    /**
+     * The table <code>camp.t_persondocument</code>.
+     */
+    public final TPersondocument T_PERSONDOCUMENT = de.jottyfan.camporganizer.db.jooq.tables.TPersondocument.T_PERSONDOCUMENT;
 
     /**
      * The table <code>camp.t_profile</code>.
@@ -167,6 +173,7 @@ public class Camp extends SchemaImpl {
             TDocument.T_DOCUMENT,
             TLocation.T_LOCATION,
             TPerson.T_PERSON,
+            TPersondocument.T_PERSONDOCUMENT,
             TProfile.T_PROFILE,
             TProfilerole.T_PROFILEROLE,
             TRss.T_RSS,

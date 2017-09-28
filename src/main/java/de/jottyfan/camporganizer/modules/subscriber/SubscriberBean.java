@@ -21,6 +21,7 @@ public class SubscriberBean {
 	private Boolean accept;
 	private String url;
 	private List<DocumentBean> documents;
+	private List<PersondocumentBean> persondocuments;
 
 	public SubscriberBean(Integer pkPerson, String fullname) {
 		this.pkPerson = pkPerson;
@@ -97,5 +98,13 @@ public class SubscriberBean {
 
 	public String getFullname() {
 		return fullname;
+	}
+
+	public List<PersondocumentBean> getPersondocuments() {
+		return persondocuments;
+	}
+
+	public void setPersondocuments(List<PersondocumentBean> persondocuments) {
+		this.persondocuments = persondocuments;
 	}
 }

@@ -194,3 +194,16 @@ from t_camp c
 left join t_location l on c.fk_location = l.pk;
          
 grant select on v_camp to camp;
+
+/* 20170928 */
+
+create table t_persondocument(pk serial primary key, 
+                              fk_person integer not null, 
+                              name text, 
+                              document text, 
+                              filetype enum_filetype, 
+                              unique(fk_person, name),
+                              foreign key (fk_person) references t_person(pk));
+
+grant select,insert,update,delete on t_persondocument to camp;
+grant usage on t_persondocument_pk_seq to camp;

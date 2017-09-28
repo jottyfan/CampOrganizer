@@ -1,5 +1,6 @@
 package de.jottyfan.camporganizer.modules.subscriber;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -12,7 +13,11 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.db.BookGateway;
+import de.jottyfan.camporganizer.db.DocumentGateway;
+import de.jottyfan.camporganizer.db.PersondocumentGateway;
 import de.jottyfan.camporganizer.db.SubscriberGateway;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
+import de.jottyfan.camporganizer.modules.admin.DocumentBean;
 import de.jottyfan.camporganizer.modules.book.PersonBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
@@ -28,6 +33,7 @@ public class SubscriberModel {
 
 	private List<SubscriberBean> camps;
 	private PersonBean bean;
+	private PersondocumentBean persondocument;
 
 	public List<SubscriberBean> getCamps() {
 		return camps;
@@ -79,7 +85,8 @@ public class SubscriberModel {
 	/**
 	 * update person in db
 	 * 
-	 * @param facesContext current faces context
+	 * @param facesContext
+	 *          current faces context
 	 */
 	public void doUpdate(FacesContext facesContext) {
 		try {
@@ -88,5 +95,60 @@ public class SubscriberModel {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("SubscriberModel.doUpdate", e);
 		}
+	}
+
+	/**
+	 * delete document uploaded by user from database
+	 * 
+	 * @param facesContext
+	 * @param bean
+	 */
+	public void doDeleteUserDoc(FacesContext facesContext, PersondocumentBean bean) {
+		try {
+			new PersondocumentGateway(facesContext).deletePersondocument(bean);
+			StringBuilder buf = new StringBuilder("Das Dokument ");
+			buf.append(bean.getName());
+			buf.append(" wurde aus der Datenbank gelöscht.");
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "document removed", buf.toString()));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("SubscriberModel.doDeleteUserDoc", e);
+		}
+	}
+
+	/**
+	 * add document uploaded by user to database
+	 * 
+	 * @param facesContext
+	 * @param bean
+	 */
+	public void doAddUserDoc(FacesContext facesContext, SubscriberBean bean) {
+		persondocument.setFkPerson(bean.getPkPerson());
+		try {
+			new PersondocumentGateway(facesContext).addPersondocument(persondocument);
+			StringBuilder buf = new StringBuilder("Das Dokument ");
+			buf.append(persondocument.getName());
+			buf.append(" wurde in die Datenbank gelegt.");
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "document added", buf.toString()));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("SubscriberModel.doAddUserDoc", e);
+		}
+	}
+
+	public List<EnumFiletype> getEnumlistFiletype() {
+		List<EnumFiletype> list = new ArrayList<>();
+		for (EnumFiletype e : EnumFiletype.values()) {
+			list.add(e);
+		}
+		return list;
+	}
+
+	public PersondocumentBean getPersondocument() {
+		return persondocument;
+	}
+
+	public void setPersondocument(PersondocumentBean persondocument) {
+		this.persondocument = persondocument;
 	}
 }

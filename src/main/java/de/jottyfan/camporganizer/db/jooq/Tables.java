@@ -8,6 +8,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
+import de.jottyfan.camporganizer.db.jooq.tables.TPersondocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
 import de.jottyfan.camporganizer.db.jooq.tables.TRss;
@@ -57,6 +58,11 @@ public class Tables {
      * The table <code>camp.t_person</code>.
      */
     public static final TPerson T_PERSON = de.jottyfan.camporganizer.db.jooq.tables.TPerson.T_PERSON;
+
+    /**
+     * The table <code>camp.t_persondocument</code>.
+     */
+    public static final TPersondocument T_PERSONDOCUMENT = de.jottyfan.camporganizer.db.jooq.tables.TPersondocument.T_PERSONDOCUMENT;
 
     /**
      * The table <code>camp.t_profile</code>.
