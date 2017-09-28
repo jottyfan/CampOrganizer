@@ -9,6 +9,8 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+import de.jottyfan.camporganizer.profile.ProfileBean;
+
 /**
  * 
  * @author jotty
@@ -21,7 +23,10 @@ public class NameValidator implements Validator {
 	public void validate(FacesContext facesContext, UIComponent component, Object object) throws ValidatorException {
 		String name = new StringBuilder().append(object).toString();
 		List<String> listOfNames = (List<String>) component.getAttributes().get("listOfNames");
-		if (listOfNames.contains(name)) {
+		ProfileBean profileBean = (ProfileBean) facesContext.getExternalContext().getSessionMap().get("profileBean");
+		if (name.equals(profileBean.getUsername())) {
+			// this is not critical, as there might not be a username change
+		} else if (listOfNames.contains(name)) {
 			StringBuilder msg = new StringBuilder(name);
 			msg.append(" ist bereits vergeben, bitte einen anderen wählen.");
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on change", msg.toString());
