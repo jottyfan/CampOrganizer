@@ -7,6 +7,10 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('registrator')}" title="Bestätigung" collapsible="false">
+			  <b:alert severity="info" closable="true">
+          <h:outputText value="Der RSS-Feed des Registrators lautet: " />
+          <b:navLink href="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=registrator" target="#" value="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=registrator" iconAwesome="rss" />
+        </b:alert>
 				<b:form>
 					<b:dataTable value="#{registratorModel.list}" var="l" lang="de">
 						<b:dataTableColumn label="Bestätigung">

@@ -7,6 +7,10 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('admin')}" title="Administration" collapsible="false">
+			  <b:alert severity="info" closable="true">
+          <h:outputText value="Der RSS-Feed des Administrators lautet: " />
+          <b:navLink href="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=admin" target="#" value="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=admin" iconAwesome="rss" />
+        </b:alert>
 				<b:tabView activeIndex="#{adminModel.activeIndex}">
 					<b:tab title="Rollen verwalten" styleClass="dist16">
 						<b:form>
