@@ -4,6 +4,10 @@ body {
 	background-repeat: repeat;
 }
 
+.odd {
+	background-color: #eeeeee;
+}
+
 .pagetitle {
 	font-size: xx-large;
 	padding-left: 32px;
@@ -53,4 +57,8 @@ body {
 	bottom: 24px;
 	top: 48px;
 	position: absolute;
+}
+
+.mylabel {
+	font-weight: bolder;
 }

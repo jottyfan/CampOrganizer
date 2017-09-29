@@ -44,7 +44,7 @@ public class SubscriberController extends Controller {
 	  return toMain();
 	}
 	
-	public String doDownloadDocument(DocumentBean d) {
+	public String doDownloadDocument(PersondocumentBean d) {
 		super.doDownloadBase64(facesContext, d.getDocument(), d.getName(), d.getFiletype().getLiteral());
 		return toMain();
 	}
@@ -54,8 +54,8 @@ public class SubscriberController extends Controller {
 		return toMain();
 	}
 	
-	public String doAddUserDoc(SubscriberBean bean) {
-		model.doAddUserDoc(facesContext, bean);
+	public String doAddUserDoc() {
+		model.doAddUserDoc(facesContext);
 		return toMain();
 	}
 	

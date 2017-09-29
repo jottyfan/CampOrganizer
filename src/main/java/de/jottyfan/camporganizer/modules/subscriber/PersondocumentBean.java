@@ -37,6 +37,8 @@ public class PersondocumentBean {
 			if (bytes.length > 0) {
 				document = Base64.getEncoder().encodeToString(bytes);
 			} // not uploaded files should not be changed, so document must be kept as is
+		} else {
+			throw new IOException("uploadfile is null");
 		}
 	}
 

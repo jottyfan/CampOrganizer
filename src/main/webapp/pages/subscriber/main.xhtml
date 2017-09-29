@@ -12,32 +12,26 @@
 					Für alle Freizeiten gelten diese <a href="http://www.crg-reisen.de/agbs/" target="_blank">AGB</a>
 					</b:alert>
 					<h:outputText value="Folgende Anmeldungen hast Du durchgeführt:" />
-					<h:dataTable value="#{subscriberModel.camps}" var="c">
+					<h:dataTable value="#{subscriberModel.camps}" var="c" rowClasses="odd,even">
 						<h:column>
 							<b:panelGrid colSpans="2,10" size="sm">
-								<h:outputText value="Storno" />
-								<h:outputText value="nur schriftlich" rendered="#{c.accept}" />
-								<b:dropButton value="stornieren" iconAwesome="trash-o" look="danger" rendered="#{!c.accept}">
-									<b:commandButton action="#{subscriberController.doDelete(c)}" value="ja, jetzt unwiederbringlich stornieren"
-										look="danger" />
-								</b:dropButton>
-								<h:outputText value="Teilnehmer" />
+								<h:outputText value="Teilnehmer" class="mylabel" />
 								<h:outputText value="#{c.fullname}" />
-								<h:outputText value="Freizeit" />
+								<h:outputText value="Freizeit" class="mylabel" />
 								<h:outputText value="#{c.campname} #{c.camptime}" />
-								<h:outputText value="Ort" />
+								<h:outputText value="Ort" class="mylabel" />
 								<ui:fragment>
 									<a href="#{c.url}" target="_blank"> <h:outputText value="#{c.locationname}" /></a>
 								</ui:fragment>
-								<h:outputText value="Dokumente" />
-								<ui:fragment>
-									<h:outputText value="Die Bestätigungsdokumente sind erst nach der offiziellen Bestätigung einsehbar."
-										rendered="#{!c.accept}" />
-									<h:outputText
-										value="Dir wurde ein Freizeitplatz reserviert. Bitte fülle die hier downloadbaren Formulare vollständig aus und schicke sie zügig an uns zurück."
-										rendered="#{c.accept}" />
-									<b:commandButton action="#{subscriberController.toEdit(c)}" value="bearbeiten" look="warning" iconAwesome="pencil"
-										rendered="#{!c.accept}" />
+								<h:outputText value="Dokumente" class="mylabel" />
+								<h:panelGrid columns="1">
+									<b:alert severity="info" closable="false" rendered="#{!c.accept}">
+									  Die Bestätigungsdokumente sind erst nach der offiziellen Bestätigung einsehbar.
+									</b:alert>
+									<b:alert severity="info" closable="true" rendered="#{c.accept}">
+										<strong>Dir wurde ein Freizeitplatz reserviert.</strong>
+										Bitte fülle die hier downloadbaren Formulare vollständig aus und schicke sie zügig an uns zurück oder lade sie als eingescanntes oder abfotografiertes Bild über das unten stehende Formular hoch.
+                   	</b:alert>
 									<h:dataTable value="#{c.documents}" var="d" rendered="#{c.accept}">
 										<h:column>
 											<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
@@ -47,13 +41,24 @@
 										<h:column>
 											<b:buttonGroup>
 												<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
-												<b:dropButton value="-" iconAwesome="trash-o" look="danger">
+												<b:dropButton value="x" iconAwesome="trash-o" look="danger">
 													<b:commandButton action="#{subscriberController.doDeleteUserDoc(d)}" value="ja, jetzt unwiederbringlich löschen"
 														look="danger" />
 												</b:dropButton>
 											</b:buttonGroup>
 										</h:column>
 									</h:dataTable>
+								</h:panelGrid>
+								<h:outputText value="Storno" class="mylabel" />
+								<ui:fragment>
+									<h:outputText value="nur schriftlich" rendered="#{c.accept}" />
+									<b:buttonGroup rendered="#{!c.accept}">
+										<b:commandButton action="#{subscriberController.toEdit(c)}" value="bearbeiten" look="warning" iconAwesome="pencil" />
+										<b:dropButton value="stornieren" iconAwesome="trash-o" look="danger">
+											<b:commandButton action="#{subscriberController.doDelete(c)}" value="ja, jetzt unwiederbringlich stornieren"
+												look="danger" />
+										</b:dropButton>
+									</b:buttonGroup>
 								</ui:fragment>
 							</b:panelGrid>
 						</h:column>
@@ -62,14 +67,27 @@
 				<b:panel title="Wenn Du willst, kannst Du hier Deine eingescannten oder abfotografierten Bestätigungen hochladen.">
 					<b:form enctype="multipart/form-data">
 						<b:panelGrid colSpans="2,10" size="sm">
-							<b:inputText value="#{subscriberModel.persondocument.name}" required="true" requiredMessage="Bitte einen Namen angeben." />
-							<h:inputFile value="#{subscriberModel.persondocument.uploadfile}" style="padding-bottom: 16px" />
+							<h:outputText value="Anmeldung" />
+							<b:selectOneMenu value="#{subscriberModel.persondocument.fkPerson}" required="true"
+								requiredMessage="Bitte die Anmeldung angeben.">
+								<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+								<f:selectItems value="#{subscriberModel.camps}" var="c" itemValue="#{c.pkPerson}"
+									itemLabel="#{c.fullname} in #{c.campname} #{c.camptime}" noSelectionValue="#{c.accept}" />
+							</b:selectOneMenu>
+							<h:outputText value="Name" />
+							<b:inputText value="#{subscriberModel.persondocument.name}"
+								placeholder="Bitte den Namen der Datei eingeben, z.B. unterschriebene Bestätigung o.ä." required="true"
+								requiredMessage="Bitte einen Namen angeben." />
+							<h:outputText value="Foto, PDF" />
+							<h:inputFile value="#{subscriberModel.persondocument.uploadfile}" required="true" requiredMessage="Bitte ein Foto oder eine PDF angeben." style="padding-bottom: 16px" />
+							<h:outputText value="Dateityp" />
 							<b:selectOneMenu value="#{subscriberModel.persondocument.filetype}" required="true"
 								requiredMessage="Bitte den Dateityp auswählen.">
 								<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
 								<f:selectItems value="#{subscriberModel.enumFiletypes}" var="e" itemValue="#{e}" itemLabel="#{e.literal}" />
 							</b:selectOneMenu>
-							<b:commandButton action="#{subscriberController.doAddUserDoc(c)}" value="hochladen" look="primary" />
+							<h:outputText value="" />
+							<b:commandButton action="#{subscriberController.doAddUserDoc}" value="hochladen" look="primary" />
 						</b:panelGrid>
 					</b:form>
 				</b:panel>

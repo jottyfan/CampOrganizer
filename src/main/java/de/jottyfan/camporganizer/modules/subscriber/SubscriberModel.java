@@ -1,5 +1,6 @@
 package de.jottyfan.camporganizer.modules.subscriber;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,11 +122,10 @@ public class SubscriberModel {
 	 * add document uploaded by user to database
 	 * 
 	 * @param facesContext
-	 * @param bean
 	 */
-	public void doAddUserDoc(FacesContext facesContext, SubscriberBean bean) {
-		persondocument.setFkPerson(bean.getPkPerson());
+	public void doAddUserDoc(FacesContext facesContext) {
 		try {
+			persondocument.encodeUpload();
 			new PersondocumentGateway(facesContext).addPersondocument(persondocument);
 			StringBuilder buf = new StringBuilder("Das Dokument ");
 			buf.append(persondocument.getName());
@@ -133,6 +133,9 @@ public class SubscriberModel {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "document added", buf.toString()));
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("SubscriberModel.doAddUserDoc", e);
+		} catch (IOException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "image error", e.getMessage()));
 			LOGGER.error("SubscriberModel.doAddUserDoc", e);
 		}
 	}
