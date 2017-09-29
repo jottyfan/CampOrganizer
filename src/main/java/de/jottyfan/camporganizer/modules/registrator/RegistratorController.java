@@ -6,6 +6,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import de.jottyfan.camporganizer.Controller;
+import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 
 /**
  * 
@@ -44,6 +45,11 @@ public class RegistratorController extends Controller {
 	
 	public String doReject(Integer pk) {
 		model.rejectRegistration(facesContext, pk);
+		return toMain();
+	}
+	
+	public String doDownloadDocument(PersondocumentBean d) {
+		super.doDownloadBase64(facesContext, d.getDocument(), d.getName(), d.getFiletype().getLiteral());
 		return toMain();
 	}
 	

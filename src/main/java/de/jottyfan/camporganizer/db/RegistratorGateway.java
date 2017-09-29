@@ -6,6 +6,7 @@ import static de.jottyfan.camporganizer.db.jooq.Tables.V_CAMP;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -18,15 +19,19 @@ import org.jooq.Record;
 import org.jooq.Record18;
 import org.jooq.Record20;
 import org.jooq.Record21;
+import org.jooq.Record4;
+import org.jooq.SelectConditionStep;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.modules.registrator.RegistratorBean;
+import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 
 /**
  * 
@@ -95,6 +100,38 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setProfileForename(r.get(T_PROFILE.FORENAME));
 			bean.setProfileSurname(r.get(T_PROFILE.SURNAME));
 			bean.setProfileUUID(r.get(T_PROFILE.UUID));
+			bean.getDocuments().addAll(getAllPersondocumentsOf(bean.getPk()));
+			list.add(bean);
+		}
+		return list;
+	}
+
+	/**
+	 * get all person documents of person with pk
+	 * 
+	 * @param pk
+	 *          to be used as reference
+	 * @return list of found person documents; empty list at least
+	 * @throws DataAccessException
+	 */
+	private List<PersondocumentBean> getAllPersondocumentsOf(Integer pk) throws DataAccessException {
+		SelectConditionStep<Record4<Integer, String, EnumFiletype, String>> sql = getJooq()
+		// @formatter:off
+			.select(T_PERSONDOCUMENT.PK,
+					    T_PERSONDOCUMENT.NAME,
+					    T_PERSONDOCUMENT.FILETYPE,
+					    T_PERSONDOCUMENT.DOCUMENT)
+			.from(T_PERSONDOCUMENT)
+			.where(T_PERSONDOCUMENT.FK_PERSON.eq(pk));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<PersondocumentBean> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			PersondocumentBean bean = new PersondocumentBean(r.get(T_PERSONDOCUMENT.PK));
+			bean.setFkPerson(pk);
+			bean.setName(r.get(T_PERSONDOCUMENT.NAME));
+			bean.setFiletype(r.get(T_PERSONDOCUMENT.FILETYPE));
+			bean.setDocument(r.get(T_PERSONDOCUMENT.DOCUMENT));
 			list.add(bean);
 		}
 		return list;
@@ -126,8 +163,9 @@ public class RegistratorGateway extends JooqGateway {
 			buf.append(bean.getSurname());
 			buf.append(" zur Freizeit ");
 			buf.append(bean.getCampname());
-			buf.append(" wurde bestätigt. Melde Dich jetzt unter https://onkelwernerfreizeiten.de/camporganizer an, um die Bestätigungen herunterzuladen.");
-			
+			buf.append(
+					" wurde bestätigt. Melde Dich jetzt unter https://onkelwernerfreizeiten.de/camporganizer an, um die Bestätigungen herunterzuladen.");
+
 			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
 			// @formatter:off
 				.insertInto(T_RSS,

@@ -50,6 +50,11 @@
 						</b:dataTableColumn>
 						<b:dataTableColumn label="Bemerkungen">
 							<h:outputText value="#{l.note}" />
+							<h:dataTable value="#{l.documents}" var="d">
+							  <h:column>
+                   <b:commandButton action="#{registratorController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
+							  </h:column>
+							</h:dataTable>
 						</b:dataTableColumn>
 						<b:dataTableColumn label="">
 						  <b:commandButton action="#{registratorController.toEdit(l)}" value="" title="korrigieren" look="warning" iconAwesome="pencil" />

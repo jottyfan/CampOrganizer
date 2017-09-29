@@ -2,12 +2,15 @@ package de.jottyfan.camporganizer.modules.registrator;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
+import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 
 /**
  * 
@@ -34,10 +37,12 @@ public class RegistratorBean {
 	private String profileForename;
 	private String profileSurname;
 	private String profileUUID;
+	private List<PersondocumentBean> documents;
 
 	public RegistratorBean(Integer pk) {
 		super();
 		this.pk = pk;
+		this.documents = new ArrayList<>();
 	}
 
 	public String getNote() {
@@ -229,5 +234,9 @@ public class RegistratorBean {
 
 	public void setProfileUUID(String profileUUID) {
 		this.profileUUID = profileUUID;
+	}
+
+	public List<PersondocumentBean> getDocuments() {
+		return documents;
 	}
 }
