@@ -46,7 +46,7 @@ public class RssController {
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on reading rss from db", e.getMessage()));
 			}
 		} else {
-			RssBean bean = new RssBean();
+			RssBean bean = new RssBean(null);
 			bean.setPubdate(new Date());
 			bean.setMessage("Dieser Feed ist nicht mehr aktuell. Bitte gib einen recipientCode an.");
 			beans.add(bean);

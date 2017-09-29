@@ -19,9 +19,11 @@ import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.DocumentGateway;
 import de.jottyfan.camporganizer.db.LocationGateway;
 import de.jottyfan.camporganizer.db.ProfileGateway;
+import de.jottyfan.camporganizer.db.RssGateway;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.profile.ProfileBean;
+import de.jottyfan.camporganizer.rss.RssBean;
 
 /**
  * 
@@ -59,12 +61,17 @@ public class AdminController extends Controller {
 				model.setLocation(new LocationBean(null));
 			}
 			model.setLocations(gw.getAllLocations());
-			
+
 			if (model.getCamp() == null) {
 				model.setCamp(new CampBean());
 			}
 			model.setCamps(new CampGateway(facesContext).getAllCampsFromTable());
 			model.setLocationNameToCamp();
+
+			if (model.getRss() == null) {
+				model.setRss(new RssBean(null));
+			}
+			model.setRssList(new RssGateway(facesContext).getAllRss());
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.toAdministrate: ", e);
@@ -76,7 +83,8 @@ public class AdminController extends Controller {
 		model.setActiveIndex(1);
 		try {
 			String newPassword = new ProfileGateway(facesContext).resetPassword(bean);
-			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "password reset", "Das neue Passwort von " + bean.getFullname() + " lautet: " + newPassword));
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "password reset",
+					"Das neue Passwort von " + bean.getFullname() + " lautet: " + newPassword));
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.doResetUserPassword: ", e);
@@ -128,6 +136,17 @@ public class AdminController extends Controller {
 		return toAdministrate();
 	}
 
+	public String toEditRss(Integer pk) {
+		model.setActiveIndex(5);
+		for (RssBean bean : model.getRssList()) {
+			if (bean.getPk().equals(pk)) {
+				model.setRss(bean);
+				model.setActiveIndexRss(1); // element tab
+			}
+		}
+		return toAdministrate();
+	}
+
 	public String toEditLocation(Integer pk) {
 		model.setActiveIndex(2);
 		for (LocationBean bean : model.getLocations()) {
@@ -138,7 +157,7 @@ public class AdminController extends Controller {
 		}
 		return toAdministrate();
 	}
-	
+
 	public String toEditCamp(Integer pk) {
 		model.setActiveIndex(3);
 		for (CampBean bean : model.getCamps()) {
@@ -163,6 +182,19 @@ public class AdminController extends Controller {
 		return toAdministrate();
 	}
 
+	public String doDeleteRss() {
+		model.setActiveIndex(5);
+		try {
+			new RssGateway(facesContext).deleteRss(model.getRss());
+			model.setActiveIndexRss(0);
+			model.setRss(new RssBean(null));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doDeleteRss: ", e);
+		}
+		return toAdministrate();
+	}
+
 	public String doDeleteLocation() {
 		model.setActiveIndex(2);
 		try {
@@ -175,7 +207,7 @@ public class AdminController extends Controller {
 		}
 		return toAdministrate();
 	}
-	
+
 	public String doDeleteCamp() {
 		model.setActiveIndex(3);
 		try {
@@ -199,6 +231,22 @@ public class AdminController extends Controller {
 		} catch (DataAccessException | IOException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.doUpsertDocument: ", e);
+		}
+		return toAdministrate();
+	}
+
+	public String doUpdateRss() {
+		model.setActiveIndex(5);
+		try {
+			if (model.getRss().getPk() == null) {
+				throw new DataAccessException("Anlegen von RSS-Feeds wird mit diesem Formular nicht unterstützt.");
+			}
+			new RssGateway(facesContext).update(model.getRss());
+			model.setActiveIndexRss(0);
+			model.setRss(new RssBean(null));
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doUpsertRss: ", e);
 		}
 		return toAdministrate();
 	}
@@ -234,7 +282,7 @@ public class AdminController extends Controller {
 		model.setActiveIndexDocument(0);
 		return super.doDownloadBase64(facesContext, bean.getDocument(), bean.getName(), bean.getFiletype().getLiteral());
 	}
-	
+
 	public String doDownloadDocument(CampBean bean) {
 		model.setActiveIndex(3);
 		model.setActiveIndexCamp(0);
@@ -280,13 +328,20 @@ public class AdminController extends Controller {
 		return toAdministrate();
 	}
 
+	public String doResetRss() {
+		model.setActiveIndex(5);
+		model.setActiveIndexRss(1);
+		model.setRss(new RssBean(null));
+		return toAdministrate();
+	}
+
 	public String doResetLocation() {
 		model.setActiveIndex(2);
 		model.setActiveIndexLocation(1);
 		model.setLocation(new LocationBean(null));
 		return toAdministrate();
 	}
-	
+
 	public String doResetCamp() {
 		model.setActiveIndex(3);
 		model.setActiveIndexCamp(1);

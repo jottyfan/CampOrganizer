@@ -11,6 +11,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
 import de.jottyfan.camporganizer.db.jooq.tables.TPersondocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
+import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
@@ -21,6 +22,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalescontentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalescontenttypeRecord;
@@ -57,6 +59,7 @@ public class Keys {
     public static final Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = Identities0.IDENTITY_T_PERSON;
     public static final Identity<TPersondocumentRecord, Integer> IDENTITY_T_PERSONDOCUMENT = Identities0.IDENTITY_T_PERSONDOCUMENT;
     public static final Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = Identities0.IDENTITY_T_PROFILE;
+    public static final Identity<TRssRecord, Integer> IDENTITY_T_RSS = Identities0.IDENTITY_T_RSS;
     public static final Identity<TSalesRecord, Integer> IDENTITY_T_SALES = Identities0.IDENTITY_T_SALES;
 
     // -------------------------------------------------------------------------
@@ -72,6 +75,7 @@ public class Keys {
     public static final UniqueKey<TProfileRecord> T_PROFILE_USERNAME_KEY = UniqueKeys0.T_PROFILE_USERNAME_KEY;
     public static final UniqueKey<TProfileRecord> T_PROFILE_UUID_KEY = UniqueKeys0.T_PROFILE_UUID_KEY;
     public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = UniqueKeys0.T_PROFILEROLE_FK_PROFILE_ROLE_KEY;
+    public static final UniqueKey<TRssRecord> T_RSS_PKEY = UniqueKeys0.T_RSS_PKEY;
     public static final UniqueKey<TSalesRecord> T_SALES_PKEY = UniqueKeys0.T_SALES_PKEY;
     public static final UniqueKey<TSalescontentRecord> T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = UniqueKeys0.T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY;
     public static final UniqueKey<TSalescontenttypeRecord> T_SALESCONTENTTYPE_PKEY = UniqueKeys0.T_SALESCONTENTTYPE_PKEY;
@@ -100,6 +104,7 @@ public class Keys {
         public static Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = createIdentity(TPerson.T_PERSON, TPerson.T_PERSON.PK);
         public static Identity<TPersondocumentRecord, Integer> IDENTITY_T_PERSONDOCUMENT = createIdentity(TPersondocument.T_PERSONDOCUMENT, TPersondocument.T_PERSONDOCUMENT.PK);
         public static Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = createIdentity(TProfile.T_PROFILE, TProfile.T_PROFILE.PK);
+        public static Identity<TRssRecord, Integer> IDENTITY_T_RSS = createIdentity(TRss.T_RSS, TRss.T_RSS.PK);
         public static Identity<TSalesRecord, Integer> IDENTITY_T_SALES = createIdentity(TSales.T_SALES, TSales.T_SALES.PK);
     }
 
@@ -113,6 +118,7 @@ public class Keys {
         public static final UniqueKey<TProfileRecord> T_PROFILE_USERNAME_KEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_username_key", TProfile.T_PROFILE.USERNAME);
         public static final UniqueKey<TProfileRecord> T_PROFILE_UUID_KEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_uuid_key", TProfile.T_PROFILE.UUID);
         public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = createUniqueKey(TProfilerole.T_PROFILEROLE, "t_profilerole_fk_profile_role_key", TProfilerole.T_PROFILEROLE.FK_PROFILE, TProfilerole.T_PROFILEROLE.ROLE);
+        public static final UniqueKey<TRssRecord> T_RSS_PKEY = createUniqueKey(TRss.T_RSS, "t_rss_pkey", TRss.T_RSS.PK);
         public static final UniqueKey<TSalesRecord> T_SALES_PKEY = createUniqueKey(TSales.T_SALES, "t_sales_pkey", TSales.T_SALES.PK);
         public static final UniqueKey<TSalescontentRecord> T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = createUniqueKey(TSalescontent.T_SALESCONTENT, "t_salescontent_fk_sales_fk_salescontenttype_key", TSalescontent.T_SALESCONTENT.FK_SALES, TSalescontent.T_SALESCONTENT.FK_SALESCONTENTTYPE);
         public static final UniqueKey<TSalescontenttypeRecord> T_SALESCONTENTTYPE_PKEY = createUniqueKey(TSalescontenttype.T_SALESCONTENTTYPE, "t_salescontenttype_pkey", TSalescontenttype.T_SALESCONTENTTYPE.NAME);

@@ -134,11 +134,14 @@ create view v_role as select unnest(enum_range(NULL::enum_role));
 
 grant select on v_role to camp;
 
-create table t_rss (recipient text,
+create table t_rss (pk serial,
+                    recipient text,
                     msg text, 
-                    regdate timestamp default now());
+                    regdate timestamp default now(),
+                    primary key (pk));
 
 grant select,insert,update,delete on t_rss to camp;
+grant usage on sequence t_rss_pk_seq to camp;
 
 create type enum_camprole as enum ('boy', 'girl', 'helperboy', 'helpergirl', 'kitchen');
 

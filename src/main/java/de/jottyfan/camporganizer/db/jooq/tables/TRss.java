@@ -5,16 +5,21 @@ package de.jottyfan.camporganizer.db.jooq.tables;
 
 
 import de.jottyfan.camporganizer.db.jooq.Camp;
+import de.jottyfan.camporganizer.db.jooq.Keys;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.UniqueKey;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TRss extends TableImpl<TRssRecord> {
 
-    private static final long serialVersionUID = 761258327;
+    private static final long serialVersionUID = -2008277144;
 
     /**
      * The reference instance of <code>camp.t_rss</code>
@@ -62,6 +67,11 @@ public class TRss extends TableImpl<TRssRecord> {
     public final TableField<TRssRecord, String> RECIPIENT = createField("recipient", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
+     * The column <code>camp.t_rss.pk</code>.
+     */
+    public final TableField<TRssRecord, Integer> PK = createField("pk", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('camp.t_rss_pk_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+
+    /**
      * Create a <code>camp.t_rss</code> table reference
      */
     public TRss() {
@@ -89,6 +99,30 @@ public class TRss extends TableImpl<TRssRecord> {
     @Override
     public Schema getSchema() {
         return Camp.CAMP;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<TRssRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_T_RSS;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public UniqueKey<TRssRecord> getPrimaryKey() {
+        return Keys.T_RSS_PKEY;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<UniqueKey<TRssRecord>> getKeys() {
+        return Arrays.<UniqueKey<TRssRecord>>asList(Keys.T_RSS_PKEY);
     }
 
     /**

@@ -225,6 +225,46 @@
 							</b:tab>
 						</b:tabView>
 					</b:tab>
+          <b:tab title="RSS" styleClass="dist16">
+            <b:tabView activeIndex="#{adminModel.activeIndexRss}">
+              <b:tab title="Tabelle">
+                <b:form>
+                  <b:dataTable value="#{adminModel.rssList}" var="d" lang="de">
+                    <b:dataTableColumn label="ID">
+                      <b:commandButton action="#{adminController.toEditRss(d.pk)}" value="#{d.pk}" look="link" />
+                    </b:dataTableColumn>
+                    <b:dataTableColumn label="Empfänger">
+                      <b:commandButton action="#{adminController.toEditRss(d.pk)}" value="#{d.recipient}" look="link" />
+                    </b:dataTableColumn>
+                    <b:dataTableColumn label="Inhalt">
+                      <b:commandButton action="#{adminController.toEditRss(d.pk)}" value="#{d.message}" look="link" />
+                    </b:dataTableColumn>
+                    <b:dataTableColumn label="Datum">
+                      <b:commandButton action="#{adminController.toEditRss(d.pk)}" value="#{d.pubdate}" look="link" />
+                    </b:dataTableColumn>
+                  </b:dataTable>
+                </b:form>
+              </b:tab>
+              <b:tab title="Element">
+                <b:form>
+                  <b:panelGrid colSpans="3,9" size="xs">
+                    <h:outputText value="ID = #{adminModel.rss.pk}" />
+                    <b:commandButton action="#{adminController.doResetRss}" value="Felder leeren" />
+                    <h:outputText value="Empfänger" />
+                    <h:outputText value="#{adminModel.rss.recipient}" />
+                    <h:outputText value="Inhalt" />
+                    <b:inputText value="#{adminModel.rss.message}" />
+                    <h:outputText value="Datum" />
+                    <h:outputText value="#{adminModel.rss.pubdate}" />
+                    <b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
+                      <b:commandButton action="#{adminController.doDeleteRss}" value="ja, unwiederbringlich löschen" look="danger" />
+                    </b:dropButton>
+                    <b:commandButton action="#{adminController.doUpdateRss}" value="Übernehmen" look="primary" />
+                  </b:panelGrid>
+                </b:form>
+              </b:tab>
+            </b:tabView>
+          </b:tab>
 				</b:tabView>
 			</b:panel>
 		</ui:define>

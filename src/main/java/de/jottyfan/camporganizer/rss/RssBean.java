@@ -8,10 +8,19 @@ import java.util.Date;
  *
  */
 public class RssBean {
+	public final Integer pk;
 	public String recipient;
 	public String message;
 	public Date pubdate;
 
+	public RssBean(Integer pk) {
+		this.pk = pk;
+	}
+	
+	public Integer getPk() {
+		return pk;
+	}
+	
 	public String getMessage() {
 		return message;
 	}

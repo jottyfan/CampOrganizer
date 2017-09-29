@@ -10,6 +10,7 @@ import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.profile.ProfileBean;
+import de.jottyfan.camporganizer.rss.RssBean;
 
 /**
  * 
@@ -39,6 +40,10 @@ public class AdminModel {
 	private Integer activeIndexCamp;
 	private CampBean camp;
 	private List<CampBean> camps;
+	
+	private Integer activeIndexRss;
+	private RssBean rss;
+	private List<RssBean> rssList;
 
 	public List<String> getPossibleCountries() {
 		List<String> list = new ArrayList<>();
@@ -198,5 +203,29 @@ public class AdminModel {
 
 	public void setCamps(List<CampBean> camps) {
 		this.camps = camps;
+	}
+
+	public RssBean getRss() {
+		return rss;
+	}
+
+	public void setRss(RssBean rss) {
+		this.rss = rss;
+	}
+
+	public List<RssBean> getRssList() {
+		return rssList;
+	}
+
+	public Integer getActiveIndexRss() {
+		return activeIndexRss;
+	}
+
+	public void setActiveIndexRss(Integer activeIndexRss) {
+		this.activeIndexRss = activeIndexRss;
+	}
+
+	public void setRssList(List<RssBean> rssList) {
+		this.rssList = rssList;
 	}
 }
