@@ -54,7 +54,8 @@ public class SubscriberModel {
 
 	public void load(FacesContext facesContext, Integer pk) {
 		try {
-			setCamps(new SubscriberGateway(facesContext).getCamps(pk));
+			camps = new SubscriberGateway(facesContext).getCamps(pk);
+			persondocument = new PersondocumentBean(null);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("SubscriberModel.load", e);
@@ -136,7 +137,7 @@ public class SubscriberModel {
 		}
 	}
 
-	public List<EnumFiletype> getEnumlistFiletype() {
+	public List<EnumFiletype> getEnumFiletypes() {
 		List<EnumFiletype> list = new ArrayList<>();
 		for (EnumFiletype e : EnumFiletype.values()) {
 			list.add(e);

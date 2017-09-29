@@ -7,71 +7,72 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('subscriber')}" title="Buchung" collapsible="false">
-				<b:alert severity="info" closable="true">
+				<b:form>
+					<b:alert severity="info" closable="true">
 					Für alle Freizeiten gelten diese <a href="http://www.crg-reisen.de/agbs/" target="_blank">AGB</a>
-				</b:alert>
-				<h:outputText value="Du hast dich für folgende Freizeiten angemeldet:" />
-				<b:dataTable value="#{subscriberModel.camps}" var="c" lang="de">
-					<b:dataTableColumn label="Storno">
-						<b:form>
-							<h:outputText value="nur schriftlich" rendered="#{c.accept}" />
-							<b:dropButton value="stornieren" iconAwesome="trash-o" look="danger" rendered="#{!c.accept}">
-								<b:commandButton action="#{subscriberController.doDelete(c)}" value="ja, jetzt unwiederbringlich stornieren"
-									look="danger" />
-							</b:dropButton>
-						</b:form>
-					</b:dataTableColumn>
-					<b:dataTableColumn label="Teilnehmer">
-						<h:outputText value="#{c.fullname}" />
-					</b:dataTableColumn>
-					<b:dataTableColumn label="Freizeit">
-						<h:outputText value="#{c.campname} #{c.camptime}" />
-					</b:dataTableColumn>
-					<b:dataTableColumn label="Ort">
-						<a href="#{c.url}" target="_blank"> <h:outputText value="#{c.locationname}" /></a>
-					</b:dataTableColumn>
-					<b:dataTableColumn label="Dokumente">
-						<h:outputText value="Die Bestätigungsdokumente sind erst nach der offiziellen Bestätigung einsehbar."
-							rendered="#{!c.accept}" />
-						<h:outputText
-							value="Dir wurde ein Freizeitplatz reserviert. Bitte fülle die hier downloadbaren Formulare vollständig aus und schicke sie zügig an uns zurück."
-							rendered="#{c.accept}" />
-						<b:commandButton action="#{subscriberController.toEdit(c)}" value="bearbeiten" look="warning" iconAwesome="pencil"
-							rendered="#{!c.accept}" />
-						<h:dataTable value="#{c.documents}" var="d" rendered="#{c.accept}">
-							<h:column>
-								<b:form>
-									<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
-								</b:form>
-							</h:column>
-						</h:dataTable>
-						<h:dataTable value="#{c.persondocuments}" var="d">
-							<h:column>
-								<b:form>
-									<b:buttonGroup>
-										<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
-										<b:dropButton value="-" iconAwesome="trash-o" look="danger">
-											<b:commandButton action="#{subscriberController.doDeleteUserDoc(d)}" value="ja, jetzt unwiederbringlich löschen"
-												look="danger" />
-										</b:dropButton>
-									</b:buttonGroup>
-								</b:form>
-							</h:column>
-						</h:dataTable>
-						Wenn Du willst, kannst Du hier Deine eingescannten oder abfotografierten Bestätigungen hochladen.
-						<b:form enctype="multipart/form-data">
-							<h:panelGrid columns="4">
-								<b:inputText value="#{subscriberModel.persondocument.name}" required="true" requiredMessage="Bitte einen Namen angeben." />
-								<h:inputFile value="#{subscriberModel.persondocument.uploadfile}" style="padding-bottom: 16px" />
-								<b:selectOneMenu value="#{subscriberModel.persondocument.filetype}" required="true" requiredMessage="Bitte den Dateityp auswählen.">
-									<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
-									<f:selectItems value="#{subscriberModel.enumlistFiletype}" var="e" itemValue="#{e}" itemLabel="#{e.literal}" />
-								</b:selectOneMenu>
-								<b:commandButton action="#{subscriberController.doAddUserDoc(c)}" value="hochladen" look="primary" />
-							</h:panelGrid>
-						</b:form>
-					</b:dataTableColumn>
-				</b:dataTable>
+					</b:alert>
+					<h:outputText value="Folgende Anmeldungen hast Du durchgeführt:" />
+					<h:dataTable value="#{subscriberModel.camps}" var="c">
+						<h:column>
+							<b:panelGrid colSpans="2,10" size="sm">
+								<h:outputText value="Storno" />
+								<h:outputText value="nur schriftlich" rendered="#{c.accept}" />
+								<b:dropButton value="stornieren" iconAwesome="trash-o" look="danger" rendered="#{!c.accept}">
+									<b:commandButton action="#{subscriberController.doDelete(c)}" value="ja, jetzt unwiederbringlich stornieren"
+										look="danger" />
+								</b:dropButton>
+								<h:outputText value="Teilnehmer" />
+								<h:outputText value="#{c.fullname}" />
+								<h:outputText value="Freizeit" />
+								<h:outputText value="#{c.campname} #{c.camptime}" />
+								<h:outputText value="Ort" />
+								<ui:fragment>
+									<a href="#{c.url}" target="_blank"> <h:outputText value="#{c.locationname}" /></a>
+								</ui:fragment>
+								<h:outputText value="Dokumente" />
+								<ui:fragment>
+									<h:outputText value="Die Bestätigungsdokumente sind erst nach der offiziellen Bestätigung einsehbar."
+										rendered="#{!c.accept}" />
+									<h:outputText
+										value="Dir wurde ein Freizeitplatz reserviert. Bitte fülle die hier downloadbaren Formulare vollständig aus und schicke sie zügig an uns zurück."
+										rendered="#{c.accept}" />
+									<b:commandButton action="#{subscriberController.toEdit(c)}" value="bearbeiten" look="warning" iconAwesome="pencil"
+										rendered="#{!c.accept}" />
+									<h:dataTable value="#{c.documents}" var="d" rendered="#{c.accept}">
+										<h:column>
+											<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
+										</h:column>
+									</h:dataTable>
+									<h:dataTable value="#{c.persondocuments}" var="d">
+										<h:column>
+											<b:buttonGroup>
+												<b:commandButton action="#{subscriberController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
+												<b:dropButton value="-" iconAwesome="trash-o" look="danger">
+													<b:commandButton action="#{subscriberController.doDeleteUserDoc(d)}" value="ja, jetzt unwiederbringlich löschen"
+														look="danger" />
+												</b:dropButton>
+											</b:buttonGroup>
+										</h:column>
+									</h:dataTable>
+								</ui:fragment>
+							</b:panelGrid>
+						</h:column>
+					</h:dataTable>
+				</b:form>
+				<b:panel title="Wenn Du willst, kannst Du hier Deine eingescannten oder abfotografierten Bestätigungen hochladen.">
+					<b:form enctype="multipart/form-data">
+						<b:panelGrid colSpans="2,10" size="sm">
+							<b:inputText value="#{subscriberModel.persondocument.name}" required="true" requiredMessage="Bitte einen Namen angeben." />
+							<h:inputFile value="#{subscriberModel.persondocument.uploadfile}" style="padding-bottom: 16px" />
+							<b:selectOneMenu value="#{subscriberModel.persondocument.filetype}" required="true"
+								requiredMessage="Bitte den Dateityp auswählen.">
+								<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+								<f:selectItems value="#{subscriberModel.enumFiletypes}" var="e" itemValue="#{e}" itemLabel="#{e.literal}" />
+							</b:selectOneMenu>
+							<b:commandButton action="#{subscriberController.doAddUserDoc(c)}" value="hochladen" look="primary" />
+						</b:panelGrid>
+					</b:form>
+				</b:panel>
 			</b:panel>
 		</ui:define>
 	</ui:composition>
