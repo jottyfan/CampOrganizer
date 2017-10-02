@@ -5,11 +5,12 @@ import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
 
 import java.sql.Date;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jooq.InsertValuesStep1;
+import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep11;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
@@ -24,13 +25,14 @@ import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.modules.book.PersonBean;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
  * @author jotty
  *
  */
-public class BookGateway extends JooqGateway {
+public class BookGateway extends ProfileGateway {
 
 	private static final Logger LOGGER = LogManager.getLogger(BookGateway.class);
 
@@ -45,12 +47,10 @@ public class BookGateway extends JooqGateway {
 	 *          to be stored
 	 * @throws DataAccessException
 	 */
-	public void insert(PersonBean bean) throws DataAccessException {
-		getJooq().transaction(t -> {
-			Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
-			InsertValuesStep11<TPersonRecord, String, String, String, String, String, String, Date, EnumCamprole, String, Integer, Integer> sql = DSL
-					.using(t)
-					// @formatter:off
+	public void insert(DSLContext jooq, PersonBean bean) throws DataAccessException {
+		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
+		InsertValuesStep11<TPersonRecord, String, String, String, String, String, String, Date, EnumCamprole, String, Integer, Integer> sql = jooq
+		// @formatter:off
 			  .insertInto(T_PERSON,
 			  		        T_PERSON.FORENAME,
 			  		        T_PERSON.SURNAME,
@@ -65,23 +65,22 @@ public class BookGateway extends JooqGateway {
 			  		        T_PERSON.FK_PROFILE)
 			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(),bean.getPhone(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp(), bean.getFkProfile());
 			// @formatter:on
-			LOGGER.debug("{}", sql.toString());
-			sql.execute();
+		LOGGER.debug("{}", sql.toString());
+		sql.execute();
 
-			StringBuilder buf = new StringBuilder("Eine neue Anmeldung von ");
-			buf.append(bean.getForename()).append(" ").append(bean.getSurname());
-			buf.append(" zur Freizeit ").append(bean.getFkCamp()).append(" ist soeben eingetroffen.");
+		StringBuilder buf = new StringBuilder("Eine neue Anmeldung von ");
+		buf.append(bean.getForename()).append(" ").append(bean.getSurname());
+		buf.append(" zur Freizeit ").append(bean.getFkCamp()).append(" ist soeben eingetroffen.");
 
-			InsertValuesStep2<TRssRecord, String, String> sql2 = DSL.using(t)
-			// @formatter:off
+		InsertValuesStep2<TRssRecord, String, String> sql2 = jooq
+		// @formatter:off
 				.insertInto(T_RSS,
 						        T_RSS.MSG,
 						        T_RSS.RECIPIENT)
 				.values(buf.toString(), "registrator");
 			// @formatter:on
-			LOGGER.debug("{}", sql2.toString());
-			sql2.execute();
-		});
+		LOGGER.debug("{}", sql2.toString());
+		sql2.execute();
 	}
 
 	/**
@@ -131,7 +130,7 @@ public class BookGateway extends JooqGateway {
 	 */
 	public void update(PersonBean bean) throws DataAccessException {
 		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
-		getJooq().transaction(t->{
+		getJooq().transaction(t -> {
 			UpdateSetMoreStep<TPersonRecord> sql = DSL.using(t)
 			// @formatter:off
 				.update(T_PERSON)
@@ -147,7 +146,7 @@ public class BookGateway extends JooqGateway {
 			// @formatter:on
 			LOGGER.debug("{}", sql.toString());
 			sql.execute();
-			
+
 			InsertValuesStep2<TRssRecord, String, String> sql2 = DSL.using(t)
 			// @formatter:off
 				.insertInto(T_RSS,
@@ -157,6 +156,39 @@ public class BookGateway extends JooqGateway {
 			// @formatter:on
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();
+		});
+	}
+
+	/**
+	 * do the booking db stuff
+	 * 
+	 * @param profileBean
+	 * @param bean
+	 * @throws DataAccessException
+	 */
+	public void doBooking(ProfileBean profileBean, PersonBean bean) throws DataAccessException {
+		getJooq().transaction(t -> {
+			if (profileBean.getUsername() != null && !profileBean.getUsername().isEmpty()) {
+				if (profileBean.getIsEmpty()) {
+					profileBean.setForename(bean.getForename());
+					profileBean.setSurname(bean.getSurname());
+					if (checkUsernameExists(DSL.using(t), profileBean)) {
+						throw new DataAccessException("Der Name ist leider schon vergeben, bitte wähle einen anderen.");
+					} else if (profileBean.getPassword().equals(profileBean.getPasswordAgain())) {
+						Integer pk = register(DSL.using(t), profileBean, true);
+						bean.setFkProfile(pk);
+					} else {
+						throw new DataAccessException("Die eingegebenen Passwörter sind nicht gleich.");
+					}
+				} else {
+					bean.setFkProfile(profileBean.getPk());
+					ensureSubscriberRole(DSL.using(t), profileBean);
+				}
+			}
+			insert(DSL.using(t), bean);
+			getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "booking finished",
+					"Die Anmeldung wurde übernommen. Sobald sie von uns bestätigt wurde, ist Dein Platz auf der Freizeit gesichert."));
+			profileBean.clear();
 		});
 	}
 }

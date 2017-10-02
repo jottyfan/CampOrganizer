@@ -155,11 +155,23 @@ public class ProfileGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public Integer register(ProfileBean bean, boolean addSubscriber) throws DataAccessException {
+		return register(getJooq(), bean, addSubscriber);
+	}
+	
+	/**
+	 * register profile
+	 * 
+	 * @param bean
+	 *          containing new password, username, forename and surname
+	 * @param addSubscriber
+	 *          if true, add an entry of users new pk and role subscriber to t_profilerole
+	 * @return pk of new profile
+	 * @throws DataAccessException
+	 */
+	public Integer register(DSLContext jooq, ProfileBean bean, boolean addSubscriber) throws DataAccessException {
 		String uuid = UUID.randomUUID().toString();
-		LambdaResultWrapper lrw = new LambdaResultWrapper();
-		getJooq().transaction(t -> {
-			InsertResultStep<TProfileRecord> sql = DSL.using(t)
-			// @formatter:off
+		InsertResultStep<TProfileRecord> sql = jooq
+		// @formatter:off
 				.insertInto(T_PROFILE,
 						        T_PROFILE.FORENAME,
 						        T_PROFILE.SURNAME,
@@ -169,32 +181,31 @@ public class ProfileGateway extends JooqGateway {
 				.values(bean.getForename(), bean.getSurname(), bean.getUsername(), bean.getEncryptedPassword(), uuid)
 				.returning(T_PROFILE.PK);
 		  // @formatter:on
-			LOGGER.debug("{}", sql.toString());
-			lrw.setNumber(sql.fetchOne().get(T_PROFILE.PK));
-			bean.setPk(lrw.getNumber());
-			bean.setAllUsernames(getAllUsernames(DSL.using(t)));
-			if (addSubscriber) {
-				InsertValuesStep2<TProfileroleRecord, Integer, EnumRole> sql2 = DSL.using(t)
-				// @formatter:off
+		LOGGER.debug("{}", sql.toString());
+		Integer result = sql.fetchOne().get(T_PROFILE.PK);
+		bean.setPk(result);
+		bean.setAllUsernames(getAllUsernames(jooq));
+		if (addSubscriber) {
+			InsertValuesStep2<TProfileroleRecord, Integer, EnumRole> sql2 = jooq
+			// @formatter:off
 					.insertInto(T_PROFILEROLE,
 	                     T_PROFILEROLE.FK_PROFILE,
 	                     T_PROFILEROLE.ROLE)
-					.values(lrw.getNumber(), EnumRole.subscriber);
+					.values(result, EnumRole.subscriber);
 				// @formatter:on
-				LOGGER.debug("{}", sql2.toString());
-				sql2.execute();
-			}
-			InsertValuesStep2<TRssRecord, String, String> sql3 = DSL.using(t)
-			// @formatter:off
+			LOGGER.debug("{}", sql2.toString());
+			sql2.execute();
+		}
+		InsertValuesStep2<TRssRecord, String, String> sql3 = jooq
+		// @formatter:off
 				.insertInto(T_RSS,
 						        T_RSS.MSG,
 						        T_RSS.RECIPIENT)
 				.values(new StringBuilder(bean.getFullname()).append(" hat sich als Nutzer im camporganizer registriert.").toString(), "admin");
 			// @formatter:on
-			LOGGER.debug("{}", sql3.toString());
-			sql3.execute();
-		});
-		return lrw.getNumber();
+		LOGGER.debug("{}", sql3.toString());
+		sql3.execute();
+		return result;
 	}
 
 	/**
@@ -371,8 +382,8 @@ public class ProfileGateway extends JooqGateway {
 	 * @param profileBean
 	 * @return true if username exists, false otherwise
 	 */
-	public boolean checkUsernameExists(ProfileBean profileBean) throws DataAccessException {
-		SelectConditionStep<Record1<Integer>> sql = getJooq()
+	public boolean checkUsernameExists(DSLContext jooq, ProfileBean profileBean) throws DataAccessException {
+		SelectConditionStep<Record1<Integer>> sql = jooq
 		// @formatter:off
 			.select(T_PROFILE.PK)
 			.from(T_PROFILE)
@@ -509,8 +520,8 @@ public class ProfileGateway extends JooqGateway {
 	 * @param profileBean
 	 * @throws DataAccessException
 	 */
-	public void ensureSubscriberRole(ProfileBean profileBean) throws DataAccessException {
-		InsertFinalStep<TProfileroleRecord> sql = getJooq()
+	public void ensureSubscriberRole(DSLContext jooq, ProfileBean profileBean) throws DataAccessException {
+		InsertFinalStep<TProfileroleRecord> sql = jooq
 		// @formatter:off
 			.insertInto(T_PROFILEROLE,
 					        T_PROFILEROLE.FK_PROFILE,
@@ -526,7 +537,8 @@ public class ProfileGateway extends JooqGateway {
 	/**
 	 * update bean's names
 	 * 
-	 * @param bean to be used
+	 * @param bean
+	 *          to be used
 	 * @throws DataAccessException
 	 */
 	public void changeNames(ProfileBean bean) throws DataAccessException {

@@ -26,6 +26,7 @@ public abstract class JooqGateway {
 
 	private final static Logger LOGGER = LogManager.getLogger(JooqGateway.class);
 	private final DSLContext context;
+	private final FacesContext facesContext;
 
 	/**
 	 * generate a new instance of the gateway
@@ -35,6 +36,7 @@ public abstract class JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public JooqGateway(FacesContext facesContext) throws DataAccessException {
+		this.facesContext = facesContext;
 		if (facesContext == null) {
 			throw new DataAccessException("facesContext must not be null");
 		}
@@ -65,5 +67,9 @@ public abstract class JooqGateway {
 	 */
 	public DSLContext getJooq() {
 		return context;
+	}
+
+	protected FacesContext getFacesContext() {
+		return facesContext;
 	}
 }

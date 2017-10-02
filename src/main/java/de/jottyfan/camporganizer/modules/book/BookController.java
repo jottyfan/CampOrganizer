@@ -35,15 +35,12 @@ public class BookController extends Controller {
 
 	@ManagedProperty(value = "#{profileBean}")
 	private ProfileBean profileBean;
+	
+	@ManagedProperty(value = "#{bookModel}")
+	private BookModel model;
 
 	public String toBook() {
-		try {
-			bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(true));
-		} catch (DataAccessException e) {
-			facesContext.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
-			LOGGER.error("BookController.toBook: ", e);
-		}
+		model.toBook(facesContext);
 		return "/pages/book.jsf";
 	}
 
@@ -53,29 +50,7 @@ public class BookController extends Controller {
 	}
 
 	public String doBook() {
-		try {
-			// TODO: make to one transaction to ensure complete registrations only
-			if (profileBean.getIsEmpty()) {
-				profileBean.setForename(bean.getForename());
-				profileBean.setSurname(bean.getSurname());
-				if (new ProfileGateway(facesContext).checkUsernameExists(profileBean)) {
-					throw new DataAccessException("Der Name ist leider schon vergeben, bitte wähle einen anderen.");
-				} else if (profileBean.getPassword().equals(profileBean.getPasswordAgain())) {
-					Integer pk = new ProfileGateway(facesContext).register(profileBean, true);
-					bean.setFkProfile(pk);
-				} else {
-					throw new DataAccessException("Die eingegebenen Passwörter sind nicht gleich.");
-				}
-			} else {
-				bean.setFkProfile(profileBean.getPk());
-				new ProfileGateway(facesContext).ensureSubscriberRole(profileBean);
-			}
-			new BookGateway(facesContext).insert(bean);
-			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "booking finished",
-					"Die Anmeldung wurde übernommen. Sobald sie von uns bestätigt wurde, ist Dein Platz auf der Freizeit gesichert."));
-		} catch (DataAccessException e) {
-			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on booking", e.getMessage()));
-		}
+		model.doBook(facesContext, profileBean);
 		if (profileBean.getIsEmpty()) {
 			profileBean.setForename(null);
 			profileBean.setSurname(null);
@@ -98,5 +73,9 @@ public class BookController extends Controller {
 
 	public void setProfileBean(ProfileBean profileBean) {
 		this.profileBean = profileBean;
+	}
+
+	public void setModel(BookModel model) {
+		this.model = model;
 	}
 }
