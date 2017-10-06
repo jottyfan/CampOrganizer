@@ -24,11 +24,13 @@ import org.jooq.SelectConditionStep;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
+import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.modules.registrator.RegistratorBean;
 import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
@@ -187,14 +189,27 @@ public class RegistratorGateway extends JooqGateway {
 	 * @return number of affected rows
 	 * @throws DataAccessException
 	 */
-	public Integer rejectUser(Integer pk) throws DataAccessException {
-		DeleteConditionStep<TPersonRecord> sql = getJooq()
-		// @formatter:off
-			.deleteFrom(T_PERSON)
-			.where(T_PERSON.PK.eq(pk));
-		// @formatter:off
-		LOGGER.debug("{}", sql.toString());
-		return sql.execute();
+	public Integer deleteUser(Integer pk) throws DataAccessException {
+		LambdaResultWrapper lrw = new LambdaResultWrapper();		
+		getJooq().transaction(t->{			
+			DeleteConditionStep<TPersondocumentRecord> sql = DSL.using(t)
+			// @formatter:off
+			  .deleteFrom(T_PERSONDOCUMENT)
+			  .where(T_PERSONDOCUMENT.FK_PERSON.eq(pk));
+			// @formatter:off
+			LOGGER.debug("{}", sql.toString());
+			Integer affected = sql.execute();
+			
+			DeleteConditionStep<TPersonRecord> sql2 = DSL.using(t)
+		  // @formatter:off
+			  .deleteFrom(T_PERSON)
+			  .where(T_PERSON.PK.eq(pk));
+		  // @formatter:off
+		  LOGGER.debug("{}", sql2.toString());
+		  affected += sql2.execute();
+		  lrw.setNumber(affected);
+		});
+		return lrw.getNumber();
 	}
 
 	/**

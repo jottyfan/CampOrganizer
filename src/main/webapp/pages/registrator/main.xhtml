@@ -7,20 +7,23 @@
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="content">
 			<b:panel rendered="#{profileBean.hasRole('registrator')}" title="Bestätigung" collapsible="false">
-			  <b:alert severity="info" closable="true">
-          <h:outputText value="Der RSS-Feed des Registrators lautet: " />
-          <b:navLink href="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=registrator" target="#" value="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=registrator" iconAwesome="rss" />
-        </b:alert>
+				<b:alert severity="info" closable="true">
+					<h:outputText value="Der RSS-Feed des Registrators lautet: " />
+					<b:navLink href="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=registrator" target="#"
+						value="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=registrator" iconAwesome="rss" />
+				</b:alert>
 				<b:form>
 					<b:dataTable value="#{registratorModel.list}" var="l" lang="de">
 						<b:dataTableColumn label="Bestätigung">
 							<h:outputText value="erledigt" rendered="#{l.accept}" />
 							<b:buttonGroup>
-								<b:commandButton action="#{registratorController.doAccept(l)}" value="" title="bestätigen" look="success" iconAwesome="check"
-									rendered="#{!l.accept}" />
-								<b:dropButton value=" x " title="ablehnen" look="danger" rendered="#{!l.accept}">
-									<b:commandButton action="#{registratorController.doReject(l.pk)}" value="ja, unwiederbringlich löschen" look="danger"
-										rendered="#{!l.accept}" />
+								<b:commandButton action="#{registratorController.doAccept(l)}" value="" title="bestätigen" look="success"
+									iconAwesome="check" rendered="#{!l.accept}" />
+								<b:dropButton value=" x " title="löschen" look="danger">
+									<b:commandButton action="#{registratorController.doDelete(l.pk)}" value="ja, unwiederbringlich löschen" look="danger" />
+								</b:dropButton>
+								<b:dropButton value=" x " title="löschen" look="danger" rendered="#{l.accept}">
+									<b:commandButton action="#{registratorController.doDelete(l.pk)}" value="ja, unwiederbringlich löschen" look="danger" />
 								</b:dropButton>
 							</b:buttonGroup>
 						</b:dataTableColumn>
@@ -51,13 +54,14 @@
 						<b:dataTableColumn label="Bemerkungen">
 							<h:outputText value="#{l.note}" />
 							<h:dataTable value="#{l.documents}" var="d">
-							  <h:column>
-                   <b:commandButton action="#{registratorController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
-							  </h:column>
+								<h:column>
+									<b:commandButton action="#{registratorController.doDownloadDocument(d)}" value="#{d.name}" iconAwesome="download" />
+								</h:column>
 							</h:dataTable>
 						</b:dataTableColumn>
 						<b:dataTableColumn label="">
-						  <b:commandButton action="#{registratorController.toEdit(l)}" value="" title="korrigieren" look="warning" iconAwesome="pencil" />
+							<b:commandButton action="#{registratorController.toEdit(l)}" value="" title="korrigieren" look="warning"
+								iconAwesome="pencil" />
 						</b:dataTableColumn>
 					</b:dataTable>
 				</b:form>

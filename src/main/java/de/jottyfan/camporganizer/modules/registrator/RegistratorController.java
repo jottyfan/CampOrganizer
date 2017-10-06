@@ -43,8 +43,8 @@ public class RegistratorController extends Controller {
 		return toMain();
 	}
 	
-	public String doReject(Integer pk) {
-		model.rejectRegistration(facesContext, pk);
+	public String doDelete(Integer pk) {
+		model.deleteRegistration(facesContext, pk);
 		return toMain();
 	}
 	

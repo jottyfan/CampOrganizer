@@ -60,12 +60,12 @@ public class RegistratorModel {
 	 * @param facesContext
 	 * @param pk
 	 */
-	public void rejectRegistration(FacesContext facesContext, Integer pk) {
+	public void deleteRegistration(FacesContext facesContext, Integer pk) {
 		try {
-			new RegistratorGateway(facesContext).rejectUser(pk);
+			new RegistratorGateway(facesContext).deleteUser(pk);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on rejecting user", e.getMessage()));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on deleting user", e.getMessage()));
 		}
 	}
 
