@@ -40,7 +40,7 @@ public class RegistratorModel {
 	}
 
 	/**
-	 * set accept flat to true
+	 * accept user
 	 * 
 	 * @param facesContext
 	 * @param pk
@@ -51,6 +51,21 @@ public class RegistratorModel {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on accepting user", e.getMessage()));
+		}
+	}
+
+	/**
+	 * reject user 
+	 * 
+	 * @param facesContext
+	 * @param bean2
+	 */
+	public void rejectRegistration(FacesContext facesContext, RegistratorBean bean) {
+		try {
+			new RegistratorGateway(facesContext).rejectUser(bean);
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on rejecting user", e.getMessage()));
 		}
 	}
 

@@ -15,14 +15,17 @@
 				<b:form>
 					<b:dataTable value="#{registratorModel.list}" var="l" lang="de">
 						<b:dataTableColumn label="Bestätigung">
-							<h:outputText value="erledigt" rendered="#{l.accept}" />
+							<div>
+								<b:label text="bestätigt" severity="success" rendered="#{l.accept}" />
+								<b:label text="abgelehnt" severity="warning" rendered="#{l.accept == false}" />
+							</div>
 							<b:buttonGroup>
 								<b:commandButton action="#{registratorController.doAccept(l)}" value="" title="bestätigen" look="success"
-									iconAwesome="check" rendered="#{!l.accept}" />
-								<b:dropButton value=" x " title="löschen" look="danger">
-									<b:commandButton action="#{registratorController.doDelete(l.pk)}" value="ja, unwiederbringlich löschen" look="danger" />
-								</b:dropButton>
-								<b:dropButton value=" x " title="löschen" look="danger" rendered="#{l.accept}">
+									iconAwesome="check" rendered="#{l.accept != true}" />
+								<!-- null or false -->
+								<b:commandButton action="#{registratorController.doReject(l)}" value="" title="ablehnen" look="warning"
+									iconAwesome="frown-o" rendered="#{l.accept == null}" />
+								<b:dropButton value=" x " title="löschen" rendered="#{l.accept != null}">
 									<b:commandButton action="#{registratorController.doDelete(l.pk)}" value="ja, unwiederbringlich löschen" look="danger" />
 								</b:dropButton>
 							</b:buttonGroup>

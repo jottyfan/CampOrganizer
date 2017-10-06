@@ -182,6 +182,44 @@ public class RegistratorGateway extends JooqGateway {
 	}
 
 	/**
+	 * set accept flag to false in db
+	 * 
+	 * @param bean
+	 *          to be used
+	 * @throws DataAccessException
+	 */
+	public void rejectUser(RegistratorBean bean) throws DataAccessException {
+		getJooq().transaction(t -> {
+			UpdateConditionStep<TPersonRecord> sql = getJooq()
+			// @formatter:off
+				.update(T_PERSON)
+				.set(T_PERSON.ACCEPT, false)
+				.where(T_PERSON.PK.eq(bean.getPk()));
+			// @formatter:on
+			LOGGER.debug("{}", sql.toString());
+			sql.execute();
+
+			StringBuilder buf = new StringBuilder("Die Anmeldung von ");
+			buf.append(bean.getForename());
+			buf.append(" ");
+			buf.append(bean.getSurname());
+			buf.append(" zur Freizeit ");
+			buf.append(bean.getCampname());
+			buf.append(" wurde leider abgelehnt. Möglicherweise ist sie schon ausgebucht?");
+
+			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
+			// @formatter:off
+				.insertInto(T_RSS,
+						        T_RSS.MSG,
+						        T_RSS.RECIPIENT)
+				.values(buf.toString(), bean.getProfileUUID());
+			// @formatter:on
+			LOGGER.debug("{}", sql2.toString());
+			sql2.execute();
+		});
+	}
+
+	/**
 	 * remove entry in person table from db referenced by pk
 	 * 
 	 * @param pk
@@ -190,8 +228,8 @@ public class RegistratorGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public Integer deleteUser(Integer pk) throws DataAccessException {
-		LambdaResultWrapper lrw = new LambdaResultWrapper();		
-		getJooq().transaction(t->{			
+		LambdaResultWrapper lrw = new LambdaResultWrapper();
+		getJooq().transaction(t -> {
 			DeleteConditionStep<TPersondocumentRecord> sql = DSL.using(t)
 			// @formatter:off
 			  .deleteFrom(T_PERSONDOCUMENT)

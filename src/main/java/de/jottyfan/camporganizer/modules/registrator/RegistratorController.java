@@ -1,5 +1,6 @@
 package de.jottyfan.camporganizer.modules.registrator;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -45,6 +46,11 @@ public class RegistratorController extends Controller {
 	
 	public String doDelete(Integer pk) {
 		model.deleteRegistration(facesContext, pk);
+		return toMain();
+	}
+	
+	public String doReject(RegistratorBean bean) {
+		model.rejectRegistration(facesContext, bean);
 		return toMain();
 	}
 	
