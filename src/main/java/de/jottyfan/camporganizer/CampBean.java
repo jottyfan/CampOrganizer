@@ -23,7 +23,15 @@ public class CampBean {
 	private String countries;
 	private Integer fkDocument;
 	private Integer bookings;
-	
+
+	public String getFullCampname() {
+		StringBuilder buf = new StringBuilder();
+		buf.append(name).append(" ");
+		buf.append(year).append(" in ");
+		buf.append(locationName);
+		return buf.toString();
+	}
+
 	public String getCampTime() {
 		StringBuilder buf = new StringBuilder();
 		buf.append(new SimpleDateFormat("dd.MM.").format(arrive));
@@ -31,7 +39,7 @@ public class CampBean {
 		buf.append(new SimpleDateFormat("dd.MM.yyyy").format(depart));
 		return buf.toString();
 	}
-	
+
 	public Integer getPk() {
 		return pk;
 	}

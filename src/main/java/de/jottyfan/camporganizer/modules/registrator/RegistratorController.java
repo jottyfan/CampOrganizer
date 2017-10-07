@@ -59,6 +59,11 @@ public class RegistratorController extends Controller {
 		return toMain();
 	}
 	
+	public String doDownloadCampAsCsv() {
+		model.doDownloadCsv(facesContext);
+		return toMain();
+	}
+	
 	public void setFacesContext(FacesContext facesContext) {
 		this.facesContext = facesContext;
 	}

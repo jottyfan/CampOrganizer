@@ -4,7 +4,7 @@
 	<groupId>de.jottyfan</groupId>
 	<artifactId>camporganizer</artifactId>
 	<packaging>war</packaging>
-	<version>0.9.5</version>
+	<version>0.9.6</version>
 	<name>CampOrganizer</name>
 	<description>organize bible camps (booking, registering)</description>
 	<dependencies>
@@ -96,6 +96,11 @@
 			<groupId>net.sf.biweekly</groupId>
 			<artifactId>biweekly</artifactId>
 			<version>0.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.5</version>
 		</dependency>
 	</dependencies>
 	<build>

@@ -68,6 +68,16 @@
 						</b:dataTableColumn>
 					</b:dataTable>
 				</b:form>
+				<b:form>
+					<b:panelGrid colSpans="9,3">
+						<b:selectOneMenu value="#{registratorModel.campPk}" required="true"
+							requiredMessage="bitte eine Freizeit zum Herunterladen auswählen">
+							<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+							<f:selectItems value="#{registratorModel.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.fullCampname}" />
+						</b:selectOneMenu>
+						<b:commandButton action="{registratorController.doDownloadCampAsCsv}" value="herunterladen" iconAwesome="download" />
+					</b:panelGrid>
+				</b:form>
 			</b:panel>
 		</ui:define>
 	</ui:composition>
