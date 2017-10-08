@@ -1,12 +1,14 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.*;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSON;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSONDOCUMENT;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILE;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_CAMP;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -16,10 +18,9 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
-import org.jooq.Record18;
-import org.jooq.Record20;
 import org.jooq.Record21;
 import org.jooq.Record4;
+import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.UpdateConditionStep;
@@ -32,6 +33,7 @@ import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
+import de.jottyfan.camporganizer.modules.book.PersonBean;
 import de.jottyfan.camporganizer.modules.registrator.RegistratorBean;
 import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 
@@ -288,5 +290,46 @@ public class RegistratorGateway extends JooqGateway {
 			sql2.execute();
 		});
 		return lrw.getNumber();
+	}
+
+	/**
+	 * load all entries with campPk from t_person
+	 * 
+	 * @param campPk
+	 * @return list of all registrations
+	 * @throws DataAccessException
+	 */
+	public List<PersonBean> getAllPersonsOfCamp(
+			Integer campPk) throws DataAccessException {
+		SelectConditionStep<Record9<String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
+		// @formatter:off
+			.select(T_PERSON.FORENAME,
+					    T_PERSON.SURNAME,
+					    T_PERSON.STREET,
+					    T_PERSON.ZIP,
+					    T_PERSON.CITY,
+					    T_PERSON.PHONE,
+					    T_PERSON.EMAIL,
+					    T_PERSON.BIRTHDATE,
+					    T_PERSON.CAMPROLE)
+			.from(T_PERSON)
+			.where(T_PERSON.FK_CAMP.eq(campPk));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<PersonBean> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			PersonBean bean = new PersonBean();
+			bean.setForename(r.get(T_PERSON.FORENAME));
+			bean.setSurname(r.get(T_PERSON.SURNAME));
+			bean.setStreet(r.get(T_PERSON.STREET));
+			bean.setZip(r.get(T_PERSON.ZIP));
+			bean.setCity(r.get(T_PERSON.CITY));
+			bean.setPhone(r.get(T_PERSON.PHONE));
+			bean.setEmail(r.get(T_PERSON.EMAIL));
+			bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
+			bean.setCamprole(r.get(T_PERSON.CAMPROLE).getLiteral());
+			list.add(bean);
+		}
+		return list;
 	}
 }

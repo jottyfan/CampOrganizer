@@ -1,7 +1,6 @@
 package de.jottyfan.camporganizer.modules.registrator;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,15 @@ import javax.faces.context.FacesContext;
 
 import org.jooq.exception.DataAccessException;
 
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.RegistratorGateway;
+import de.jottyfan.camporganizer.modules.book.PersonBean;
 
 /**
  * 
@@ -130,19 +135,30 @@ public class RegistratorModel {
 	 * @param facesContext
 	 */
 	public void doDownloadCsv(FacesContext facesContext) {
-		// TODO: use commons.csv to make csv file from database select * from t_person where fk_camp = campPk
-		String csvContent = "message\ndownload not yet implemented for camp " + campPk;
-		
-		ExternalContext ec = facesContext.getExternalContext();
-		ec.responseReset();
-		ec.setResponseContentType("csv");
-		ec.setResponseHeader("Content-Disposition", "attachment; filename=\"camp" + campPk + ".csv\"");
 		try {
+			ExternalContext ec = facesContext.getExternalContext();
+			ec.responseReset();
+			ec.setResponseContentType("csv");
+			ec.setResponseHeader("Content-Disposition", "attachment; filename=\"camp" + campPk + ".csv\"");
+			List<PersonBean> list = new RegistratorGateway(facesContext).getAllPersonsOfCamp(campPk);
+			// hack to generate a head line
+			PersonBean bean = new PersonBean();
+			bean.setForename("Vorname");
+			bean.setSurname("Nachname");
+			bean.setStreet("Straße");
+			bean.setZip("PLZ");
+			bean.setCity("Ort");
+			bean.setPhone("Telefon");
+			bean.setEmail("E-Mail");
+			bean.setCamprole("Rolle");
 			Writer writer = ec.getResponseOutputWriter();
-			writer.write(csvContent);
-			writer.flush();
+			StatefulBeanToCsvBuilder<PersonBean> builder = new StatefulBeanToCsvBuilder<>(writer);
+			StatefulBeanToCsv b2c = builder.build();
+			b2c.write(bean);
+			b2c.write(list);
+			writer.close();
 			facesContext.responseComplete();
-		} catch (IOException e) {
+		} catch (DataAccessException | IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on downloading", e.getMessage()));
 		}

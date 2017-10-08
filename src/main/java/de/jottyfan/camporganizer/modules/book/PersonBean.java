@@ -6,6 +6,10 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
+import com.opencsv.bean.CsvDate;
+
 import de.jottyfan.camporganizer.CampBean;
 
 /**
@@ -16,20 +20,49 @@ import de.jottyfan.camporganizer.CampBean;
 @ManagedBean
 @SessionScoped
 public class PersonBean {
+	
+	@CsvBindByPosition(position = 0)
+	@CsvBindByName(column = "Vorname")
 	private String forename;
+	
+	@CsvBindByPosition(position = 1)
+	@CsvBindByName(column = "Nachname")
 	private String surname;
+	
+	@CsvBindByPosition(position = 2)
+	@CsvBindByName(column = "Straße")
 	private String street;
+	
+	@CsvBindByPosition(position = 3)
+	@CsvBindByName(column = "PLZ")
 	private String zip;
+	
+	@CsvBindByPosition(position = 4)
+	@CsvBindByName(column = "Ort")
 	private String city;
+	
+	@CsvBindByPosition(position = 5)
+	@CsvBindByName(column = "Telefon")
 	private String phone;
-	private Date birthdate;
+	
+	@CsvBindByPosition(position = 6)
+	@CsvBindByName(column = "E-Mail")
 	private String email;
+	
+	@CsvBindByPosition(position = 7)
+	@CsvBindByName(column = "Geburtstag")
+	@CsvDate("dd.MM.yyyy")
+	private Date birthdate;
+	
+	@CsvBindByPosition(position = 8)
+	@CsvBindByName(column = "Status")
 	private String camprole;
+
 	private Integer fkCamp;
 	private Integer fkProfile;
 
 	private List<CampBean> camps;
-
+	
 	public String getForename() {
 		return forename;
 	}
