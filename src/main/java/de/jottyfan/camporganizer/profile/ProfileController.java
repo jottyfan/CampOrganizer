@@ -113,6 +113,10 @@ public class ProfileController extends Controller {
 		return toProfile();
 	}
 
+	public String getVersion() {
+		return getClass().getPackage().getImplementationVersion();
+	}
+	
 	public ProfileBean getBean() {
 		return bean;
 	}
