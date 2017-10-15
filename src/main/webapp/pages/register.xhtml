@@ -6,7 +6,7 @@
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="navigation">
-			<b:commandButton action="#{profileController.toLogin}" value="abbrechen" immediate="true" />
+			<b:navCommandLink action="#{profileController.toLogin}" value="abbrechen" immediate="true" />
 		</ui:define>
 		<ui:define name="content">
 			<h:form>

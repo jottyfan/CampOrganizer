@@ -6,7 +6,7 @@
 <h:body>
 	<ui:composition template="/pages/template.xhtml">
 		<ui:define name="navigation">
-			<b:commandButton action="#{bookController.toLogin}" value="abbrechen" rendered="#{profileBean.isEmpty}" />
+			<b:navCommandLink action="#{bookController.toLogin}" value="abbrechen" rendered="#{profileBean.isEmpty}" />
 		</ui:define>
 		<ui:define name="content">
 			<b:panel title="Hinweis zur Online-Anmeldung" collapsible="true" look="info">

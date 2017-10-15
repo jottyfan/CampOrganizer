@@ -8,32 +8,28 @@
 </h:head>
 <h:body>
 	<div class="header">
-		<div class="innerheader">
-			<h:form rendered="#{profileBean != null}">
-				<!-- space between forename and surname -->
-				<b:buttonGroup rendered="#{!profileBean.isEmpty}">
-					<b:commandButton action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
-					<b:commandButton action="#{profileController.doLogout}" value="abmelden" />
-				</b:buttonGroup>
-				<b:buttonGroup rendered="#{!profileBean.isEmpty}" style="margin-left: 8px">
-					<b:commandButton action="#{subscriberController.toMain}" value="Buchung" iconAwesome="smile-o"
+		<b:form>
+			<b:navBar inverse="true" fluid="true">
+				<b:navbarLinks rendered="#{profileBean != null and !profileBean.isEmpty}">
+					<b:navCommandLink action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
+					<b:navCommandLink action="#{profileController.doLogout}" value="abmelden" />
+				</b:navbarLinks>
+				<b:navbarLinks rendered="#{profileBean != null and !profileBean.isEmpty}">
+					<b:navCommandLink action="#{subscriberController.toMain}" value="Buchung" iconAwesome="smile-o"
 						rendered="#{profileBean.hasRole('subscriber')}" />
-          <b:commandButton action="#{bookController.toBook}" value="Anmeldung" iconAwesome="handshake-o" />
-					<b:commandButton action="#{salesController.toSales}" value="Abrechnung" iconAwesome="money"
+					<b:navCommandLink action="#{bookController.toBook}" value="Anmeldung" iconAwesome="handshake-o" />
+					<b:navCommandLink action="#{salesController.toSales}" value="Abrechnung" iconAwesome="money"
 						rendered="#{profileBean.hasRole('businessman')}" />
-					<b:commandButton action="#{adminController.toAdministrate}" value="Administration" iconAwesome="graduation-cap"
+					<b:navCommandLink action="#{adminController.toAdministrate}" value="Administration" iconAwesome="graduation-cap"
 						rendered="#{profileBean.hasRole('admin')}" />
-					<b:commandButton action="#{registratorController.toMain}" value="Bestätigung" iconAwesome="user-o"
+					<b:navCommandLink action="#{registratorController.toMain}" value="Bestätigung" iconAwesome="user-o"
 						rendered="#{profileBean.hasRole('registrator')}" />
+				</b:navbarLinks>
+				<b:navbarLinks>
 					<ui:insert name="navigation" />
-				</b:buttonGroup>
-			</h:form>
-			<h:form rendered="#{profileBean == null or profileBean.fullname == ' '}">
-				<b:buttonGroup>
-					<ui:insert name="navigation" />
-				</b:buttonGroup>
-			</h:form>
-		</div>
+				</b:navbarLinks>
+			</b:navBar>
+		</b:form>
 	</div>
 	<div class="content">
 		<div class="lrpadding">
