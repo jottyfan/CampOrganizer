@@ -75,7 +75,7 @@
 											<b:commandButton action="#{adminController.toEditLocation(l.pk)}" value="#{l.name}" look="link" />
 										</b:dataTableColumn>
 										<b:dataTableColumn label="Webseite">
-											<b:commandButton action="#{adminController.toEditLocation(l.pk)}" value="#{l.url}" look="link" />
+											<b:commandButton action="#{adminController.toEditLocation(l.pk)}" value="#{l.showUrl(32)}" look="link" />
 										</b:dataTableColumn>
 										<b:dataTableColumn label="Wegbeschreibung">
 											<b:commandButton action="#{adminController.doDownloadDocument(l)}" value="" iconAwesome="download"

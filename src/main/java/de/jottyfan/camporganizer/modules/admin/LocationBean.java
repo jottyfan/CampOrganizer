@@ -16,6 +16,15 @@ public class LocationBean {
 		this.pk = pk;
 	}
 
+	public String showUrl(int charAmount) {
+		if (url == null) {
+			return "";
+		} else {
+			int endIndex = charAmount > url.length() ? url.length() - 1 : charAmount;
+			return url == null ? "" : url.substring(0, endIndex) + (endIndex < url.length() ? "…" : "");
+		}
+	}
+
 	public String getName() {
 		return name;
 	}
