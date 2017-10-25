@@ -62,6 +62,11 @@
 								</h:column>
 							</h:dataTable>
 						</b:dataTableColumn>
+						<b:dataTableColumn label="Erstellt">
+						  <h:outputText value="#{l.created}">
+						    <f:convertDateTime pattern="yyyy-MM-dd" />
+						  </h:outputText>
+						</b:dataTableColumn>
 						<b:dataTableColumn label="">
 							<b:commandButton action="#{registratorController.toEdit(l)}" value="" title="korrigieren" look="warning"
 								iconAwesome="pencil" />
