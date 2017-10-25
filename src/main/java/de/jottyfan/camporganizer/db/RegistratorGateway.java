@@ -19,6 +19,7 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record21;
+import org.jooq.Record22;
 import org.jooq.Record4;
 import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
@@ -50,7 +51,7 @@ public class RegistratorGateway extends JooqGateway {
 	}
 
 	public List<RegistratorBean> loadUsers() throws DataAccessException {
-		SelectOnConditionStep<Record21<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, String, Integer, Integer, Timestamp, Timestamp, Double, String, String, String, String>> sql = getJooq()
+		SelectOnConditionStep<Record22<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, Timestamp, String, Integer, Integer, Timestamp, Timestamp, Double, String, String, String, String>> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
 							T_PERSON.FORENAME,
@@ -63,6 +64,7 @@ public class RegistratorGateway extends JooqGateway {
 					    T_PERSON.EMAIL,
 					    T_PERSON.CAMPROLE,
 					    T_PERSON.ACCEPT,
+					    T_PERSON.CREATED,
 					    V_CAMP.NAME,
 					    V_CAMP.MIN_AGE,
 					    V_CAMP.MAX_AGE,
@@ -89,6 +91,7 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setPhone(r.get(T_PERSON.PHONE));
 			bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
 			bean.setEmail(r.get(T_PERSON.EMAIL));
+			bean.setCreated(r.get(T_PERSON.CREATED));
 			bean.setCamprole(r.get(T_PERSON.CAMPROLE));
 			StringBuilder campName = new StringBuilder();
 			campName.append(r.get(V_CAMP.NAME)).append(" ");

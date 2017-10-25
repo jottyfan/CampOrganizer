@@ -45,6 +45,7 @@ war {
   manifest {
     attributes("Implementation-Version": version)
   }
+  archiveName = 'camporganizer.war'
 }
 
 jooq {

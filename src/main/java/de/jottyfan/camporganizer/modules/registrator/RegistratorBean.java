@@ -27,6 +27,7 @@ public class RegistratorBean {
 	private String phone;
 	private Date birthdate;
 	private String email;
+	private Date created;
 	private String campname;
 	private Integer minAge;
 	private Integer maxAge;
@@ -238,5 +239,13 @@ public class RegistratorBean {
 
 	public List<PersondocumentBean> getDocuments() {
 		return documents;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 }
