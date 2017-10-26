@@ -63,7 +63,7 @@ jooq {
            }
            target {
                packageName = 'de.jottyfan.camporganizer.db.jooq'
-               directory = 'src/main/java'
+               directory = 'src/main/jooq'
            }
        }
    }
