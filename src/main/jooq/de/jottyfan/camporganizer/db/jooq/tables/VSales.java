@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VSales extends TableImpl<VSalesRecord> {
 
-    private static final long serialVersionUID = 640507771;
+    private static final long serialVersionUID = -1182858325;
 
     /**
      * The reference instance of <code>camp.v_sales</code>
@@ -60,9 +60,19 @@ public class VSales extends TableImpl<VSalesRecord> {
     public final TableField<VSalesRecord, String> TRADER = createField("trader", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
+     * The column <code>camp.v_sales.fk_camp</code>.
+     */
+    public final TableField<VSalesRecord, Integer> FK_CAMP = createField("fk_camp", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
      * The column <code>camp.v_sales.name</code>.
      */
     public final TableField<VSalesRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>camp.v_sales.fk_location</code>.
+     */
+    public final TableField<VSalesRecord, Integer> FK_LOCATION = createField("fk_location", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>camp.v_sales.location</code>.
@@ -78,6 +88,11 @@ public class VSales extends TableImpl<VSalesRecord> {
      * The column <code>camp.v_sales.year</code>.
      */
     public final TableField<VSalesRecord, Double> YEAR = createField("year", org.jooq.impl.SQLDataType.DOUBLE, this, "");
+
+    /**
+     * The column <code>camp.v_sales.fk_sales</code>.
+     */
+    public final TableField<VSalesRecord, Integer> FK_SALES = createField("fk_sales", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>camp.v_sales.provider</code>.

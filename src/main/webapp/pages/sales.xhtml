@@ -83,6 +83,16 @@
 							</b:dataTable>
 						</b:form>
 					</b:tab>
+				  <b:tab title="Zusammenfassung" styleClass="dist16">
+				    <b:dataTable value="#{salesModel.budget}" var="b">
+				      <b:dataTableColumn label="Freizeit">
+				        <h:outputText value="#{b.camp}" />
+				      </b:dataTableColumn>
+				      <b:dataTableColumn label="aktueller Kontostand (Überschuss) in €">
+				        <h:outputText value="#{b.budget}" />
+				      </b:dataTableColumn>
+				    </b:dataTable>
+				  </b:tab>
 				</b:tabView>
 			</b:panel>
 		</ui:define>

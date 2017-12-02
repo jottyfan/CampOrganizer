@@ -105,10 +105,13 @@ grant select on v_profile to camp;
 create view v_sales as 
 select s.pk,
        s.trader,
+       c.pk as fk_camp,
        c.name,
+       l.pk as fk_location,
        l.name as location,
        s.incredients,
        extract(isoyear from c.arrive) as year,
+       s.pk as fk_sales,
        s.provider,
        s.cash,
        s.buydate,
@@ -120,13 +123,13 @@ from t_sales s
 left join t_camp c on c.pk = s.fk_camp
 left join t_location l on l.pk = c.fk_location
 left join t_salescontent t on t.fk_sales = s.pk
-group by 1,2,3,4,5,6,7,8,9,10,11;
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14;
 
 grant select on v_sales to camp;
 
 create view v_budget as
-select sum(cash) as budget, location, year from v_sales
-group by 2,3;
+select sum(cash) as budget, fk_camp, name, location, year from v_sales
+group by 2,3,4,5;
 
 grant select on v_budget to camp;
 

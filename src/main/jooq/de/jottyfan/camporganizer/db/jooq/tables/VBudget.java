@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VBudget extends TableImpl<VBudgetRecord> {
 
-    private static final long serialVersionUID = -1605351994;
+    private static final long serialVersionUID = -480499971;
 
     /**
      * The reference instance of <code>camp.v_budget</code>
@@ -52,6 +52,16 @@ public class VBudget extends TableImpl<VBudgetRecord> {
      * The column <code>camp.v_budget.budget</code>.
      */
     public final TableField<VBudgetRecord, BigDecimal> BUDGET = createField("budget", org.jooq.impl.SQLDataType.NUMERIC, this, "");
+
+    /**
+     * The column <code>camp.v_budget.fk_camp</code>.
+     */
+    public final TableField<VBudgetRecord, Integer> FK_CAMP = createField("fk_camp", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>camp.v_budget.name</code>.
+     */
+    public final TableField<VBudgetRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>camp.v_budget.location</code>.

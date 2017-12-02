@@ -1,6 +1,7 @@
 package de.jottyfan.camporganizer.db;
 
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALES;
+import static de.jottyfan.camporganizer.db.jooq.Tables.V_BUDGET;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -15,12 +16,14 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep9;
 import org.jooq.Record1;
 import org.jooq.Record10;
+import org.jooq.Record5;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
+import de.jottyfan.camporganizer.modules.businessman.BudgetBean;
 import de.jottyfan.camporganizer.modules.businessman.SalesBean;
 
 /**
@@ -125,7 +128,7 @@ public class SalesGateway extends JooqGateway {
 	 * 
 	 * @return string of traders, comma separated
 	 */
-	public List<String> getAllTraders() {
+	public List<String> getAllTraders() throws DataAccessException {
 		SelectSeekStep1<Record1<String>, String> sql = getJooq()
 		// @formatter:off
 			.selectDistinct(T_SALES.TRADER)
@@ -139,14 +142,13 @@ public class SalesGateway extends JooqGateway {
 		}
 		return list;
 	}
-	
 
 	/**
 	 * get all providers from db
 	 * 
 	 * @return string of providers, comma separated
 	 */
-	public List<String> getAllProviders() {
+	public List<String> getAllProviders() throws DataAccessException {
 		SelectSeekStep1<Record1<String>, String> sql = getJooq()
 		// @formatter:off
 			.selectDistinct(T_SALES.PROVIDER)
@@ -157,6 +159,35 @@ public class SalesGateway extends JooqGateway {
 		List<String> list = new ArrayList<>();
 		for (Record1<String> r : sql.fetch()) {
 			list.add(r.get(T_SALES.PROVIDER));
+		}
+		return list;
+	}
+
+	/**
+	 * get budget list from db
+	 * 
+	 * @return list of budget beans
+	 */
+	public List<BudgetBean> getBudget() throws DataAccessException {
+		SelectJoinStep<Record5<BigDecimal, Integer, String, String, Double>> sql = getJooq()
+		// @formatter:off
+			.select(V_BUDGET.BUDGET,
+					    V_BUDGET.FK_CAMP,
+					    V_BUDGET.LOCATION,
+					    V_BUDGET.NAME,
+					    V_BUDGET.YEAR)
+			.from(V_BUDGET);
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<BudgetBean> list = new ArrayList<>();
+		for (Record5<BigDecimal, Integer, String, String, Double> r : sql.fetch()) {
+			Double year = r.get(V_BUDGET.YEAR);
+			StringBuilder buf = new StringBuilder();
+			buf.append(r.get(V_BUDGET.NAME)).append(" in ");
+			buf.append(r.get(V_BUDGET.LOCATION)).append(" ");
+			buf.append(year == null ? "" : year.intValue());
+			BigDecimal budget = r.get(V_BUDGET.BUDGET);
+			list.add(new BudgetBean(buf.toString(), budget == null ? null : budget.multiply(new BigDecimal(-1))));
 		}
 		return list;
 	}

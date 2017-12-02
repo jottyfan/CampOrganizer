@@ -20,6 +20,7 @@ public class SalesModel {
 	}
 
 	private List<SalesBean> list;
+	private List<BudgetBean> budget;
 
 	private Integer activeIndex;
 
@@ -37,5 +38,13 @@ public class SalesModel {
 
 	public void setActiveIndex(Integer activeIndex) {
 		this.activeIndex = activeIndex;
+	}
+
+	public List<BudgetBean> getBudget() {
+		return budget;
+	}
+
+	public void setBudget(List<BudgetBean> budget) {
+		this.budget = budget;
 	}
 }

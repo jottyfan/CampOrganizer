@@ -46,6 +46,7 @@ public class SalesController extends Controller {
 			bean.setTraders(gw.getAllTraders());
 			bean.setProviders(gw.getAllProviders());
 			model.setList(gw.getAllSales());
+			model.setBudget(gw.getBudget());
 		} catch (DataAccessException e) {
 			bean.setCamps(new ArrayList<>());
 			bean.setTraders(new ArrayList<>());
