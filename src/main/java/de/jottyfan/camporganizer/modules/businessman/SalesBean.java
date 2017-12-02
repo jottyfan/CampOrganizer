@@ -27,7 +27,6 @@ public class SalesBean {
 	private Integer fkCamp;
 	private String provider;
 	private Float cash;
-	private String cashText;
 	private String incredients;
 	private Date buydate;
 	private String recipeNumber;
@@ -180,14 +179,6 @@ public class SalesBean {
 
 	public void setRecipeshot(byte[] recipeshot) {
 		this.recipeshot = recipeshot;
-	}
-
-	public String getCashText() {
-		return cashText;
-	}
-
-	public void setCashText(String cashText) {
-		this.cashText = cashText;
 	}
 
 	public Part getFile() {

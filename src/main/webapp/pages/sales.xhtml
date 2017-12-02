@@ -9,34 +9,38 @@
 			<b:panel rendered="#{profileBean.hasRole('businessman')}" title="Abrechnung" collapsible="false">
 				<b:tabView activeIndex="#{salesModel.activeIndex}">
 					<b:tab title="Rechung erfassen" styleClass="dist16">
+						<b:alert severity="info" closable="true" rendered="#{salesModel.bean.pk != null}">
+							<h:outputText value="ID ist #{salesModel.bean.pk}" />
+						</b:alert>
 						<b:form inline="true" enctype="multipart/form-data">
 							<b:panelGrid colSpans="3,9" size="xs">
 								<h:outputText value="Einkauf bei" />
-								<b:inputText value="#{salesBean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" typeahead="true"
-									typeaheadValues="#{salesBean.traders}" />
+								<b:inputText value="#{salesModel.bean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" typeahead="true"
+									typeaheadValues="#{salesModel.bean.traders}" />
 								<h:outputText value="Freizeit" />
-								<b:selectOneMenu value="#{salesBean.fkCamp}">
-									<f:selectItems value="#{salesBean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
+								<b:selectOneMenu value="#{salesModel.bean.fkCamp}">
+									<f:selectItems value="#{salesModel.bean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
 								</b:selectOneMenu>
 								<h:outputText value="Name" />
-								<b:inputText value="#{salesBean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" typeahead="true"
-									typeaheadValues="#{salesBean.providers}" />
+								<b:inputText value="#{salesModel.bean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" typeahead="true"
+									typeaheadValues="#{salesModel.bean.providers}" />
 								<h:outputText value="Betrag" />
-								<b:inputText value="#{salesBean.cash}" mask="-{0,1}9{1,7}.99">
-									<f:facet name="prepend">€</f:facet>
+								<b:inputText value="#{salesModel.bean.cash}" placeholder="0,00 €">
+									<f:convertNumber currencyCode="EUR" type="currency" />
 								</b:inputText>
 								<h:outputText value="Bestandteile" />
-								<b:inputText value="#{salesBean.incredients}" placeholder="Bitte Bestandteile auflisten" tags="true" style="width: 100%" />
+								<b:inputText value="#{salesModel.bean.incredients}" placeholder="Bitte Bestandteile auflisten" tags="true"
+									style="width: 100%" />
 								<h:outputText value="Rechnungsdatum" />
-								<b:dateTimePicker value="#{salesBean.buydate}" style="padding-bottom: 16px" />
+								<b:dateTimePicker value="#{salesModel.bean.buydate}" style="padding-bottom: 16px" />
 								<h:outputText value="Belegnummer" />
-								<b:inputText value="#{salesBean.recipeNumber}" placeholder="Bitte de Rechnungsnummer eintragen" />
+								<b:inputText value="#{salesModel.bean.recipeNumber}" placeholder="Bitte de Rechnungsnummer eintragen" />
 								<h:outputText value="Foto von Kassenzettel" />
-								<h:inputFile value="#{salesBean.file}" placeholder="Bitte Kassenzettelfoto hochladen" style="padding-bottom: 16px" />
+								<h:inputFile value="#{salesModel.bean.file}" placeholder="Bitte Kassenzettelfoto hochladen" style="padding-bottom: 16px" />
 								<h:outputText value="Buchungstext" />
-								<b:inputTextarea value="#{salesBean.recipeNote}" placeholder="Bemerkungen" />
+								<b:inputTextarea value="#{salesModel.bean.recipeNote}" placeholder="Bemerkungen" />
 								<b:commandButton action="#{salesController.toProfile}" value="abbrechen" immediate="true" />
-								<b:commandButton action="#{salesController.doInsert}" value="übernehmen" look="primary" />
+								<b:commandButton action="#{salesController.doUpsert}" value="übernehmen" look="primary" />
 							</b:panelGrid>
 						</b:form>
 					</b:tab>
@@ -47,13 +51,15 @@
 									<h:outputText value="#{l.trader}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Freizeit">
-									<h:outputText value="#{salesBean.getCampNameAndYear(l.fkCamp)}" />
+									<h:outputText value="#{salesModel.bean.getCampNameAndYear(l.fkCamp)}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Name">
 									<h:outputText value="#{l.provider}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Betrag">
-									<h:outputText value="#{l.cashText}" />
+									<h:outputText value="#{l.cash}">
+										<f:convertNumber currencyCode="EUR" type="currency" />
+									</h:outputText>
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Bestandteile">
 									<h:outputText value="#{l.incredients}" />
@@ -83,16 +89,18 @@
 							</b:dataTable>
 						</b:form>
 					</b:tab>
-				  <b:tab title="Zusammenfassung" styleClass="dist16">
-				    <b:dataTable value="#{salesModel.budget}" var="b">
-				      <b:dataTableColumn label="Freizeit">
-				        <h:outputText value="#{b.camp}" />
-				      </b:dataTableColumn>
-				      <b:dataTableColumn label="aktueller Kontostand (Überschuss) in €">
-				        <h:outputText value="#{b.budget}" />
-				      </b:dataTableColumn>
-				    </b:dataTable>
-				  </b:tab>
+					<b:tab title="Zusammenfassung" styleClass="dist16">
+						<b:dataTable value="#{salesModel.budget}" var="b">
+							<b:dataTableColumn label="Freizeit">
+								<h:outputText value="#{b.camp}" />
+							</b:dataTableColumn>
+							<b:dataTableColumn label="aktueller Kontostand (Überschuss)">
+								<h:outputText value="#{b.budget}">
+									<f:convertNumber currencyCode="EUR" type="currency" />
+								</h:outputText>
+							</b:dataTableColumn>
+						</b:dataTable>
+					</b:tab>
 				</b:tabView>
 			</b:panel>
 		</ui:define>

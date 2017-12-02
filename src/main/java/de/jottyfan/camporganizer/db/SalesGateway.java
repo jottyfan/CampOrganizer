@@ -12,13 +12,18 @@ import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jooq.DataType;
 import org.jooq.DeleteConditionStep;
+import org.jooq.InsertOnDuplicateSetMoreStep;
+import org.jooq.InsertReturningStep;
 import org.jooq.InsertValuesStep9;
+import org.jooq.Query;
 import org.jooq.Record1;
 import org.jooq.Record10;
 import org.jooq.Record5;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
+import org.jooq.UpdateSetMoreStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
@@ -40,15 +45,18 @@ public class SalesGateway extends JooqGateway {
 	}
 
 	/**
-	 * insert content of bean into database table
+	 * upsert content of bean in database table
 	 * 
 	 * @param bean
-	 *          to be used as insert
+	 *          to be used for upsert
 	 * @return amount of affected lines
 	 * @throws DataAccessException
 	 */
-	public Integer insert(SalesBean bean) throws DataAccessException {
-		InsertValuesStep9<TSalesRecord, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String> sql = getJooq()
+	public Integer upsert(SalesBean bean) throws DataAccessException {
+		boolean isNew = bean.getPk() == null;
+		Timestamp buydate = bean.getBuydate() == null ? null : new Timestamp(bean.getBuydate().getTime());
+		@SuppressWarnings("resource")
+		Query sql = isNew ? getJooq()
 		// @formatter:off
 			.insertInto(T_SALES,
 					        T_SALES.TRADER,
@@ -60,7 +68,19 @@ public class SalesGateway extends JooqGateway {
 					        T_SALES.RECIPENUMBER,
 					        T_SALES.RECIPESHOT,
 					        T_SALES.RECIPENOTE)
-			.values(bean.getTrader(), bean.getFkCamp(), bean.getProvider(), bean.getIncredients(), bean.getCashBigDecimal(), bean.getBuydate() == null ? null : new Timestamp(bean.getBuydate().getTime()), bean.getRecipeNumber(), bean.getRecipeshot(), bean.getRecipeNote());
+			.values(bean.getTrader(), bean.getFkCamp(), bean.getProvider(), bean.getIncredients(), bean.getCashBigDecimal(), buydate, bean.getRecipeNumber(), bean.getRecipeshot(), bean.getRecipeNote())
+			: getJooq()
+			.update(T_SALES)
+			.set(T_SALES.TRADER, bean.getTrader())
+			.set(T_SALES.FK_CAMP, bean.getFkCamp())
+			.set(T_SALES.PROVIDER, bean.getProvider())
+			.set(T_SALES.INCREDIENTS, bean.getIncredients())
+			.set(T_SALES.CASH, bean.getCashBigDecimal())
+			.set(T_SALES.BUYDATE, buydate)
+			.set(T_SALES.RECIPENUMBER, bean.getRecipeNumber())
+			.set(T_SALES.RECIPESHOT, bean.getRecipeshot())
+			.set(T_SALES.RECIPENOTE, bean.getRecipeNote())		
+			.where(T_SALES.PK.eq(bean.getPk()));
 	  // @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		return sql.execute();
@@ -73,14 +93,14 @@ public class SalesGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<SalesBean> getAllSales() throws DataAccessException {
-		SelectJoinStep<Record10<Integer, String, Integer, String, String, String, Timestamp, String, byte[], String>> sql = getJooq()
+		SelectJoinStep<Record10<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String>> sql = getJooq()
 		// @formatter:off
 			.select(T_SALES.PK,
 							T_SALES.TRADER,
 					    T_SALES.FK_CAMP,
 					    T_SALES.PROVIDER,
 					    T_SALES.INCREDIENTS,
-					    DSL.field("cash", String.class),
+					    T_SALES.CASH,
 					    T_SALES.BUYDATE,
 					    T_SALES.RECIPENUMBER,
 					    T_SALES.RECIPESHOT,
@@ -89,14 +109,15 @@ public class SalesGateway extends JooqGateway {
 		// @formatter.on
 		LOGGER.debug("{}", sql.toString());
 		List<SalesBean> list = new ArrayList<>();
-		for (Record10<Integer, String, Integer, String, String, String, Timestamp, String, byte[], String> r : sql.fetch()) {
+		for (Record10<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String> r : sql.fetch()) {
 			SalesBean bean = new SalesBean();
+			BigDecimal cash = r.get(T_SALES.CASH);			
 			bean.setPk(r.get(T_SALES.PK));
 			bean.setTrader(r.get(T_SALES.TRADER));
 			bean.setFkCamp(r.get(T_SALES.FK_CAMP));
 			bean.setProvider(r.get(T_SALES.PROVIDER));
 			bean.setIncredients(r.get(T_SALES.INCREDIENTS));
-			bean.setCashText(r.get("cash", String.class));
+			bean.setCash(cash == null ? null : cash.floatValue());
 			bean.setBuydate(r.get(T_SALES.BUYDATE));
 			bean.setRecipeNumber(r.get(T_SALES.RECIPENUMBER));
 			bean.setRecipeNote(r.get(T_SALES.RECIPENOTE));

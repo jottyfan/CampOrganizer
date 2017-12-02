@@ -36,21 +36,19 @@ public class SalesController extends Controller {
 	@ManagedProperty(value = "#{salesModel}")
 	private SalesModel model;
 
-	@ManagedProperty(value = "#{salesBean}")
-	private SalesBean bean;
-
 	private String toSales(Integer activeIndex) {
 		try {
 			SalesGateway gw = new SalesGateway(facesContext);
-			bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(false));
-			bean.setTraders(gw.getAllTraders());
-			bean.setProviders(gw.getAllProviders());
+			model.setBean(model.getBean() == null ? new SalesBean() : model.getBean());
+			model.getBean().setCamps(new CampGateway(facesContext).getAllCampsFromView(false));
+			model.getBean().setTraders(gw.getAllTraders());
+			model.getBean().setProviders(gw.getAllProviders());
 			model.setList(gw.getAllSales());
 			model.setBudget(gw.getBudget());
 		} catch (DataAccessException e) {
-			bean.setCamps(new ArrayList<>());
-			bean.setTraders(new ArrayList<>());
-			bean.setProviders(new ArrayList<>());
+			model.getBean().setCamps(new ArrayList<>());
+			model.getBean().setTraders(new ArrayList<>());
+			model.getBean().setProviders(new ArrayList<>());
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 			LOGGER.error(e.getMessage(), e);
@@ -64,9 +62,8 @@ public class SalesController extends Controller {
 	}
 
 	public String toEdit(SalesBean selection) {
-		facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "not yet implemented",
-				"Das Bearbeiten wurde noch nicht implementiert."));
-		return toSales(1);
+		model.setBean(selection);
+		return toSales();
 	}
 	
 	public String doDelete(SalesBean selection) {
@@ -82,11 +79,11 @@ public class SalesController extends Controller {
 		}
 	}
 
-	public String doInsert() {
+	public String doUpsert() {
 		try {
 			SalesGateway gw = new SalesGateway(facesContext);
-			bean.uploadFile();
-			gw.insert(bean);
+			model.getBean().uploadFile();
+			gw.upsert(model.getBean());
 			model.setList(gw.getAllSales());
 			return toSales(1);
 		} catch (DataAccessException | IOException e) {
@@ -126,11 +123,7 @@ public class SalesController extends Controller {
 	}
 
 	public SalesBean getBean() {
-		return bean;
-	}
-
-	public void setBean(SalesBean bean) {
-		this.bean = bean;
+		return model.getBean();
 	}
 
 	public void setModel(SalesModel model) {
