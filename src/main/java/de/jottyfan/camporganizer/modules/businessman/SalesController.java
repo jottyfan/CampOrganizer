@@ -53,6 +53,7 @@ public class SalesController extends Controller {
 			bean.setProviders(new ArrayList<>());
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
+			LOGGER.error(e.getMessage(), e);
 		}
 		model.setActiveIndex(activeIndex);
 		return "/pages/sales.jsf";

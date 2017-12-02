@@ -128,7 +128,7 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14;
 grant select on v_sales to camp;
 
 create view v_budget as
-select sum(cash) as budget, fk_camp, name, location, year from v_sales
+select sum(cash)::numeric as budget, fk_camp, name, location, year from v_sales
 group by 2,3,4,5;
 
 grant select on v_budget to camp;
