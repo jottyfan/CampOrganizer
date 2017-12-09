@@ -9,7 +9,7 @@
 <h:body>
 	<div class="header">
 		<b:form>
-			<b:navBar inverse="true" fluid="true">
+			<b:navBar fluid="true">
 				<b:navbarLinks rendered="#{profileBean != null and !profileBean.isEmpty}">
 					<b:navCommandLink action="#{profileController.toProfile}" value="#{profileBean.fullname}" />
 					<b:navCommandLink action="#{profileController.doLogout}" value="abmelden" />
