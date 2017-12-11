@@ -1,11 +1,12 @@
 package de.jottyfan.camporganizer.modules.book;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +16,7 @@ import org.jooq.exception.DataAccessException;
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.BookGateway;
 import de.jottyfan.camporganizer.db.CampGateway;
-import de.jottyfan.camporganizer.db.ProfileGateway;
+import de.jottyfan.camporganizer.db.RegistratorGateway;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
@@ -24,13 +25,18 @@ import de.jottyfan.camporganizer.profile.ProfileBean;
  *
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class BookModel {
 
 	private final static Logger LOGGER = LogManager.getLogger(BookModel.class);
 
 	@ManagedProperty(value = "#{personBean}")
 	private PersonBean bean;
+
+	@ManagedProperty(value = "#{persons}")
+	private List<PersonBean> persons;
+
+	private List<CampBean> camps;
 
 	/**
 	 * get all camps; as there is no toLogin method, all camps are read from db just here
@@ -52,13 +58,14 @@ public class BookModel {
 		this.bean = bean;
 	}
 
-	public void toBook(FacesContext facesContext) {
+	public void toBook(FacesContext facesContext, ProfileBean profileBean) {
 		try {
-			bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(true));
+			this.camps = new CampGateway(facesContext).getAllCampsFromView(true);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));
 			LOGGER.error("BookModel.toBook: ", e);
+			this.camps = new ArrayList<>();
 		}
 	}
 
@@ -68,5 +75,26 @@ public class BookModel {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on booking", e.getMessage()));
 		}
+	}
+
+	public void loadPersons(FacesContext facesContext, ProfileBean profileBean) {
+		try {
+			persons = new RegistratorGateway(facesContext).getPersons(profileBean.getPk());
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading bookings", e.getMessage()));
+		}
+	}
+
+	public List<PersonBean> getPersons() {
+		return persons;
+	}
+
+	public void setPersons(List<PersonBean> persons) {
+		this.persons = persons;
+	}
+
+	public List<CampBean> getCamps() {
+		return camps;
 	}
 }

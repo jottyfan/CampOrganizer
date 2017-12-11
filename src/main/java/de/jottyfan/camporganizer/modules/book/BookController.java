@@ -1,6 +1,5 @@
 package de.jottyfan.camporganizer.modules.book;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -8,12 +7,8 @@ import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.Controller;
-import de.jottyfan.camporganizer.db.BookGateway;
-import de.jottyfan.camporganizer.db.CampGateway;
-import de.jottyfan.camporganizer.db.ProfileGateway;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
@@ -30,22 +25,24 @@ public class BookController extends Controller {
 	@ManagedProperty(value = "#{facesContext}")
 	private FacesContext facesContext;
 
-	@ManagedProperty(value = "#{personBean}")
-	private PersonBean bean;
-
 	@ManagedProperty(value = "#{profileBean}")
 	private ProfileBean profileBean;
-	
+
 	@ManagedProperty(value = "#{bookModel}")
 	private BookModel model;
 
 	public String toBook() {
-		model.toBook(facesContext);
+		model.toBook(facesContext, profileBean);
 		return "/pages/book.jsf";
 	}
 
+	public String toBookWithProfile() {
+		model.loadPersons(facesContext, profileBean);
+		return toBook();
+	}
+
 	public String toBook(Integer campPk) {
-		bean.setFkCamp(campPk);
+		model.getBean().setFkCamp(campPk);
 		return toBook();
 	}
 
@@ -61,14 +58,6 @@ public class BookController extends Controller {
 
 	public void setFacesContext(FacesContext facesContext) {
 		this.facesContext = facesContext;
-	}
-
-	public PersonBean getBean() {
-		return bean;
-	}
-
-	public void setBean(PersonBean bean) {
-		this.bean = bean;
 	}
 
 	public void setProfileBean(ProfileBean profileBean) {

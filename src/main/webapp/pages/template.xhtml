@@ -17,7 +17,7 @@
 				<b:navbarLinks rendered="#{profileBean != null and !profileBean.isEmpty}">
 					<b:navCommandLink action="#{subscriberController.toMain}" value="Buchung" iconAwesome="smile-o"
 						rendered="#{profileBean.hasRole('subscriber')}" />
-					<b:navCommandLink action="#{bookController.toBook}" value="Anmeldung" iconAwesome="handshake-o" />
+					<b:navCommandLink action="#{bookController.toBookWithProfile}" value="Anmeldung" iconAwesome="handshake-o" />
 					<b:navCommandLink action="#{salesController.toSales}" value="Abrechnung" iconAwesome="money"
 						rendered="#{profileBean.hasRole('businessman')}" />
 					<b:navCommandLink action="#{adminController.toAdministrate}" value="Administration" iconAwesome="graduation-cap"

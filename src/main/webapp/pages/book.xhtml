@@ -19,6 +19,16 @@
 				<br />
 	  		  Bitte gib immer alle Daten an, damit wir Dir eine Bestätigung zukommen lassen können.
 	  	  </b:panel>
+	  	  <b:panel rendered="#{!profileBean.isEmpty}">
+	  	    <b:form>
+	  	      <b:panelGrid colSpans="3,9" size="xs">
+            <b:selectOneMenu value="#{personBean}">
+              <f:selectItems value="#{bookModel.persons}" var="p" itemLabel="#{p.fullname}" itemValue="#{p}" />
+            </b:selectOneMenu>
+            <b:commandButton action="#{bookController.toBook}" value="für eine andere Freizeit anmelden" look="primary" />
+	  	      </b:panelGrid>
+	  	    </b:form>
+	  	  </b:panel>
 			<h:form>
 				<b:panel>
 					<b:panelGrid colSpans="3,9" size="xs">
@@ -49,7 +59,7 @@
 						</b:selectOneMenu>
 						<h:outputText value="Freizeit" />
 						<b:selectOneMenu value="#{personBean.fkCamp}">
-							<f:selectItems value="#{personBean.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
+							<f:selectItems value="#{bookModel.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
 						</b:selectOneMenu>
 					</b:panelGrid>
 					<b:panelGrid colSpans="3,9" size="xs" rendered="#{profileBean.isEmpty}">					

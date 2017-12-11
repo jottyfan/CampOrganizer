@@ -23,6 +23,7 @@ import org.jooq.Record22;
 import org.jooq.Record4;
 import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
+import org.jooq.SelectHavingStep;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
@@ -302,8 +303,7 @@ public class RegistratorGateway extends JooqGateway {
 	 * @return list of all registrations
 	 * @throws DataAccessException
 	 */
-	public List<PersonBean> getAllPersonsOfCamp(
-			Integer campPk) throws DataAccessException {
+	public List<PersonBean> getAllPersonsOfCamp(Integer campPk) throws DataAccessException {
 		SelectConditionStep<Record9<String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.FORENAME,
@@ -317,6 +317,47 @@ public class RegistratorGateway extends JooqGateway {
 					    T_PERSON.CAMPROLE)
 			.from(T_PERSON)
 			.where(T_PERSON.FK_CAMP.eq(campPk));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<PersonBean> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			PersonBean bean = new PersonBean();
+			bean.setForename(r.get(T_PERSON.FORENAME));
+			bean.setSurname(r.get(T_PERSON.SURNAME));
+			bean.setStreet(r.get(T_PERSON.STREET));
+			bean.setZip(r.get(T_PERSON.ZIP));
+			bean.setCity(r.get(T_PERSON.CITY));
+			bean.setPhone(r.get(T_PERSON.PHONE));
+			bean.setEmail(r.get(T_PERSON.EMAIL));
+			bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
+			bean.setCamprole(r.get(T_PERSON.CAMPROLE).getLiteral());
+			list.add(bean);
+		}
+		return list;
+	}
+
+	/**
+	 * get all booking data of a login
+	 * 
+	 * @param pk
+	 *          of the user that is logged in
+	 * @return list of found bookings
+	 * @throws DataAccessException
+	 */
+	public List<PersonBean> getPersons(Integer pk) throws DataAccessException {
+		SelectHavingStep<Record9<String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
+		// @formatter:off
+			.selectDistinct(T_PERSON.FORENAME,
+					            T_PERSON.SURNAME,
+					            T_PERSON.STREET,
+					            T_PERSON.ZIP,
+					            T_PERSON.CITY,
+					            T_PERSON.PHONE,
+					            T_PERSON.EMAIL,
+					            T_PERSON.BIRTHDATE,
+					            T_PERSON.CAMPROLE)
+			.from(T_PERSON)
+			.where(T_PERSON.FK_PROFILE.eq(pk));
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		List<PersonBean> list = new ArrayList<>();
