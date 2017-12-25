@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DSLContext;
+import org.jooq.InsertReturningStep;
 import org.jooq.InsertValuesStep11;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
@@ -47,9 +48,9 @@ public class BookGateway extends ProfileGateway {
 	 *          to be stored
 	 * @throws DataAccessException
 	 */
-	public void insert(DSLContext jooq, PersonBean bean) throws DataAccessException {
+	public void upsert(DSLContext jooq, PersonBean bean) throws DataAccessException {
 		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
-		InsertValuesStep11<TPersonRecord, String, String, String, String, String, String, Date, EnumCamprole, String, Integer, Integer> sql = jooq
+		InsertReturningStep<TPersonRecord> sql = jooq
 		// @formatter:off
 			  .insertInto(T_PERSON,
 			  		        T_PERSON.FORENAME,
@@ -63,7 +64,9 @@ public class BookGateway extends ProfileGateway {
 			  		        T_PERSON.EMAIL,
 			  		        T_PERSON.FK_CAMP,
 			  		        T_PERSON.FK_PROFILE)
-			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(),bean.getPhone(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp(), bean.getFkProfile());
+			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(),bean.getPhone(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp(), bean.getFkProfile())
+			  .onConflict(T_PERSON.FORENAME, T_PERSON.SURNAME, T_PERSON.BIRTHDATE, T_PERSON.FK_CAMP)
+			  .doNothing();
 			// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		sql.execute();
@@ -185,7 +188,7 @@ public class BookGateway extends ProfileGateway {
 					ensureSubscriberRole(DSL.using(t), profileBean);
 				}
 			}
-			insert(DSL.using(t), bean);
+			upsert(DSL.using(t), bean);
 			getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "booking finished",
 					"Die Anmeldung wurde übernommen. Sobald sie von uns bestätigt wurde, ist Dein Platz auf der Freizeit gesichert."));
 			profileBean.clear();

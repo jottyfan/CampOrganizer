@@ -9,75 +9,85 @@
 			<b:navCommandLink action="#{bookController.toLogin}" value="abbrechen" rendered="#{profileBean.isEmpty}" />
 		</ui:define>
 		<ui:define name="content">
-			<b:panel title="Hinweis zur Online-Anmeldung" collapsible="true" look="info">
-			  Mit der Online-Anmeldung erklären sich Du und Deine Eltern einverstanden, dass Deine Adressdaten zu organisatorischen Zwecken der Freizeit digital erfasst werden.
-	  		  Wenn Du Deine persönlichen Daten nicht über das Internet übertragen willst, melde Dich bitte per Post an:
-	  		  <br />
-				<p style="margin-left: 40px; font-weight: bolder">
-					Werner Blödtner<br /> Stresemannstr. 86<br />74080 Heilbronn
-				</p>
-				<br />
-	  		  Bitte gib immer alle Daten an, damit wir Dir eine Bestätigung zukommen lassen können.
-	  	  </b:panel>
-	  	  <b:panel rendered="#{!profileBean.isEmpty}">
-	  	    <b:form>
-	  	      <b:panelGrid colSpans="3,9" size="xs">
-            <b:selectOneMenu value="#{personBean}">
-              <f:selectItems value="#{bookModel.persons}" var="p" itemLabel="#{p.fullname}" itemValue="#{p}" />
-            </b:selectOneMenu>
-            <b:commandButton action="#{bookController.toBook}" value="für eine andere Freizeit anmelden" look="primary" />
-	  	      </b:panelGrid>
-	  	    </b:form>
-	  	  </b:panel>
-			<h:form>
-				<b:panel>
-					<b:panelGrid colSpans="3,9" size="xs">
-						<h:outputText value="Vorname" />
-						<b:inputText value="#{personBean.forename}" placeholder="Bitte Vornamen eingeben" />
-						<h:outputText value="Nachname" />
-						<b:inputText value="#{personBean.surname}" placeholder="Bitte Nachnamen eingeben" />
-						<h:outputText value="Straße" />
-						<b:inputText value="#{personBean.street}" placeholder="Bitte Straße der Anschrift eingeben" />
-						<h:outputText value="PLZ" />
-						<b:inputText value="#{personBean.zip}" placeholder="Bitte Postleitzahl der Anschrift eingeben" />
-						<h:outputText value="Ort" />
-						<b:inputText value="#{personBean.city}" placeholder="Bitte den Ort der Anschrift eingeben" />
-						<h:outputText value="Telefon" />
-						<b:inputText value="#{personBean.phone}" placeholder="Bitte eine Telefonnummer eingeben" />
-						<h:outputText value="Geburtsdatum" />
-						<b:datepicker value="#{personBean.birthdate}" placeholder="Bitte das Geburtsdatum des Teilnehmers eingeben" />
-						<h:outputText value="E-Mail" />
-						<b:inputText value="#{personBean.email}" placeholder="Bitte die E-Mail-Adresse angeben" />
-						<h:outputText value="Rolle" />
-						<b:selectOneMenu value="#{personBean.camprole}">
-							<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
-							<f:selectItem itemValue="girl" itemLabel="Mädchen" />
-							<f:selectItem itemValue="boy" itemLabel="Junge" />
-							<f:selectItem itemValue="helpergirl" itemLabel="Mitarbeiterin" />
-							<f:selectItem itemValue="helperboy" itemLabel="Mitarbeiter" />
-							<f:selectItem itemValue="kitchen" itemLabel="Küche" />
-						</b:selectOneMenu>
-						<h:outputText value="Freizeit" />
-						<b:selectOneMenu value="#{personBean.fkCamp}">
-							<f:selectItems value="#{bookModel.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
-						</b:selectOneMenu>
-					</b:panelGrid>
-					<b:panelGrid colSpans="3,9" size="xs" rendered="#{profileBean.isEmpty}">					
-						<h:outputText value="optional" />
-						<h:outputText value="Wenn Du Dich registrierst, kannst Du die Bestätigung nach Freischaltung selbst herunterladen." />
-						<h:outputText value="Login" />
-						<b:inputText value="#{profileBean.username}" />
-						<h:outputText value="Passwort" />
-						<b:inputSecret value="#{profileBean.password}" />
-						<h:outputText value="Passwort (wiederholen)" />
-						<b:inputSecret value="#{profileBean.passwordAgain}" />
-          </b:panelGrid>
-          <b:panelGrid colSpans="3,9" size="xs">          
-						<h:outputText value="" />
-						<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary" />
-					</b:panelGrid>
+			<b:accordion expandedPanels="hint">
+				<b:panel id="hint" title="Hinweis zur Online-Anmeldung" collapsible="true" look="info">
+					<ui:include src="/resources/html/fullack.html" />
 				</b:panel>
-			</h:form>
+				<b:panel id="known" title="bekannte Person anmelden" rendered="#{!profileBean.isEmpty}">
+					<b:form>
+						<b:panelGrid colSpans="3,9" size="xs">
+							<h:outputText value="Person auswählen" />
+							<b:selectOneMenu value="#{bookModel.bean}">
+								<f:selectItems value="#{bookModel.persons}" var="p" itemLabel="#{p.fullname} #{p.address}" itemValue="#{p}" />
+							</b:selectOneMenu>
+							<h:outputText value="Rolle" />
+							<b:selectOneMenu value="#{bookModel.bean.camprole}">
+								<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+								<f:selectItem itemValue="girl" itemLabel="Mädchen" />
+								<f:selectItem itemValue="boy" itemLabel="Junge" />
+								<f:selectItem itemValue="helpergirl" itemLabel="Mitarbeiterin" />
+								<f:selectItem itemValue="helperboy" itemLabel="Mitarbeiter" />
+								<f:selectItem itemValue="kitchen" itemLabel="Küche" />
+							</b:selectOneMenu>
+							<h:outputText value="Freizeit" />
+							<b:selectOneMenu value="#{bookModel.bean.fkCamp}">
+								<f:selectItems value="#{bookModel.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
+							</b:selectOneMenu>
+							<h:outputText value="" />
+							<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary" />
+						</b:panelGrid>
+					</b:form>
+				</b:panel>
+				<b:panel id="new" title="neue Person anmelden">
+					<b:form>
+						<b:panelGrid colSpans="3,9" size="xs">
+							<h:outputText value="Vorname" />
+							<b:inputText value="#{personBean.forename}" placeholder="Bitte Vornamen eingeben" />
+							<h:outputText value="Nachname" />
+							<b:inputText value="#{personBean.surname}" placeholder="Bitte Nachnamen eingeben" />
+							<h:outputText value="Straße" />
+							<b:inputText value="#{personBean.street}" placeholder="Bitte Straße der Anschrift eingeben" />
+							<h:outputText value="PLZ" />
+							<b:inputText value="#{personBean.zip}" placeholder="Bitte Postleitzahl der Anschrift eingeben" />
+							<h:outputText value="Ort" />
+							<b:inputText value="#{personBean.city}" placeholder="Bitte den Ort der Anschrift eingeben" />
+							<h:outputText value="Telefon" />
+							<b:inputText value="#{personBean.phone}" placeholder="Bitte eine Telefonnummer eingeben" />
+							<h:outputText value="Geburtsdatum" />
+							<b:datepicker value="#{personBean.birthdate}" placeholder="Bitte das Geburtsdatum des Teilnehmers eingeben" />
+							<h:outputText value="E-Mail" />
+							<b:inputText value="#{personBean.email}" placeholder="Bitte die E-Mail-Adresse angeben" />
+							<h:outputText value="Rolle" />
+							<b:selectOneMenu value="#{personBean.camprole}">
+								<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+								<f:selectItem itemValue="girl" itemLabel="Mädchen" />
+								<f:selectItem itemValue="boy" itemLabel="Junge" />
+								<f:selectItem itemValue="helpergirl" itemLabel="Mitarbeiterin" />
+								<f:selectItem itemValue="helperboy" itemLabel="Mitarbeiter" />
+								<f:selectItem itemValue="kitchen" itemLabel="Küche" />
+							</b:selectOneMenu>
+							<h:outputText value="Freizeit" />
+							<b:selectOneMenu value="#{personBean.fkCamp}">
+								<f:selectItems value="#{bookModel.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.name} #{c.year}" />
+							</b:selectOneMenu>
+						</b:panelGrid>
+						<b:panelGrid colSpans="3,9" size="xs" rendered="#{profileBean.isEmpty}">
+							<h:outputText value="optional" />
+							<h:outputText value="Wenn Du Dich registrierst, kannst Du die Bestätigung nach Freischaltung selbst herunterladen." />
+							<h:outputText value="Login" />
+							<b:inputText value="#{profileBean.username}" />
+							<h:outputText value="Passwort" />
+							<b:inputSecret value="#{profileBean.password}" />
+							<h:outputText value="Passwort (wiederholen)" />
+							<b:inputSecret value="#{profileBean.passwordAgain}" />
+						</b:panelGrid>
+						<b:panelGrid colSpans="3,9" size="xs">
+							<h:outputText value="" />
+							<b:commandButton action="#{bookController.doBook}" value="anmelden" look="primary" />
+						</b:panelGrid>
+					</b:form>
+				</b:panel>
+			</b:accordion>
 		</ui:define>
 	</ui:composition>
 </h:body>

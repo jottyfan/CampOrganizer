@@ -166,6 +166,7 @@ create table t_person (pk serial primary key,
                        fk_profile integer,
                        accept boolean default false not null,
                        created timestamp default now(),
+                       unique (forename, surname, birthdate, fk_camp),
                        foreign key (fk_camp) references t_camp(pk),
                        foreign key (fk_profile) references t_profile(pk));
                        
