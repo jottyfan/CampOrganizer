@@ -17,6 +17,7 @@ import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
+import org.jooq.UpdateConditionStep;
 import org.jooq.UpdateSetMoreStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
@@ -112,6 +113,7 @@ public class BookGateway extends ProfileGateway {
 		LOGGER.debug("{}", sql.toString());
 		Record r = sql.fetchOne();
 		PersonBean bean = new PersonBean();
+		bean.setPk(pk);
 		bean.setForename(r.get(T_PERSON.FORENAME));
 		bean.setSurname(r.get(T_PERSON.SURNAME));
 		bean.setStreet(r.get(T_PERSON.STREET));
@@ -134,7 +136,7 @@ public class BookGateway extends ProfileGateway {
 	public void update(PersonBean bean) throws DataAccessException {
 		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
 		getJooq().transaction(t -> {
-			UpdateSetMoreStep<TPersonRecord> sql = DSL.using(t)
+			UpdateConditionStep<TPersonRecord> sql = DSL.using(t)
 			// @formatter:off
 				.update(T_PERSON)
 				.set(T_PERSON.FORENAME, bean.getForename())
@@ -145,7 +147,8 @@ public class BookGateway extends ProfileGateway {
 				.set(T_PERSON.BIRTHDATE, birthDate)
 				.set(T_PERSON.PHONE, bean.getPhone())
 				.set(T_PERSON.EMAIL, bean.getEmail())
-				.set(T_PERSON.CAMPROLE, new EnumConverter().getEnumCamprole(bean.getCamprole()));
+				.set(T_PERSON.CAMPROLE, new EnumConverter().getEnumCamprole(bean.getCamprole()))
+				.where(T_PERSON.PK.eq(bean.getPk()));
 			// @formatter:on
 			LOGGER.debug("{}", sql.toString());
 			sql.execute();

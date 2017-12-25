@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
+import org.jooq.Record10;
 import org.jooq.Record21;
 import org.jooq.Record22;
 import org.jooq.Record4;
@@ -304,9 +305,10 @@ public class RegistratorGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<PersonBean> getAllPersonsOfCamp(Integer campPk) throws DataAccessException {
-		SelectConditionStep<Record9<String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
+		SelectConditionStep<Record10<Integer, String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
 		// @formatter:off
-			.select(T_PERSON.FORENAME,
+			.select(T_PERSON.PK,
+					    T_PERSON.FORENAME,
 					    T_PERSON.SURNAME,
 					    T_PERSON.STREET,
 					    T_PERSON.ZIP,
@@ -322,6 +324,7 @@ public class RegistratorGateway extends JooqGateway {
 		List<PersonBean> list = new ArrayList<>();
 		for (Record r : sql.fetch()) {
 			PersonBean bean = new PersonBean();
+			bean.setPk(r.get(T_PERSON.PK));
 			bean.setForename(r.get(T_PERSON.FORENAME));
 			bean.setSurname(r.get(T_PERSON.SURNAME));
 			bean.setStreet(r.get(T_PERSON.STREET));
@@ -345,9 +348,10 @@ public class RegistratorGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<PersonBean> getPersons(Integer pk) throws DataAccessException {
-		SelectHavingStep<Record9<String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
+		SelectHavingStep<Record10<Integer, String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
 		// @formatter:off
-			.selectDistinct(T_PERSON.FORENAME,
+			.selectDistinct(T_PERSON.PK,
+					            T_PERSON.FORENAME,
 					            T_PERSON.SURNAME,
 					            T_PERSON.STREET,
 					            T_PERSON.ZIP,
@@ -363,6 +367,7 @@ public class RegistratorGateway extends JooqGateway {
 		List<PersonBean> list = new ArrayList<>();
 		for (Record r : sql.fetch()) {
 			PersonBean bean = new PersonBean();
+			bean.setPk(r.get(T_PERSON.PK));
 			bean.setForename(r.get(T_PERSON.FORENAME));
 			bean.setSurname(r.get(T_PERSON.SURNAME));
 			bean.setStreet(r.get(T_PERSON.STREET));

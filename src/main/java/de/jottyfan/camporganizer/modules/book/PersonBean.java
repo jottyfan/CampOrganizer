@@ -21,6 +21,8 @@ import de.jottyfan.camporganizer.CampBean;
 @SessionScoped
 public class PersonBean {
 
+	private Integer pk;
+	
 	@CsvBindByPosition(position = 0)
 	@CsvBindByName(column = "Vorname")
 	private String forename;
@@ -161,5 +163,13 @@ public class PersonBean {
 
 	public void setFkProfile(Integer fkProfile) {
 		this.fkProfile = fkProfile;
+	}
+
+	public Integer getPk() {
+		return pk;
+	}
+
+	public void setPk(Integer pk) {
+		this.pk = pk;
 	}
 }
