@@ -12,13 +12,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DSLContext;
 import org.jooq.InsertReturningStep;
-import org.jooq.InsertValuesStep11;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record9;
 import org.jooq.SelectConditionStep;
 import org.jooq.UpdateConditionStep;
-import org.jooq.UpdateSetMoreStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
@@ -181,7 +179,7 @@ public class BookGateway extends ProfileGateway {
 					if (checkUsernameExists(DSL.using(t), profileBean)) {
 						throw new DataAccessException("Der Name ist leider schon vergeben, bitte wähle einen anderen.");
 					} else if (profileBean.getPassword().equals(profileBean.getPasswordAgain())) {
-						Integer pk = register(DSL.using(t), profileBean, true);
+						Integer pk = register(DSL.using(t), profileBean);
 						bean.setFkProfile(pk);
 					} else {
 						throw new DataAccessException("Die eingegebenen Passwörter sind nicht gleich.");

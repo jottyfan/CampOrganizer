@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
-import org.jooq.Record2;
 import org.jooq.Record3;
 import org.jooq.Record4;
 import org.jooq.SelectConditionStep;

@@ -1,6 +1,8 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.*;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMP;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSON;
+import static de.jottyfan.camporganizer.db.jooq.Tables.V_CAMP;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -14,11 +16,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep9;
-import org.jooq.Record10;
 import org.jooq.Record11;
 import org.jooq.Record12;
 import org.jooq.SelectHavingStep;
-import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
 import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;

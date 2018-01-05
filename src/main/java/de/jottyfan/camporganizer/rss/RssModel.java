@@ -2,7 +2,6 @@ package de.jottyfan.camporganizer.rss;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.rometools.rome.feed.synd.SyndContent;

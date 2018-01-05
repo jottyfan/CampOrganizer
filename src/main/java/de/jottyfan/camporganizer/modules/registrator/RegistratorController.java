@@ -1,6 +1,5 @@
 package de.jottyfan.camporganizer.modules.registrator;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;

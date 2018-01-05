@@ -2,8 +2,6 @@ package de.jottyfan.camporganizer.ical;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -14,14 +12,9 @@ import javax.faces.context.FacesContext;
 
 import org.jooq.exception.DataAccessException;
 
-import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.FeedException;
-import com.rometools.rome.io.SyndFeedOutput;
-
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import de.jottyfan.camporganizer.db.IcalGateway;
-import de.jottyfan.camporganizer.db.RssGateway;
 
 /**
  * 

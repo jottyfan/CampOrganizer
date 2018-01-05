@@ -43,11 +43,8 @@ public class SubscriberGateway extends JooqGateway {
 
 	private static final Logger LOGGER = LogManager.getLogger(BookGateway.class);
 
-	private FacesContext facesContext;
-
 	public SubscriberGateway(FacesContext facesContext) throws DataAccessException {
 		super(facesContext);
-		this.facesContext = facesContext;
 	}
 
 	/**

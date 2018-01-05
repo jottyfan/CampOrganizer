@@ -1,9 +1,9 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.*;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMP;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_LOCATION;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
@@ -18,9 +18,6 @@ import biweekly.ICalendar;
 import biweekly.component.VEvent;
 import biweekly.io.TimezoneAssignment;
 import biweekly.property.Summary;
-import biweekly.property.Timezone;
-import biweekly.util.Duration;
-import biweekly.util.Recurrence;
 
 /**
  * 

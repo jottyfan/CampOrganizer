@@ -153,7 +153,7 @@ public class RegistratorModel {
 			bean.setCamprole("Rolle");
 			Writer writer = ec.getResponseOutputWriter();
 			StatefulBeanToCsvBuilder<PersonBean> builder = new StatefulBeanToCsvBuilder<>(writer);
-			StatefulBeanToCsv b2c = builder.build();
+			StatefulBeanToCsv<PersonBean> b2c = builder.build();
 			b2c.write(bean);
 			b2c.write(list);
 			writer.close();

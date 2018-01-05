@@ -49,7 +49,7 @@ public class ProfileController extends Controller {
 	public String doRegister() {
 		try {
 			if (bean.getPassword().equals(bean.getPasswordAgain())) {
-				new ProfileGateway(facesContext).register(bean, false);
+				new ProfileGateway(facesContext).register(bean);
 				return toProfile();
 			} else {
 				throw new DataAccessException("Die Passwörter sind nicht gleich.");

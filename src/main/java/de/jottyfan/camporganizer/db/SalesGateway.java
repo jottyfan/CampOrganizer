@@ -12,20 +12,14 @@ import javax.faces.context.FacesContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jooq.DataType;
 import org.jooq.DeleteConditionStep;
-import org.jooq.InsertOnDuplicateSetMoreStep;
-import org.jooq.InsertReturningStep;
-import org.jooq.InsertValuesStep9;
 import org.jooq.Query;
 import org.jooq.Record1;
 import org.jooq.Record10;
 import org.jooq.Record5;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
-import org.jooq.UpdateSetMoreStep;
 import org.jooq.exception.DataAccessException;
-import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
 import de.jottyfan.camporganizer.modules.businessman.BudgetBean;

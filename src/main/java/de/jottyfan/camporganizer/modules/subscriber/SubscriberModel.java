@@ -14,11 +14,9 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.db.BookGateway;
-import de.jottyfan.camporganizer.db.DocumentGateway;
 import de.jottyfan.camporganizer.db.PersondocumentGateway;
 import de.jottyfan.camporganizer.db.SubscriberGateway;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
-import de.jottyfan.camporganizer.modules.admin.DocumentBean;
 import de.jottyfan.camporganizer.modules.book.PersonBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 

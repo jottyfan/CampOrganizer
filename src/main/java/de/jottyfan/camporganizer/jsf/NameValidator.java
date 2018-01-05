@@ -22,6 +22,7 @@ public class NameValidator implements Validator {
 	@Override
 	public void validate(FacesContext facesContext, UIComponent component, Object object) throws ValidatorException {
 		String name = new StringBuilder().append(object).toString();
+		@SuppressWarnings("unchecked")
 		List<String> listOfNames = (List<String>) component.getAttributes().get("listOfNames");
 		ProfileBean profileBean = (ProfileBean) facesContext.getExternalContext().getSessionMap().get("profileBean");
 		if (name.equals(profileBean.getUsername())) {

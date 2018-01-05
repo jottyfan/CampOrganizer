@@ -22,7 +22,6 @@ import org.jooq.DSLContext;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertFinalStep;
 import org.jooq.InsertResultStep;
-import org.jooq.InsertValuesStep1;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record1;
@@ -154,10 +153,10 @@ public class ProfileGateway extends JooqGateway {
 	 * @return pk of new profile
 	 * @throws DataAccessException
 	 */
-	public Integer register(ProfileBean bean, boolean addSubscriber) throws DataAccessException {
-		return register(getJooq(), bean, addSubscriber);
+	public Integer register(ProfileBean bean) throws DataAccessException {
+		return register(getJooq(), bean);
 	}
-	
+
 	/**
 	 * register profile
 	 * 
@@ -168,41 +167,40 @@ public class ProfileGateway extends JooqGateway {
 	 * @return pk of new profile
 	 * @throws DataAccessException
 	 */
-	public Integer register(DSLContext jooq, ProfileBean bean, boolean addSubscriber) throws DataAccessException {
+	public Integer register(DSLContext jooq, ProfileBean bean) throws DataAccessException {
 		String uuid = UUID.randomUUID().toString();
 		InsertResultStep<TProfileRecord> sql = jooq
 		// @formatter:off
-				.insertInto(T_PROFILE,
-						        T_PROFILE.FORENAME,
-						        T_PROFILE.SURNAME,
-						        T_PROFILE.USERNAME,
-						        T_PROFILE.PASSWORD,
-						        T_PROFILE.UUID)
-				.values(bean.getForename(), bean.getSurname(), bean.getUsername(), bean.getEncryptedPassword(), uuid)
-				.returning(T_PROFILE.PK);
-		  // @formatter:on
+			.insertInto(T_PROFILE,
+					        T_PROFILE.FORENAME,
+					        T_PROFILE.SURNAME,
+					        T_PROFILE.USERNAME,
+					        T_PROFILE.PASSWORD,
+					        T_PROFILE.UUID)
+			.values(bean.getForename(), bean.getSurname(), bean.getUsername(), bean.getEncryptedPassword(), uuid)
+			.returning(T_PROFILE.PK);
+		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		Integer result = sql.fetchOne().get(T_PROFILE.PK);
 		bean.setPk(result);
 		bean.setAllUsernames(getAllUsernames(jooq));
-		if (addSubscriber) {
-			InsertValuesStep2<TProfileroleRecord, Integer, EnumRole> sql2 = jooq
-			// @formatter:off
-					.insertInto(T_PROFILEROLE,
-	                     T_PROFILEROLE.FK_PROFILE,
-	                     T_PROFILEROLE.ROLE)
-					.values(result, EnumRole.subscriber);
-				// @formatter:on
-			LOGGER.debug("{}", sql2.toString());
-			sql2.execute();
-		}
+
+		InsertValuesStep2<TProfileroleRecord, Integer, EnumRole> sql2 = jooq
+		// @formatter:off
+		  .insertInto(T_PROFILEROLE,
+	                T_PROFILEROLE.FK_PROFILE,
+	                T_PROFILEROLE.ROLE)
+		  .values(result, EnumRole.subscriber);
+		// @formatter:on
+		LOGGER.debug("{}", sql2.toString());
+		sql2.execute();
 		InsertValuesStep2<TRssRecord, String, String> sql3 = jooq
 		// @formatter:off
-				.insertInto(T_RSS,
-						        T_RSS.MSG,
-						        T_RSS.RECIPIENT)
-				.values(new StringBuilder(bean.getFullname()).append(" hat sich als Nutzer im camporganizer registriert.").toString(), "admin");
-			// @formatter:on
+		  .insertInto(T_RSS,
+		  		        T_RSS.MSG,
+		  		        T_RSS.RECIPIENT)
+		  .values(new StringBuilder(bean.getFullname()).append(" hat sich als Nutzer im camporganizer registriert.").toString(), "admin");
+		// @formatter:on
 		LOGGER.debug("{}", sql3.toString());
 		sql3.execute();
 		return result;

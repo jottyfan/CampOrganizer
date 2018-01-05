@@ -1,10 +1,7 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMP;
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_DOCUMENT;
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_LOCATION;
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSONDOCUMENT;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
 
 import javax.faces.context.FacesContext;
 
@@ -13,19 +10,13 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep2;
 import org.jooq.InsertValuesStep4;
-import org.jooq.UpdateConditionStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
-import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
-import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
-import de.jottyfan.camporganizer.db.jooq.tables.records.TDocumentRecord;
-import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
-import de.jottyfan.camporganizer.modules.admin.DocumentBean;
 import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 
 /**

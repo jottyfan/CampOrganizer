@@ -2,14 +2,12 @@ package de.jottyfan.camporganizer.modules.subscriber;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 
 import javax.servlet.http.Part;
 
 import org.apache.commons.io.IOUtils;
 
-import java.util.Base64;
-
-import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 
 /**

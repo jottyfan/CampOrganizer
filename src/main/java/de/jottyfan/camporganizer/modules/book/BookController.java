@@ -20,6 +20,7 @@ import de.jottyfan.camporganizer.profile.ProfileBean;
 @RequestScoped
 public class BookController extends Controller {
 
+	@SuppressWarnings("unused")
 	private final static Logger LOGGER = LogManager.getLogger(BookController.class);
 
 	@ManagedProperty(value = "#{facesContext}")
