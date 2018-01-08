@@ -71,6 +71,7 @@ public class Keys {
     public static final UniqueKey<TDocumentRecord> T_DOCUMENT_NAME_KEY = UniqueKeys0.T_DOCUMENT_NAME_KEY;
     public static final UniqueKey<TLocationRecord> T_LOCATION_PKEY = UniqueKeys0.T_LOCATION_PKEY;
     public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = UniqueKeys0.T_PERSON_PKEY;
+    public static final UniqueKey<TPersonRecord> UK_PERSON = UniqueKeys0.UK_PERSON;
     public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_PKEY = UniqueKeys0.T_PERSONDOCUMENT_PKEY;
     public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_FK_PERSON_NAME_KEY = UniqueKeys0.T_PERSONDOCUMENT_FK_PERSON_NAME_KEY;
     public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = UniqueKeys0.T_PROFILE_PKEY;
@@ -116,6 +117,7 @@ public class Keys {
         public static final UniqueKey<TDocumentRecord> T_DOCUMENT_NAME_KEY = createUniqueKey(TDocument.T_DOCUMENT, "t_document_name_key", TDocument.T_DOCUMENT.NAME);
         public static final UniqueKey<TLocationRecord> T_LOCATION_PKEY = createUniqueKey(TLocation.T_LOCATION, "t_location_pkey", TLocation.T_LOCATION.PK);
         public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = createUniqueKey(TPerson.T_PERSON, "t_person_pkey", TPerson.T_PERSON.PK);
+        public static final UniqueKey<TPersonRecord> UK_PERSON = createUniqueKey(TPerson.T_PERSON, "uk_person", TPerson.T_PERSON.FORENAME, TPerson.T_PERSON.SURNAME, TPerson.T_PERSON.BIRTHDATE, TPerson.T_PERSON.FK_CAMP);
         public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_PKEY = createUniqueKey(TPersondocument.T_PERSONDOCUMENT, "t_persondocument_pkey", TPersondocument.T_PERSONDOCUMENT.PK);
         public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_FK_PERSON_NAME_KEY = createUniqueKey(TPersondocument.T_PERSONDOCUMENT, "t_persondocument_fk_person_name_key", TPersondocument.T_PERSONDOCUMENT.FK_PERSON, TPersondocument.T_PERSONDOCUMENT.NAME);
         public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_pkey", TProfile.T_PROFILE.PK);

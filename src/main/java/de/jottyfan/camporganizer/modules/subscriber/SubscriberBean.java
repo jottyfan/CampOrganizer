@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.campadmin.DocumentBean;
 
 /**
  * 

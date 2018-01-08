@@ -45,6 +45,7 @@ public class Indexes {
     public static final Index T_DOCUMENT_PKEY = Indexes0.T_DOCUMENT_PKEY;
     public static final Index T_LOCATION_PKEY = Indexes0.T_LOCATION_PKEY;
     public static final Index T_PERSON_PKEY = Indexes0.T_PERSON_PKEY;
+    public static final Index UK_PERSON = Indexes0.UK_PERSON;
     public static final Index T_PERSONDOCUMENT_FK_PERSON_NAME_KEY = Indexes0.T_PERSONDOCUMENT_FK_PERSON_NAME_KEY;
     public static final Index T_PERSONDOCUMENT_PKEY = Indexes0.T_PERSONDOCUMENT_PKEY;
     public static final Index T_PROFILE_PKEY = Indexes0.T_PROFILE_PKEY;
@@ -66,6 +67,7 @@ public class Indexes {
         public static Index T_DOCUMENT_PKEY = createIndex("t_document_pkey", TDocument.T_DOCUMENT, new OrderField[] { TDocument.T_DOCUMENT.PK }, true);
         public static Index T_LOCATION_PKEY = createIndex("t_location_pkey", TLocation.T_LOCATION, new OrderField[] { TLocation.T_LOCATION.PK }, true);
         public static Index T_PERSON_PKEY = createIndex("t_person_pkey", TPerson.T_PERSON, new OrderField[] { TPerson.T_PERSON.PK }, true);
+        public static Index UK_PERSON = createIndex("uk_person", TPerson.T_PERSON, new OrderField[] { TPerson.T_PERSON.FORENAME, TPerson.T_PERSON.SURNAME, TPerson.T_PERSON.BIRTHDATE, TPerson.T_PERSON.FK_CAMP }, true);
         public static Index T_PERSONDOCUMENT_FK_PERSON_NAME_KEY = createIndex("t_persondocument_fk_person_name_key", TPersondocument.T_PERSONDOCUMENT, new OrderField[] { TPersondocument.T_PERSONDOCUMENT.FK_PERSON, TPersondocument.T_PERSONDOCUMENT.NAME }, true);
         public static Index T_PERSONDOCUMENT_PKEY = createIndex("t_persondocument_pkey", TPersondocument.T_PERSONDOCUMENT, new OrderField[] { TPersondocument.T_PERSONDOCUMENT.PK }, true);
         public static Index T_PROFILE_PKEY = createIndex("t_profile_pkey", TProfile.T_PROFILE, new OrderField[] { TProfile.T_PROFILE.PK }, true);

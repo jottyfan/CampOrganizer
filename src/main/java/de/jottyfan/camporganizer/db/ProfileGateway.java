@@ -44,9 +44,9 @@ import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
-import de.jottyfan.camporganizer.modules.admin.DocumentBean;
-import de.jottyfan.camporganizer.modules.admin.LocationBean;
 import de.jottyfan.camporganizer.modules.admin.ProfileRoleBean;
+import de.jottyfan.camporganizer.modules.campadmin.DocumentBean;
+import de.jottyfan.camporganizer.modules.campadmin.LocationBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**

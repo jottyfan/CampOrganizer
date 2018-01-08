@@ -42,7 +42,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TSales extends TableImpl<TSalesRecord> {
 
-    private static final long serialVersionUID = -1408486346;
+    private static final long serialVersionUID = 906522743;
 
     /**
      * The reference instance of <code>camp.t_sales</code>
@@ -80,7 +80,7 @@ public class TSales extends TableImpl<TSalesRecord> {
     /**
      * The column <code>camp.t_sales.cash</code>.
      */
-    public final TableField<TSalesRecord, BigDecimal> CASH = createField("cash", org.jooq.impl.SQLDataType.NUMERIC.nullable(false), this, "");
+    public final TableField<TSalesRecord, BigDecimal> CASH = createField("cash", org.jooq.impl.SQLDataType.NUMERIC(11, 2).nullable(false), this, "");
 
     /**
      * The column <code>camp.t_sales.incredients</code>.

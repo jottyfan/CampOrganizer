@@ -29,7 +29,7 @@ import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
-import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.campadmin.DocumentBean;
 import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 import de.jottyfan.camporganizer.modules.subscriber.SubscriberBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;

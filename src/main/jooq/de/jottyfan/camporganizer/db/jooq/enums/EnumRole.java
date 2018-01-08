@@ -32,7 +32,9 @@ public enum EnumRole implements EnumType {
 
     businessman("businessman"),
 
-    admin("admin");
+    admin("admin"),
+
+    campadmin("campadmin");
 
     private final String literal;
 

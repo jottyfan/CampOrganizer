@@ -20,8 +20,10 @@
 					<b:navCommandLink action="#{bookController.toBookWithProfile}" value="Anmeldung" iconAwesome="handshake-o" />
 					<b:navCommandLink action="#{salesController.toSales}" value="Abrechnung" iconAwesome="money"
 						rendered="#{profileBean.hasRole('businessman')}" />
-					<b:navCommandLink action="#{adminController.toAdministrate}" value="Administration" iconAwesome="graduation-cap"
+					<b:navCommandLink action="#{adminController.toAdministrate}" value="Administration" iconAwesome="user-secret"
 						rendered="#{profileBean.hasRole('admin')}" />
+				  <b:navCommandLink action="#{campadminController.toCampadmin}" value="Freizeitadministration" iconAwesome="graduation-cap"
+				    rendered="#{profileBean.hasRole('campadmin')}" />
 					<b:navCommandLink action="#{registratorController.toMain}" value="Bestätigung" iconAwesome="user-o"
 						rendered="#{profileBean.hasRole('registrator')}" />
 				</b:navbarLinks>

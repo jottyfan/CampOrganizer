@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+<h:body>
+	<ui:composition template="/pages/template.xhtml">
+		<ui:define name="content">
+			<b:panel rendered="#{profileBean.hasRole('campadmin')}" title="Freizeitadministration" collapsible="false">
+			  <b:alert severity="info" closable="true">
+          <h:outputText value="Der RSS-Feed des Freizeitadministrators lautet: " />
+          <b:navLink href="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=campadmin" target="#" value="https://onkelwernerfreizeiten.de/camporganizer/rss.jsf?recipientCode=campadmin" iconAwesome="rss" />
+        </b:alert>
+				<b:tabView activeIndex="#{campadminModel.activeIndex}">
+					<b:tab title="Freizeitheime" styleClass="dist16">
+						<b:tabView activeIndex="#{campadminModel.activeIndexLocation}">
+							<b:tab title="Tabelle">
+								<b:form>
+									<b:dataTable value="#{campadminModel.locations}" var="l" lang="de">
+										<b:dataTableColumn label="ID">
+											<b:commandButton action="#{campadminController.toEditLocation(l.pk)}" value="#{l.pk}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Name">
+											<b:commandButton action="#{campadminController.toEditLocation(l.pk)}" value="#{l.name}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Webseite">
+											<b:commandButton action="#{campadminController.toEditLocation(l.pk)}" value="#{l.showUrl(32)}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Wegbeschreibung">
+											<b:commandButton action="#{campadminController.doDownloadDocument(l)}" value="" iconAwesome="download"
+												rendered="#{l.fkDocument != null}" />
+										</b:dataTableColumn>
+									</b:dataTable>
+								</b:form>
+							</b:tab>
+							<b:tab title="Element">
+								<b:form>
+									<b:panelGrid colSpans="3,9" size="xs">
+										<h:outputText value="ID = #{campadminModel.location.pk}" />
+										<b:commandButton action="#{campadminController.doResetLocation}" value="Felder leeren" />
+										<h:outputText value="Name" />
+										<b:inputText value="#{campadminModel.location.name}" />
+										<h:outputText value="Webseite" />
+										<b:inputText value="#{campadminModel.location.url}" mask="https{0,1}://*{1,999}" />
+										<h:outputText value="Wegbeschreibung" />
+										<b:selectOneMenu value="#{campadminModel.location.fkDocument}">
+											<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+											<f:selectItems value="#{campadminModel.documents}" var="d" itemValue="#{d.pk}" itemLabel="#{d.name}" />
+										</b:selectOneMenu>
+										<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
+											<b:commandButton action="#{campadminController.doDeleteLocation}" value="ja, unwiederbringlich löschen" look="danger" />
+										</b:dropButton>
+										<b:commandButton action="#{campadminController.doUpsertLocation}" value="Übernehmen" look="primary" />
+									</b:panelGrid>
+								</b:form>
+							</b:tab>
+						</b:tabView>
+					</b:tab>
+					<b:tab title="Freizeiten" styleClass="dist16">
+						<b:tabView activeIndex="#{campadminModel.activeIndexCamp}">
+							<b:tab title="Tabelle">
+								<b:form>
+									<b:dataTable value="#{campadminModel.camps}" var="c" lang="de">
+										<b:dataTableColumn label="Name">
+											<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.name}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Zeit">
+											<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.campTime}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="in">
+											<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.locationName}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Bestätigung">
+											<b:commandButton action="#{campadminController.doDownloadDocument(c)}" value="" iconAwesome="download"
+												rendered="#{c.fkDocument != null}" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Anmeldungen">
+											<h:outputText value="#{c.bookings}" />
+										</b:dataTableColumn>
+									</b:dataTable>
+								</b:form>
+							</b:tab>
+							<b:tab title="Element">
+								<b:form>
+									<b:panelGrid colSpans="3,9" size="xs">
+										<h:outputText value="ID = #{campadminModel.camp.pk}" />
+										<b:commandButton action="#{campadminController.doResetCamp}" value="Felder leeren" />
+										<h:outputText value="Name" />
+										<b:inputText value="#{campadminModel.camp.name}" />
+										<h:outputText value="von" />
+										<b:datepicker value="#{campadminModel.camp.arrive}" />
+										<h:outputText value="bis" />
+										<b:datepicker value="#{campadminModel.camp.depart}" />
+										<h:outputText value="Freizeitheim" />
+										<b:selectOneMenu value="#{campadminModel.camp.fkLocation}">
+											<f:selectItem itemValue="" itemLabel="--- bitte auswählen ---" />
+											<f:selectItems value="#{campadminModel.locations}" var="l" itemValue="#{l.pk}" itemLabel="#{l.name}" />
+										</b:selectOneMenu>
+										<h:outputText value="Mindestalter" />
+										<b:inputText value="#{campadminModel.camp.minAge}">
+											<f:convertNumber integerOnly="true" />
+										</b:inputText>
+										<h:outputText value="Maximalalter" />
+										<b:inputText value="#{campadminModel.camp.maxAge}">
+											<f:convertNumber integerOnly="true" />
+										</b:inputText>
+										<h:outputText value="Preis" />
+										<b:inputTextarea value="#{campadminModel.camp.price}" />
+										<h:outputText value="Ferien in" />
+										<b:inputText value="#{campadminModel.camp.countries}" tags="true" typeahead="true"
+											typeaheadValues="#{campadminModel.possibleCountries}" />
+										<h:outputText value="Bestätigung" />
+										<b:selectOneMenu value="#{campadminModel.camp.fkDocument}">
+											<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+											<f:selectItems value="#{campadminModel.documents}" var="d" itemValue="#{d.pk}" itemLabel="#{d.name}" />
+										</b:selectOneMenu>
+										<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
+											<b:commandButton action="#{campadminController.doDeleteCamp}" value="ja, unwiederbringlich löschen" look="danger" />
+										</b:dropButton>
+										<b:commandButton action="#{campadminController.doUpsertCamp}" value="Übernehmen" look="primary" />
+									</b:panelGrid>
+								</b:form>
+							</b:tab>
+						</b:tabView>
+					</b:tab>
+					<b:tab title="Dokumente" styleClass="dist16">
+						<b:tabView activeIndex="#{campadminModel.activeIndexDocument}">
+							<b:tab title="Tabelle">
+								<b:form>
+									<b:dataTable value="#{campadminModel.documents}" var="d" lang="de">
+										<b:dataTableColumn label="ID">
+											<b:commandButton action="#{campadminController.toEditDocument(d.pk)}" value="#{d.pk}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Name">
+											<b:commandButton action="#{campadminController.toEditDocument(d.pk)}" value="#{d.name}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Dokumententyp">
+											<b:commandButton action="#{campadminController.toEditDocument(d.pk)}" value="#{d.doctype.literal}" look="link" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Inhalt">
+											<b:commandButton action="#{campadminController.doDownloadDocument(d)}" value="" iconAwesome="download" link="look" />
+										</b:dataTableColumn>
+										<b:dataTableColumn label="Dateityp">
+											<b:commandButton action="#{campadminController.toEditDocument(d.pk)}" value="#{d.filetype.literal}" look="link" />
+										</b:dataTableColumn>
+									</b:dataTable>
+								</b:form>
+							</b:tab>
+							<b:tab title="Element">
+								<b:form enctype="multipart/form-data">
+									<b:panelGrid colSpans="3,9" size="xs">
+										<h:outputText value="ID = #{campadminModel.document.pk}" />
+										<b:commandButton action="#{campadminController.doResetDocument}" value="Felder leeren" />
+										<h:outputText value="Name" />
+										<b:inputText value="#{campadminModel.document.name}" />
+										<h:outputText value="Dokumententyp" />
+										<b:selectOneMenu value="#{campadminModel.document.doctype}">
+											<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+											<f:selectItems value="#{campadminModel.enumlistDoctype}" var="e" itemValue="#{e}" itemLabel="#{e.literal}" />
+										</b:selectOneMenu>
+										<h:outputText value="Inhalt" />
+										<h:inputFile value="#{campadminModel.document.uploadfile}" style="padding-bottom: 16px" />
+										<h:outputText value="Dateityp" />
+										<b:selectOneMenu value="#{campadminModel.document.filetype}">
+											<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+											<f:selectItems value="#{campadminModel.enumlistFiletype}" var="e" itemValue="#{e}" itemLabel="#{e.literal}" />
+										</b:selectOneMenu>
+										<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
+											<b:commandButton action="#{campadminController.doDeleteDocument}" value="ja, unwiederbringlich löschen" look="danger" />
+										</b:dropButton>
+										<b:commandButton action="#{campadminController.doUpsertDocument}" value="Übernehmen" look="primary" />
+									</b:panelGrid>
+								</b:form>
+							</b:tab>
+						</b:tabView>
+					</b:tab>
+				</b:tabView>
+			</b:panel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

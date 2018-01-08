@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VSales extends TableImpl<VSalesRecord> {
 
-    private static final long serialVersionUID = -1182858325;
+    private static final long serialVersionUID = -2101338774;
 
     /**
      * The reference instance of <code>camp.v_sales</code>
@@ -102,7 +102,7 @@ public class VSales extends TableImpl<VSalesRecord> {
     /**
      * The column <code>camp.v_sales.cash</code>.
      */
-    public final TableField<VSalesRecord, BigDecimal> CASH = createField("cash", org.jooq.impl.SQLDataType.NUMERIC, this, "");
+    public final TableField<VSalesRecord, BigDecimal> CASH = createField("cash", org.jooq.impl.SQLDataType.NUMERIC(11, 2), this, "");
 
     /**
      * The column <code>camp.v_sales.buydate</code>.

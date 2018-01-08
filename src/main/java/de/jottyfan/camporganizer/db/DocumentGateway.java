@@ -23,7 +23,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TDocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
-import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.campadmin.DocumentBean;
 
 /**
  * 

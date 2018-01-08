@@ -1,4 +1,4 @@
-package de.jottyfan.camporganizer.modules.admin;
+package de.jottyfan.camporganizer.modules.campadmin;
 
 /**
  * 

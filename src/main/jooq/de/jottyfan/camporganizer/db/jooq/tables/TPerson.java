@@ -43,7 +43,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TPerson extends TableImpl<TPersonRecord> {
 
-    private static final long serialVersionUID = 1623329349;
+    private static final long serialVersionUID = 545143855;
 
     /**
      * The reference instance of <code>camp.t_person</code>
@@ -170,7 +170,7 @@ public class TPerson extends TableImpl<TPersonRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.T_PERSON_PKEY);
+        return Arrays.<Index>asList(Indexes.T_PERSON_PKEY, Indexes.UK_PERSON);
     }
 
     /**
@@ -194,7 +194,7 @@ public class TPerson extends TableImpl<TPersonRecord> {
      */
     @Override
     public List<UniqueKey<TPersonRecord>> getKeys() {
-        return Arrays.<UniqueKey<TPersonRecord>>asList(Keys.T_PERSON_PKEY);
+        return Arrays.<UniqueKey<TPersonRecord>>asList(Keys.T_PERSON_PKEY, Keys.UK_PERSON);
     }
 
     /**

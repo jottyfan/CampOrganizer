@@ -6,7 +6,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import de.jottyfan.camporganizer.Controller;
-import de.jottyfan.camporganizer.modules.admin.DocumentBean;
+import de.jottyfan.camporganizer.modules.campadmin.DocumentBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
