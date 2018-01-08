@@ -7,7 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'war'
 
 group = 'de.jottyfan'
-version = '1.0.2'
+version = '1.0.3'
 
 description = """CampOrganizer"""
 

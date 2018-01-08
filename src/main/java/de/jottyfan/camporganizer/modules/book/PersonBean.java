@@ -22,7 +22,7 @@ import de.jottyfan.camporganizer.CampBean;
 public class PersonBean {
 
 	private Integer pk;
-	
+
 	@CsvBindByPosition(position = 0)
 	@CsvBindByName(column = "Vorname")
 	private String forename;
@@ -64,6 +64,10 @@ public class PersonBean {
 	private Integer fkProfile;
 
 	private List<CampBean> camps;
+
+	public String getAddress() {
+		return new StringBuilder("").append(street).append(", ").append(zip).append(" ").append(city).toString();
+	}
 
 	public String getFullname() {
 		return new StringBuilder("").append(forename).append(" ").append(surname).toString();

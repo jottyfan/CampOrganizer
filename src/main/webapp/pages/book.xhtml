@@ -18,7 +18,7 @@
 						<b:panelGrid colSpans="3,9" size="xs">
 							<h:outputText value="Person auswählen" />
 							<b:selectOneMenu value="#{bookModel.bean}">
-								<f:selectItems value="#{bookModel.persons}" var="p" itemLabel="#{p.fullname} #{p.address}" itemValue="#{p}" />
+								<f:selectItems value="#{bookModel.persons}" var="p" itemLabel="#{p.fullname}, #{p.address}" itemValue="#{p}" />
 							</b:selectOneMenu>
 							<h:outputText value="Rolle" />
 							<b:selectOneMenu value="#{bookModel.bean.camprole}">
