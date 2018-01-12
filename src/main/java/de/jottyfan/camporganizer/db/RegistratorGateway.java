@@ -210,7 +210,7 @@ public class RegistratorGateway extends JooqGateway {
 			buf.append(bean.getSurname());
 			buf.append(" zur Freizeit ");
 			buf.append(bean.getCampname());
-			buf.append(" wurde leider abgelehnt. Möglicherweise ist sie schon ausgebucht?");
+			buf.append(" wurde leider abgelehnt. Möglicherweise ist sie schon ausgebucht? Sollte dann ein Platz frei werden, wird die Anmeldung akzeptiert.");
 
 			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
 			// @formatter:off
