@@ -32,6 +32,7 @@ public class SalesBean {
 	private String recipeNumber;
 	private byte[] recipeshot;
 	private String recipeNote;
+	private Boolean lockSales;
 
 	private Part file;
 
@@ -93,6 +94,8 @@ public class SalesBean {
 		builder.append(recipeNumber);
 		builder.append(", recipeNote=");
 		builder.append(recipeNote);
+		builder.append(", lockSales=");
+		builder.append(lockSales);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -211,5 +214,13 @@ public class SalesBean {
 
 	public void setProviders(List<String> providers) {
 		this.providers = providers;
+	}
+
+	public Boolean getLockSales() {
+		return lockSales;
+	}
+
+	public void setLockSales(Boolean lockSales) {
+		this.lockSales = lockSales;
 	}
 }

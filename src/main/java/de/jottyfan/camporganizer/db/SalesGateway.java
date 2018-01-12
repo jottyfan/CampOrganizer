@@ -1,7 +1,6 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALES;
-import static de.jottyfan.camporganizer.db.jooq.Tables.V_BUDGET;
+import static de.jottyfan.camporganizer.db.jooq.Tables.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -16,6 +15,7 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.Query;
 import org.jooq.Record1;
 import org.jooq.Record10;
+import org.jooq.Record11;
 import org.jooq.Record5;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
@@ -87,7 +87,7 @@ public class SalesGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<SalesBean> getAllSales() throws DataAccessException {
-		SelectJoinStep<Record10<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String>> sql = getJooq()
+		SelectJoinStep<Record11<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String, Boolean>> sql = getJooq()
 		// @formatter:off
 			.select(T_SALES.PK,
 							T_SALES.TRADER,
@@ -98,12 +98,14 @@ public class SalesGateway extends JooqGateway {
 					    T_SALES.BUYDATE,
 					    T_SALES.RECIPENUMBER,
 					    T_SALES.RECIPESHOT,
-					    T_SALES.RECIPENOTE)
-			.from(T_SALES);
+					    T_SALES.RECIPENOTE,
+					    T_CAMP.LOCK_SALES)
+			.from(T_SALES)
+			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(T_SALES.FK_CAMP));
 		// @formatter.on
 		LOGGER.debug("{}", sql.toString());
 		List<SalesBean> list = new ArrayList<>();
-		for (Record10<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String> r : sql.fetch()) {
+		for (Record11<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String, Boolean> r : sql.fetch()) {
 			SalesBean bean = new SalesBean();
 			BigDecimal cash = r.get(T_SALES.CASH);			
 			bean.setPk(r.get(T_SALES.PK));
@@ -116,6 +118,7 @@ public class SalesGateway extends JooqGateway {
 			bean.setRecipeNumber(r.get(T_SALES.RECIPENUMBER));
 			bean.setRecipeNote(r.get(T_SALES.RECIPENOTE));
 			bean.setRecipeshot(r.get(T_SALES.RECIPESHOT));
+			bean.setLockSales(r.get(T_CAMP.LOCK_SALES));
 			list.add(bean);
 		}
 		return list;

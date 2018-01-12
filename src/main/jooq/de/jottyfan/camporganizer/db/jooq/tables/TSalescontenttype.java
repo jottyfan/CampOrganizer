@@ -6,7 +6,6 @@ package de.jottyfan.camporganizer.db.jooq.tables;
 
 import de.jottyfan.camporganizer.db.jooq.Camp;
 import de.jottyfan.camporganizer.db.jooq.Indexes;
-import de.jottyfan.camporganizer.db.jooq.Keys;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalescontenttypeRecord;
 
 import java.util.Arrays;
@@ -20,7 +19,6 @@ import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -38,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TSalescontenttype extends TableImpl<TSalescontenttypeRecord> {
 
-    private static final long serialVersionUID = -1936382109;
+    private static final long serialVersionUID = -1172295661;
 
     /**
      * The reference instance of <code>camp.t_salescontenttype</code>
@@ -101,22 +99,6 @@ public class TSalescontenttype extends TableImpl<TSalescontenttypeRecord> {
     @Override
     public List<Index> getIndexes() {
         return Arrays.<Index>asList(Indexes.T_SALESCONTENTTYPE_PKEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UniqueKey<TSalescontenttypeRecord> getPrimaryKey() {
-        return Keys.T_SALESCONTENTTYPE_PKEY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TSalescontenttypeRecord>> getKeys() {
-        return Arrays.<UniqueKey<TSalescontenttypeRecord>>asList(Keys.T_SALESCONTENTTYPE_PKEY);
     }
 
     /**

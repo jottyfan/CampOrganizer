@@ -17,14 +17,12 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -42,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TSales extends TableImpl<TSalesRecord> {
 
-    private static final long serialVersionUID = 906522743;
+    private static final long serialVersionUID = 1362449622;
 
     /**
      * The reference instance of <code>camp.t_sales</code>
@@ -83,11 +81,6 @@ public class TSales extends TableImpl<TSalesRecord> {
     public final TableField<TSalesRecord, BigDecimal> CASH = createField("cash", org.jooq.impl.SQLDataType.NUMERIC(11, 2).nullable(false), this, "");
 
     /**
-     * The column <code>camp.t_sales.incredients</code>.
-     */
-    public final TableField<TSalesRecord, String> INCREDIENTS = createField("incredients", org.jooq.impl.SQLDataType.CLOB, this, "");
-
-    /**
      * The column <code>camp.t_sales.buydate</code>.
      */
     public final TableField<TSalesRecord, Timestamp> BUYDATE = createField("buydate", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
@@ -106,6 +99,11 @@ public class TSales extends TableImpl<TSalesRecord> {
      * The column <code>camp.t_sales.recipenote</code>.
      */
     public final TableField<TSalesRecord, String> RECIPENOTE = createField("recipenote", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>camp.t_sales.incredients</code>.
+     */
+    public final TableField<TSalesRecord, String> INCREDIENTS = createField("incredients", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>camp.t_sales</code> table reference
@@ -158,30 +156,6 @@ public class TSales extends TableImpl<TSalesRecord> {
     @Override
     public Identity<TSalesRecord, Integer> getIdentity() {
         return Keys.IDENTITY_T_SALES;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UniqueKey<TSalesRecord> getPrimaryKey() {
-        return Keys.T_SALES_PKEY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TSalesRecord>> getKeys() {
-        return Arrays.<UniqueKey<TSalesRecord>>asList(Keys.T_SALES_PKEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ForeignKey<TSalesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TSalesRecord, ?>>asList(Keys.T_SALES__T_SALES_FK_CAMP_FKEY);
     }
 
     /**

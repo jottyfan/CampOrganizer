@@ -71,7 +71,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String toEditDocument(Integer pk) {
-		model.setActiveIndex(4);
+		model.setActiveIndex(2);
 		for (DocumentBean bean : model.getDocuments()) {
 			if (bean.getPk().equals(pk)) {
 				model.setDocument(bean);
@@ -82,7 +82,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String toEditLocation(Integer pk) {
-		model.setActiveIndex(2);
+		model.setActiveIndex(0);
 		for (LocationBean bean : model.getLocations()) {
 			if (bean.getPk().equals(pk)) {
 				model.setLocation(bean);
@@ -93,7 +93,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String toEditCamp(Integer pk) {
-		model.setActiveIndex(3);
+		model.setActiveIndex(1);
 		for (CampBean bean : model.getCamps()) {
 			if (bean.getPk().equals(pk)) {
 				model.setCamp(bean);
@@ -103,8 +103,16 @@ public class CampadminController extends Controller {
 		return toCampadmin();
 	}
 
+	public String doLockSales() {
+		boolean result = model.lockSales(facesContext);
+		if (result) {
+			model.setCamps(new CampGateway(facesContext).getAllCampsFromTable());
+		}
+		return toEditCamp(model.getCamp().getPk());
+	}
+	
 	public String doDeleteDocument() {
-		model.setActiveIndex(4);
+		model.setActiveIndex(2);
 		try {
 			new DocumentGateway(facesContext).deleteDocument(model.getDocument().getPk());
 			model.setActiveIndexDocument(0);
@@ -117,7 +125,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String doDeleteLocation() {
-		model.setActiveIndex(2);
+		model.setActiveIndex(0);
 		try {
 			new LocationGateway(facesContext).deleteLocation(model.getLocation().getPk());
 			model.setActiveIndexLocation(0);
@@ -130,7 +138,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String doDeleteCamp() {
-		model.setActiveIndex(3);
+		model.setActiveIndex(1);
 		try {
 			new CampGateway(facesContext).deleteCamp(facesContext, model.getCamp().getPk());
 			model.setActiveIndexCamp(0);
@@ -143,7 +151,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String doUpsertDocument() {
-		model.setActiveIndex(4);
+		model.setActiveIndex(2);
 		try {
 			model.getDocument().encodeUpload();
 			new DocumentGateway(facesContext).upsert(model.getDocument());
@@ -157,7 +165,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String doUpsertLocation() {
-		model.setActiveIndex(2);
+		model.setActiveIndex(0);
 		try {
 			new LocationGateway(facesContext).upsert(model.getLocation());
 			model.setActiveIndexLocation(0);
@@ -170,7 +178,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String doUpsertCamp() {
-		model.setActiveIndex(3);
+		model.setActiveIndex(1);
 		try {
 			new CampGateway(facesContext).upsert(model.getCamp());
 			model.setActiveIndexCamp(0);
@@ -183,13 +191,13 @@ public class CampadminController extends Controller {
 	}
 
 	public String doDownloadDocument(DocumentBean bean) {
-		model.setActiveIndex(4);
+		model.setActiveIndex(2);
 		model.setActiveIndexDocument(0);
 		return super.doDownloadBase64(facesContext, bean.getDocument(), bean.getName(), bean.getFiletype().getLiteral());
 	}
 
 	public String doDownloadDocument(CampBean bean) {
-		model.setActiveIndex(3);
+		model.setActiveIndex(1);
 		model.setActiveIndexCamp(0);
 		DocumentBean docBean = null;
 		for (DocumentBean b : model.getDocuments()) {
@@ -208,7 +216,7 @@ public class CampadminController extends Controller {
 	}
 
 	public String doDownloadDocument(LocationBean bean) {
-		model.setActiveIndex(2);
+		model.setActiveIndex(0);
 		model.setActiveIndexLocation(0);
 		DocumentBean docBean = null;
 		for (DocumentBean b : model.getDocuments()) {
@@ -227,21 +235,21 @@ public class CampadminController extends Controller {
 	}
 
 	public String doResetDocument() {
-		model.setActiveIndex(4);
+		model.setActiveIndex(2);
 		model.setActiveIndexDocument(1);
 		model.setDocument(new DocumentBean(null));
 		return toCampadmin();
 	}
 
 	public String doResetLocation() {
-		model.setActiveIndex(2);
+		model.setActiveIndex(0);
 		model.setActiveIndexLocation(1);
 		model.setLocation(new LocationBean(null));
 		return toCampadmin();
 	}
 
 	public String doResetCamp() {
-		model.setActiveIndex(3);
+		model.setActiveIndex(1);
 		model.setActiveIndexCamp(1);
 		model.setCamp(new CampBean());
 		return toCampadmin();

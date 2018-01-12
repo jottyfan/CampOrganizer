@@ -16,14 +16,12 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -41,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TCamp extends TableImpl<TCampRecord> {
 
-    private static final long serialVersionUID = -1871260304;
+    private static final long serialVersionUID = -915367219;
 
     /**
      * The reference instance of <code>camp.t_camp</code>
@@ -107,6 +105,11 @@ public class TCamp extends TableImpl<TCampRecord> {
     public final TableField<TCampRecord, Integer> FK_DOCUMENT = createField("fk_document", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
+     * The column <code>camp.t_camp.lock_sales</code>.
+     */
+    public final TableField<TCampRecord, Boolean> LOCK_SALES = createField("lock_sales", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    /**
      * Create a <code>camp.t_camp</code> table reference
      */
     public TCamp() {
@@ -157,30 +160,6 @@ public class TCamp extends TableImpl<TCampRecord> {
     @Override
     public Identity<TCampRecord, Integer> getIdentity() {
         return Keys.IDENTITY_T_CAMP;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UniqueKey<TCampRecord> getPrimaryKey() {
-        return Keys.T_CAMP_PKEY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TCampRecord>> getKeys() {
-        return Arrays.<UniqueKey<TCampRecord>>asList(Keys.T_CAMP_PKEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ForeignKey<TCampRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TCampRecord, ?>>asList(Keys.T_CAMP__T_CAMP_FK_LOCATION_FKEY, Keys.T_CAMP__T_CAMP_FK_DOCUMENT_FKEY);
     }
 
     /**

@@ -18,6 +18,7 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep9;
 import org.jooq.Record11;
 import org.jooq.Record12;
+import org.jooq.Record13;
 import org.jooq.SelectHavingStep;
 import org.jooq.SelectSeekStep1;
 import org.jooq.UpdateConditionStep;
@@ -71,7 +72,9 @@ public class CampGateway extends JooqGateway {
 					    V_CAMP.COUNTRIES,
 					    V_CAMP.FK_DOCUMENT)
 			.from(V_CAMP)
+			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(V_CAMP.PK))
 			.where(V_CAMP.ARRIVE.greaterThan(limitDate))
+			.and(T_CAMP.LOCK_SALES.eq(false))
 			.orderBy(V_CAMP.ARRIVE);
 	  // @formatter:on
 		LOGGER.debug("{}", sql.toString());
@@ -196,7 +199,7 @@ public class CampGateway extends JooqGateway {
 		buf.append("\"");
 		
 		String cnt = buf.toString();
-		SelectHavingStep<Record11<Integer, String, Timestamp, Timestamp, Integer, Integer, Integer, String, String, Integer, Integer>> sql = getJooq()
+		SelectHavingStep<Record12<Integer, String, Timestamp, Timestamp, Integer, Integer, Integer, String, String, Integer, Boolean, Integer>> sql = getJooq()
 		// @formatter:off
 			.select(T_CAMP.PK,
 					    T_CAMP.NAME,
@@ -208,6 +211,7 @@ public class CampGateway extends JooqGateway {
 			        T_CAMP.PRICE,
 			        T_CAMP.COUNTRIES,
 			        T_CAMP.FK_DOCUMENT,
+			        T_CAMP.LOCK_SALES,
 			        DSL.field("count(" + cnt + ")", Integer.class).as("bookings")
 			        )
 			.from(T_CAMP)
@@ -221,11 +225,12 @@ public class CampGateway extends JooqGateway {
 			        T_CAMP.MAX_AGE,
 			        T_CAMP.PRICE,
 			        T_CAMP.COUNTRIES,
-			        T_CAMP.FK_DOCUMENT);
+			        T_CAMP.FK_DOCUMENT,
+			        T_CAMP.LOCK_SALES);
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		List<CampBean> list = new ArrayList<>();
-		for (Record11<Integer, String, Timestamp, Timestamp, Integer, Integer, Integer, String, String, Integer, Integer> r : sql
+		for (Record12<Integer, String, Timestamp, Timestamp, Integer, Integer, Integer, String, String, Integer, Boolean, Integer> r : sql
 				.fetch()) {
 			CampBean bean = new CampBean();
 			bean.setPk(r.get(T_CAMP.PK));
@@ -238,9 +243,27 @@ public class CampGateway extends JooqGateway {
 			bean.setPrice(r.get(T_CAMP.PRICE));
 			bean.setCountries(r.get(T_CAMP.COUNTRIES));
 			bean.setFkDocument(r.get(T_CAMP.FK_DOCUMENT));
+			bean.setLockSales(r.get(T_CAMP.LOCK_SALES));
 			bean.setBookings(r.get("bookings", Integer.class));
 			list.add(bean);
 		}
 		return list;
+	}
+
+	/**
+	 * lock sales for camp referenced by campPk
+	 * 
+	 * @param campPk to be used as reference
+	 * @throws DataAccessException
+	 */
+	public void lockSales(Integer campPk) throws DataAccessException {
+		UpdateConditionStep<TCampRecord> sql = getJooq()
+		// @formatter:off
+			.update(T_CAMP)
+			.set(T_CAMP.LOCK_SALES, true)
+			.where(T_CAMP.PK.eq(campPk));
+		// @formatter:on
+		LOGGER.debug(sql.toString());
+		sql.execute();
 	}
 }

@@ -56,6 +56,7 @@ create table t_camp (pk serial primary key,
                      price text,
                      countries text,
                      fk_document integer,
+                     lock_sales boolean not null default false,
                      foreign key (fk_location) references t_location(pk),
                      foreign key (fk_document) references t_document(pk));
 

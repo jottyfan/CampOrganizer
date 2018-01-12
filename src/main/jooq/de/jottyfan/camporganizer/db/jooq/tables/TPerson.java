@@ -18,14 +18,12 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -43,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TPerson extends TableImpl<TPersonRecord> {
 
-    private static final long serialVersionUID = 545143855;
+    private static final long serialVersionUID = -515422863;
 
     /**
      * The reference instance of <code>camp.t_person</code>
@@ -179,30 +177,6 @@ public class TPerson extends TableImpl<TPersonRecord> {
     @Override
     public Identity<TPersonRecord, Integer> getIdentity() {
         return Keys.IDENTITY_T_PERSON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UniqueKey<TPersonRecord> getPrimaryKey() {
-        return Keys.T_PERSON_PKEY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TPersonRecord>> getKeys() {
-        return Arrays.<UniqueKey<TPersonRecord>>asList(Keys.T_PERSON_PKEY, Keys.UK_PERSON);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ForeignKey<TPersonRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TPersonRecord, ?>>asList(Keys.T_PERSON__T_PERSON_FK_CAMP_FKEY, Keys.T_PERSON__T_PERSON_FK_PROFILE_FKEY);
     }
 
     /**

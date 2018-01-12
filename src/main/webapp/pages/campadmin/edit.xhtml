@@ -114,6 +114,10 @@
 											<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
 											<f:selectItems value="#{campadminModel.documents}" var="d" itemValue="#{d.pk}" itemLabel="#{d.name}" />
 										</b:selectOneMenu>
+										<h:outputText value="Kassenschluss" rendered="#{!campadminModel.camp.lockSales}" />
+										<b:dropButton value="Rechnungen abschließen" iconAwesome="lock" look="warning" rendered="#{!campadminModel.camp.lockSales}">
+											<b:commandButton action="#{campadminController.doLockSales}" value="ja, endgültig Rechnungen festschreiben" look="warning" />
+										</b:dropButton>
 										<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
 											<b:commandButton action="#{campadminController.doDeleteCamp}" value="ja, unwiederbringlich löschen" look="danger" />
 										</b:dropButton>

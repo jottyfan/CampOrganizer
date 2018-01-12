@@ -23,7 +23,6 @@ import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -41,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TDocument extends TableImpl<TDocumentRecord> {
 
-    private static final long serialVersionUID = 476415410;
+    private static final long serialVersionUID = -1193837943;
 
     /**
      * The reference instance of <code>camp.t_document</code>
@@ -132,22 +131,6 @@ public class TDocument extends TableImpl<TDocumentRecord> {
     @Override
     public Identity<TDocumentRecord, Integer> getIdentity() {
         return Keys.IDENTITY_T_DOCUMENT;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UniqueKey<TDocumentRecord> getPrimaryKey() {
-        return Keys.T_DOCUMENT_PKEY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TDocumentRecord>> getKeys() {
-        return Arrays.<UniqueKey<TDocumentRecord>>asList(Keys.T_DOCUMENT_PKEY, Keys.T_DOCUMENT_NAME_KEY);
     }
 
     /**

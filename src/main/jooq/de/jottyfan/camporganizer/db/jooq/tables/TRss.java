@@ -22,7 +22,6 @@ import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -40,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TRss extends TableImpl<TRssRecord> {
 
-    private static final long serialVersionUID = -2125380416;
+    private static final long serialVersionUID = 1823223680;
 
     /**
      * The reference instance of <code>camp.t_rss</code>
@@ -126,22 +125,6 @@ public class TRss extends TableImpl<TRssRecord> {
     @Override
     public Identity<TRssRecord, Integer> getIdentity() {
         return Keys.IDENTITY_T_RSS;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UniqueKey<TRssRecord> getPrimaryKey() {
-        return Keys.T_RSS_PKEY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TRssRecord>> getKeys() {
-        return Arrays.<UniqueKey<TRssRecord>>asList(Keys.T_RSS_PKEY);
     }
 
     /**

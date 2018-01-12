@@ -6,7 +6,6 @@ package de.jottyfan.camporganizer.db.jooq.tables;
 
 import de.jottyfan.camporganizer.db.jooq.Camp;
 import de.jottyfan.camporganizer.db.jooq.Indexes;
-import de.jottyfan.camporganizer.db.jooq.Keys;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumRole;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 
@@ -16,13 +15,11 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -40,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TProfilerole extends TableImpl<TProfileroleRecord> {
 
-    private static final long serialVersionUID = 550504182;
+    private static final long serialVersionUID = -1056175295;
 
     /**
      * The reference instance of <code>camp.t_profilerole</code>
@@ -108,22 +105,6 @@ public class TProfilerole extends TableImpl<TProfileroleRecord> {
     @Override
     public List<Index> getIndexes() {
         return Arrays.<Index>asList(Indexes.T_PROFILEROLE_FK_PROFILE_ROLE_KEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TProfileroleRecord>> getKeys() {
-        return Arrays.<UniqueKey<TProfileroleRecord>>asList(Keys.T_PROFILEROLE_FK_PROFILE_ROLE_KEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ForeignKey<TProfileroleRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<TProfileroleRecord, ?>>asList(Keys.T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY);
     }
 
     /**

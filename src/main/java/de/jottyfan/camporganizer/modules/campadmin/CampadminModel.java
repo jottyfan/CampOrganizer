@@ -3,10 +3,15 @@ package de.jottyfan.camporganizer.modules.campadmin;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.CampBean;
+import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 
@@ -34,7 +39,7 @@ public class CampadminModel {
 	private Integer activeIndexCamp;
 	private CampBean camp;
 	private List<CampBean> camps;
-	
+
 	public List<String> getPossibleCountries() {
 		List<String> list = new ArrayList<>();
 		list.add("Bayern");
@@ -145,6 +150,17 @@ public class CampadminModel {
 
 	public void setActiveIndexCamp(Integer activeIndexCamp) {
 		this.activeIndexCamp = activeIndexCamp;
+	}
+
+	public boolean lockSales(FacesContext facesContext) {
+		try {
+			new CampGateway(facesContext).lockSales(camp.getPk());
+			return true;
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on locking sales", e.getMessage()));
+			return false;
+		}
 	}
 
 	public CampBean getCamp() {

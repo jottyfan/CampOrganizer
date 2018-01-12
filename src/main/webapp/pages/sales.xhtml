@@ -79,12 +79,13 @@
 									<h:outputText value="#{l.recipeNote}" />
 								</b:dataTableColumn>
 								<b:dataTableColumn label="Aktionen">
-									<b:buttonGroup>
+									<b:buttonGroup rendered="#{!l.lockSales}">
 										<b:commandButton action="#{salesController.toEdit(l)}" value="bearbeiten" iconAwesome="pencil" />
 										<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
 											<b:commandButton action="#{salesController.doDelete(l)}" value="ja, unwiederbringlich löschen" look="danger" />
 										</b:dropButton>
 									</b:buttonGroup>
+									<h:outputText value="final" rendered="#{l.lockSales}" />
 								</b:dataTableColumn>
 							</b:dataTable>
 						</b:form>

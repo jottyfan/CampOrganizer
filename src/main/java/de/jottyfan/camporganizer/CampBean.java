@@ -23,6 +23,7 @@ public class CampBean {
 	private String countries;
 	private Integer fkDocument;
 	private Integer bookings;
+	private Boolean lockSales;
 
 	public String getFullCampname() {
 		StringBuilder buf = new StringBuilder();
@@ -150,5 +151,13 @@ public class CampBean {
 
 	public void setBookings(Integer bookings) {
 		this.bookings = bookings;
+	}
+
+	public Boolean getLockSales() {
+		return lockSales;
+	}
+
+	public void setLockSales(Boolean lockSales) {
+		this.lockSales = lockSales;
 	}
 }

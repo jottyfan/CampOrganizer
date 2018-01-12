@@ -22,7 +22,6 @@ import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -40,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TProfile extends TableImpl<TProfileRecord> {
 
-    private static final long serialVersionUID = -1661008084;
+    private static final long serialVersionUID = 694153160;
 
     /**
      * The reference instance of <code>camp.t_profile</code>
@@ -141,22 +140,6 @@ public class TProfile extends TableImpl<TProfileRecord> {
     @Override
     public Identity<TProfileRecord, Integer> getIdentity() {
         return Keys.IDENTITY_T_PROFILE;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UniqueKey<TProfileRecord> getPrimaryKey() {
-        return Keys.T_PROFILE_PKEY;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<UniqueKey<TProfileRecord>> getKeys() {
-        return Arrays.<UniqueKey<TProfileRecord>>asList(Keys.T_PROFILE_PKEY, Keys.T_PROFILE_USERNAME_KEY, Keys.T_PROFILE_UUID_KEY);
     }
 
     /**

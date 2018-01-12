@@ -10,28 +10,20 @@ import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
 import de.jottyfan.camporganizer.db.jooq.tables.TPersondocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
-import de.jottyfan.camporganizer.db.jooq.tables.TProfilerole;
 import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
-import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
-import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TDocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
-import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileroleRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
-import de.jottyfan.camporganizer.db.jooq.tables.records.TSalescontentRecord;
-import de.jottyfan.camporganizer.db.jooq.tables.records.TSalescontenttypeRecord;
 
 import javax.annotation.Generated;
 
-import org.jooq.ForeignKey;
 import org.jooq.Identity;
-import org.jooq.UniqueKey;
 import org.jooq.impl.AbstractKeys;
 
 
@@ -66,35 +58,11 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<TCampRecord> T_CAMP_PKEY = UniqueKeys0.T_CAMP_PKEY;
-    public static final UniqueKey<TDocumentRecord> T_DOCUMENT_PKEY = UniqueKeys0.T_DOCUMENT_PKEY;
-    public static final UniqueKey<TDocumentRecord> T_DOCUMENT_NAME_KEY = UniqueKeys0.T_DOCUMENT_NAME_KEY;
-    public static final UniqueKey<TLocationRecord> T_LOCATION_PKEY = UniqueKeys0.T_LOCATION_PKEY;
-    public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = UniqueKeys0.T_PERSON_PKEY;
-    public static final UniqueKey<TPersonRecord> UK_PERSON = UniqueKeys0.UK_PERSON;
-    public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_PKEY = UniqueKeys0.T_PERSONDOCUMENT_PKEY;
-    public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_FK_PERSON_NAME_KEY = UniqueKeys0.T_PERSONDOCUMENT_FK_PERSON_NAME_KEY;
-    public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = UniqueKeys0.T_PROFILE_PKEY;
-    public static final UniqueKey<TProfileRecord> T_PROFILE_USERNAME_KEY = UniqueKeys0.T_PROFILE_USERNAME_KEY;
-    public static final UniqueKey<TProfileRecord> T_PROFILE_UUID_KEY = UniqueKeys0.T_PROFILE_UUID_KEY;
-    public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = UniqueKeys0.T_PROFILEROLE_FK_PROFILE_ROLE_KEY;
-    public static final UniqueKey<TRssRecord> T_RSS_PKEY = UniqueKeys0.T_RSS_PKEY;
-    public static final UniqueKey<TSalesRecord> T_SALES_PKEY = UniqueKeys0.T_SALES_PKEY;
-    public static final UniqueKey<TSalescontentRecord> T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = UniqueKeys0.T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY;
-    public static final UniqueKey<TSalescontenttypeRecord> T_SALESCONTENTTYPE_PKEY = UniqueKeys0.T_SALESCONTENTTYPE_PKEY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<TCampRecord, TLocationRecord> T_CAMP__T_CAMP_FK_LOCATION_FKEY = ForeignKeys0.T_CAMP__T_CAMP_FK_LOCATION_FKEY;
-    public static final ForeignKey<TCampRecord, TDocumentRecord> T_CAMP__T_CAMP_FK_DOCUMENT_FKEY = ForeignKeys0.T_CAMP__T_CAMP_FK_DOCUMENT_FKEY;
-    public static final ForeignKey<TLocationRecord, TDocumentRecord> T_LOCATION__T_LOCATION_FK_DOCUMENT_FKEY = ForeignKeys0.T_LOCATION__T_LOCATION_FK_DOCUMENT_FKEY;
-    public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = ForeignKeys0.T_PERSON__T_PERSON_FK_CAMP_FKEY;
-    public static final ForeignKey<TPersonRecord, TProfileRecord> T_PERSON__T_PERSON_FK_PROFILE_FKEY = ForeignKeys0.T_PERSON__T_PERSON_FK_PROFILE_FKEY;
-    public static final ForeignKey<TPersondocumentRecord, TPersonRecord> T_PERSONDOCUMENT__T_PERSONDOCUMENT_FK_PERSON_FKEY = ForeignKeys0.T_PERSONDOCUMENT__T_PERSONDOCUMENT_FK_PERSON_FKEY;
-    public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = ForeignKeys0.T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY;
-    public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = ForeignKeys0.T_SALES__T_SALES_FK_CAMP_FKEY;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -109,35 +77,5 @@ public class Keys {
         public static Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = createIdentity(TProfile.T_PROFILE, TProfile.T_PROFILE.PK);
         public static Identity<TRssRecord, Integer> IDENTITY_T_RSS = createIdentity(TRss.T_RSS, TRss.T_RSS.PK);
         public static Identity<TSalesRecord, Integer> IDENTITY_T_SALES = createIdentity(TSales.T_SALES, TSales.T_SALES.PK);
-    }
-
-    private static class UniqueKeys0 extends AbstractKeys {
-        public static final UniqueKey<TCampRecord> T_CAMP_PKEY = createUniqueKey(TCamp.T_CAMP, "t_camp_pkey", TCamp.T_CAMP.PK);
-        public static final UniqueKey<TDocumentRecord> T_DOCUMENT_PKEY = createUniqueKey(TDocument.T_DOCUMENT, "t_document_pkey", TDocument.T_DOCUMENT.PK);
-        public static final UniqueKey<TDocumentRecord> T_DOCUMENT_NAME_KEY = createUniqueKey(TDocument.T_DOCUMENT, "t_document_name_key", TDocument.T_DOCUMENT.NAME);
-        public static final UniqueKey<TLocationRecord> T_LOCATION_PKEY = createUniqueKey(TLocation.T_LOCATION, "t_location_pkey", TLocation.T_LOCATION.PK);
-        public static final UniqueKey<TPersonRecord> T_PERSON_PKEY = createUniqueKey(TPerson.T_PERSON, "t_person_pkey", TPerson.T_PERSON.PK);
-        public static final UniqueKey<TPersonRecord> UK_PERSON = createUniqueKey(TPerson.T_PERSON, "uk_person", TPerson.T_PERSON.FORENAME, TPerson.T_PERSON.SURNAME, TPerson.T_PERSON.BIRTHDATE, TPerson.T_PERSON.FK_CAMP);
-        public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_PKEY = createUniqueKey(TPersondocument.T_PERSONDOCUMENT, "t_persondocument_pkey", TPersondocument.T_PERSONDOCUMENT.PK);
-        public static final UniqueKey<TPersondocumentRecord> T_PERSONDOCUMENT_FK_PERSON_NAME_KEY = createUniqueKey(TPersondocument.T_PERSONDOCUMENT, "t_persondocument_fk_person_name_key", TPersondocument.T_PERSONDOCUMENT.FK_PERSON, TPersondocument.T_PERSONDOCUMENT.NAME);
-        public static final UniqueKey<TProfileRecord> T_PROFILE_PKEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_pkey", TProfile.T_PROFILE.PK);
-        public static final UniqueKey<TProfileRecord> T_PROFILE_USERNAME_KEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_username_key", TProfile.T_PROFILE.USERNAME);
-        public static final UniqueKey<TProfileRecord> T_PROFILE_UUID_KEY = createUniqueKey(TProfile.T_PROFILE, "t_profile_uuid_key", TProfile.T_PROFILE.UUID);
-        public static final UniqueKey<TProfileroleRecord> T_PROFILEROLE_FK_PROFILE_ROLE_KEY = createUniqueKey(TProfilerole.T_PROFILEROLE, "t_profilerole_fk_profile_role_key", TProfilerole.T_PROFILEROLE.FK_PROFILE, TProfilerole.T_PROFILEROLE.ROLE);
-        public static final UniqueKey<TRssRecord> T_RSS_PKEY = createUniqueKey(TRss.T_RSS, "t_rss_pkey", TRss.T_RSS.PK);
-        public static final UniqueKey<TSalesRecord> T_SALES_PKEY = createUniqueKey(TSales.T_SALES, "t_sales_pkey", TSales.T_SALES.PK);
-        public static final UniqueKey<TSalescontentRecord> T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = createUniqueKey(TSalescontent.T_SALESCONTENT, "t_salescontent_fk_sales_fk_salescontenttype_key", TSalescontent.T_SALESCONTENT.FK_SALES, TSalescontent.T_SALESCONTENT.FK_SALESCONTENTTYPE);
-        public static final UniqueKey<TSalescontenttypeRecord> T_SALESCONTENTTYPE_PKEY = createUniqueKey(TSalescontenttype.T_SALESCONTENTTYPE, "t_salescontenttype_pkey", TSalescontenttype.T_SALESCONTENTTYPE.NAME);
-    }
-
-    private static class ForeignKeys0 extends AbstractKeys {
-        public static final ForeignKey<TCampRecord, TLocationRecord> T_CAMP__T_CAMP_FK_LOCATION_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_LOCATION_PKEY, TCamp.T_CAMP, "t_camp__t_camp_fk_location_fkey", TCamp.T_CAMP.FK_LOCATION);
-        public static final ForeignKey<TCampRecord, TDocumentRecord> T_CAMP__T_CAMP_FK_DOCUMENT_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_DOCUMENT_PKEY, TCamp.T_CAMP, "t_camp__t_camp_fk_document_fkey", TCamp.T_CAMP.FK_DOCUMENT);
-        public static final ForeignKey<TLocationRecord, TDocumentRecord> T_LOCATION__T_LOCATION_FK_DOCUMENT_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_DOCUMENT_PKEY, TLocation.T_LOCATION, "t_location__t_location_fk_document_fkey", TLocation.T_LOCATION.FK_DOCUMENT);
-        public static final ForeignKey<TPersonRecord, TCampRecord> T_PERSON__T_PERSON_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TPerson.T_PERSON, "t_person__t_person_fk_camp_fkey", TPerson.T_PERSON.FK_CAMP);
-        public static final ForeignKey<TPersonRecord, TProfileRecord> T_PERSON__T_PERSON_FK_PROFILE_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PROFILE_PKEY, TPerson.T_PERSON, "t_person__t_person_fk_profile_fkey", TPerson.T_PERSON.FK_PROFILE);
-        public static final ForeignKey<TPersondocumentRecord, TPersonRecord> T_PERSONDOCUMENT__T_PERSONDOCUMENT_FK_PERSON_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PERSON_PKEY, TPersondocument.T_PERSONDOCUMENT, "t_persondocument__t_persondocument_fk_person_fkey", TPersondocument.T_PERSONDOCUMENT.FK_PERSON);
-        public static final ForeignKey<TProfileroleRecord, TProfileRecord> T_PROFILEROLE__T_PROFILEROLE_FK_PROFILE_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_PROFILE_PKEY, TProfilerole.T_PROFILEROLE, "t_profilerole__t_profilerole_fk_profile_fkey", TProfilerole.T_PROFILEROLE.FK_PROFILE);
-        public static final ForeignKey<TSalesRecord, TCampRecord> T_SALES__T_SALES_FK_CAMP_FKEY = createForeignKey(de.jottyfan.camporganizer.db.jooq.Keys.T_CAMP_PKEY, TSales.T_SALES, "t_sales__t_sales_fk_camp_fkey", TSales.T_SALES.FK_CAMP);
     }
 }
