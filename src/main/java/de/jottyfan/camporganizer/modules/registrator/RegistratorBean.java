@@ -48,8 +48,10 @@ public class RegistratorBean {
 
 	public String getNote() {
 		StringBuilder buf = new StringBuilder();
-		if (profileForename != null || profileSurname != null) {
-			buf.append("angemeldet von ");
+		if (profileForename == null && profileSurname == null) {
+			buf.append("! bitte per Post bestätigen\n");
+		}	else {
+			buf.append("* angemeldet von ");
 			buf.append(profileForename).append(" ").append(profileSurname).append("\n");
 		}
 		if (birthdate != null) {
@@ -63,7 +65,7 @@ public class RegistratorBean {
 				bDate.setTime(birthdate);
 				bDate.set(Calendar.YEAR, aDate.get(Calendar.YEAR));
 				if (aDate.before(bDate) && dDate.after(bDate)) {
-					buf.append("hat während der Freizeit Geburtstag");
+					buf.append("! hat während der Freizeit Geburtstag\n");
 				}
 			}
 			if (minAge != null && maxAge != null) {
@@ -77,7 +79,7 @@ public class RegistratorBean {
 				if (years < minAge || years > maxAge) {
 					// ignore helpers and kitchen
 					if (EnumCamprole.boy.equals(camprole) || EnumCamprole.girl.equals(camprole)) {
-						buf.append("passt vom Alter her nicht in die Freizeit");
+						buf.append("! passt vom Alter her nicht in die Freizeit\n");
 					}
 				}
 			}
