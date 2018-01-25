@@ -59,11 +59,13 @@ public class BookGateway extends ProfileGateway {
 			  		        T_PERSON.CITY,
 			  		        T_PERSON.PHONE,
 			  		        T_PERSON.BIRTHDATE,
+			  		        T_PERSON.SEX,
 			  		        T_PERSON.CAMPROLE,
 			  		        T_PERSON.EMAIL,
 			  		        T_PERSON.FK_CAMP,
 			  		        T_PERSON.FK_PROFILE)
-			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(),bean.getPhone(), birthDate, new EnumConverter().getEnumCamprole(bean.getCamprole()), bean.getEmail(), bean.getFkCamp(), bean.getFkProfile())
+			  .values(bean.getForename(), bean.getSurname(), bean.getStreet(), bean.getZip(), bean.getCity(), bean.getPhone(), birthDate, 
+			  		      bean.getSexEnum(), bean.getCamproleEnum(), bean.getEmail(), bean.getFkCamp(), bean.getFkProfile())
 			  .onConflict(T_PERSON.FORENAME, T_PERSON.SURNAME, T_PERSON.BIRTHDATE, T_PERSON.FK_CAMP)
 			  .doNothing();
 			// @formatter:on

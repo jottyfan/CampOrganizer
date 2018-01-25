@@ -8,6 +8,7 @@ import de.jottyfan.camporganizer.db.jooq.Camp;
 import de.jottyfan.camporganizer.db.jooq.Indexes;
 import de.jottyfan.camporganizer.db.jooq.Keys;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 
 import java.sql.Date;
@@ -41,7 +42,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TPerson extends TableImpl<TPersonRecord> {
 
-    private static final long serialVersionUID = -515422863;
+    private static final long serialVersionUID = 755248373;
 
     /**
      * The reference instance of <code>camp.t_person</code>
@@ -125,6 +126,11 @@ public class TPerson extends TableImpl<TPersonRecord> {
      * The column <code>camp.t_person.created</code>.
      */
     public final TableField<TPersonRecord, Timestamp> CREATED = createField("created", org.jooq.impl.SQLDataType.TIMESTAMP.defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
+
+    /**
+     * The column <code>camp.t_person.sex</code>.
+     */
+    public final TableField<TPersonRecord, EnumSex> SEX = createField("sex", org.jooq.util.postgres.PostgresDataType.VARCHAR.asEnumDataType(de.jottyfan.camporganizer.db.jooq.enums.EnumSex.class), this, "");
 
     /**
      * Create a <code>camp.t_person</code> table reference

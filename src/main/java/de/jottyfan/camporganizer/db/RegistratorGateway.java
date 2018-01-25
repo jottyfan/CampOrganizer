@@ -19,6 +19,7 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record10;
+import org.jooq.Record11;
 import org.jooq.Record22;
 import org.jooq.Record4;
 import org.jooq.SelectConditionStep;
@@ -29,8 +30,10 @@ import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.LambdaResultWrapper;
+import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
@@ -51,7 +54,7 @@ public class RegistratorGateway extends JooqGateway {
 	}
 
 	public List<RegistratorBean> loadUsers() throws DataAccessException {
-		SelectOnConditionStep<Record22<Integer, String, String, String, String, String, String, Date, String, EnumCamprole, Boolean, Timestamp, String, Integer, Integer, Timestamp, Timestamp, Double, String, String, String, String>> sql = getJooq()
+		SelectOnConditionStep<Record> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
 							T_PERSON.FORENAME,
@@ -61,6 +64,7 @@ public class RegistratorGateway extends JooqGateway {
 					    T_PERSON.CITY,
 					    T_PERSON.PHONE,
 					    T_PERSON.BIRTHDATE,
+					    T_PERSON.SEX,
 					    T_PERSON.EMAIL,
 					    T_PERSON.CAMPROLE,
 					    T_PERSON.ACCEPT,
@@ -90,6 +94,7 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setCity(r.get(T_PERSON.CITY));
 			bean.setPhone(r.get(T_PERSON.PHONE));
 			bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
+			bean.setSex(r.get(T_PERSON.SEX));
 			bean.setEmail(r.get(T_PERSON.EMAIL));
 			bean.setCreated(r.get(T_PERSON.CREATED));
 			bean.setCamprole(r.get(T_PERSON.CAMPROLE));
@@ -275,6 +280,7 @@ public class RegistratorGateway extends JooqGateway {
 				.set(T_PERSON.ZIP, bean.getZip())
 				.set(T_PERSON.CITY, bean.getCity())
 				.set(T_PERSON.BIRTHDATE, birthDate)
+				.set(T_PERSON.SEX, bean.getSex())
 				.set(T_PERSON.PHONE, bean.getPhone())
 				.set(T_PERSON.EMAIL, bean.getEmail())
 				.where(T_PERSON.PK.eq(bean.getPk()));
@@ -303,7 +309,7 @@ public class RegistratorGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<PersonBean> getAllPersonsOfCamp(Integer campPk) throws DataAccessException {
-		SelectConditionStep<Record10<Integer, String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
+		SelectConditionStep<Record11<Integer, String, String, String, String, String, String, String, Date, EnumSex, EnumCamprole>> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
 					    T_PERSON.FORENAME,
@@ -314,6 +320,7 @@ public class RegistratorGateway extends JooqGateway {
 					    T_PERSON.PHONE,
 					    T_PERSON.EMAIL,
 					    T_PERSON.BIRTHDATE,
+					    T_PERSON.SEX,
 					    T_PERSON.CAMPROLE)
 			.from(T_PERSON)
 			.where(T_PERSON.FK_CAMP.eq(campPk));
@@ -331,7 +338,8 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setPhone(r.get(T_PERSON.PHONE));
 			bean.setEmail(r.get(T_PERSON.EMAIL));
 			bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
-			bean.setCamprole(r.get(T_PERSON.CAMPROLE).getLiteral());
+			bean.setSex(new EnumConverter().getSexGerman(r.get(T_PERSON.SEX)));
+			bean.setCamprole(new EnumConverter().getCamproleGerman(r.get(T_PERSON.CAMPROLE)));
 			list.add(bean);
 		}
 		return list;
@@ -346,7 +354,7 @@ public class RegistratorGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<PersonBean> getPersons(Integer pk) throws DataAccessException {
-		SelectHavingStep<Record10<Integer, String, String, String, String, String, String, String, Date, EnumCamprole>> sql = getJooq()
+		SelectHavingStep<Record11<Integer, String, String, String, String, String, String, String, Date, EnumSex, EnumCamprole>> sql = getJooq()
 		// @formatter:off
 			.selectDistinct(T_PERSON.PK,
 					            T_PERSON.FORENAME,
@@ -357,6 +365,7 @@ public class RegistratorGateway extends JooqGateway {
 					            T_PERSON.PHONE,
 					            T_PERSON.EMAIL,
 					            T_PERSON.BIRTHDATE,
+					            T_PERSON.SEX,
 					            T_PERSON.CAMPROLE)
 			.from(T_PERSON)
 			.where(T_PERSON.FK_PROFILE.eq(pk));
@@ -374,7 +383,10 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setPhone(r.get(T_PERSON.PHONE));
 			bean.setEmail(r.get(T_PERSON.EMAIL));
 			bean.setBirthdate(r.get(T_PERSON.BIRTHDATE));
-			bean.setCamprole(r.get(T_PERSON.CAMPROLE).getLiteral());
+			EnumSex sex = r.get(T_PERSON.SEX);
+			EnumCamprole camprole = r.get(T_PERSON.CAMPROLE);
+			bean.setSex(sex == null ? null : sex.getLiteral());
+			bean.setCamprole(camprole == null ? null : camprole.getLiteral());
 			list.add(bean);
 		}
 		return list;

@@ -150,6 +150,7 @@ public class RegistratorModel {
 			bean.setCity("Ort");
 			bean.setPhone("Telefon");
 			bean.setEmail("E-Mail");
+			bean.setSex("Geschlecht");
 			bean.setCamprole("Rolle");
 			Writer writer = ec.getResponseOutputWriter();
 			StatefulBeanToCsvBuilder<PersonBean> builder = new StatefulBeanToCsvBuilder<>(writer);

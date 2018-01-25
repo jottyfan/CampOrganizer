@@ -21,12 +21,17 @@
 						<b:inputText value="#{registratorModel.bean.city}" />
 						<h:outputText value="Geburtstag" />
 						<b:datepicker value="#{registratorModel.bean.birthdate}" />
+						<h:outputText value="Geschlecht" />
+						<b:selectOneMenu value="#{registratorModel.bean.sex}">
+						  <f:selectItem itemLabel="weiblich" itemValue="female" />
+               <f:selectItem itemLabel="männlich" itemValue="male" />
+						</b:selectOneMenu>
 						<h:outputText value="Telefon" />
 						<b:inputText value="#{registratorModel.bean.phone}" />
 						<h:outputText value="E-Mail" />
 						<b:inputText value="#{registratorModel.bean.email}" />
 						<h:outputText value="Rolle" />
-						<h:outputText value="#{registratorModel.bean.camprole}" />
+						<h:outputText value="#{registratorModel.bean.camproleGerman}" />
 						<h:outputText value="Freizeit" />
 						<h:outputText value="#{registratorModel.bean.campname}" />
 						<h:outputText value="Bemerkungen" />

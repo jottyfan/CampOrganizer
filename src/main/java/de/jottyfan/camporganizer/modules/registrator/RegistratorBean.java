@@ -10,6 +10,7 @@ import java.util.List;
 
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
 import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
 
 /**
@@ -26,6 +27,7 @@ public class RegistratorBean {
 	private String city;
 	private String phone;
 	private Date birthdate;
+	private EnumSex sex;
 	private String email;
 	private Date created;
 	private String campname;
@@ -78,7 +80,7 @@ public class RegistratorBean {
 				Integer years = Period.between(bDate, aDate).getYears();
 				if (years < minAge || years > maxAge) {
 					// ignore helpers and kitchen
-					if (EnumCamprole.boy.equals(camprole) || EnumCamprole.girl.equals(camprole)) {
+					if (EnumCamprole.student.equals(camprole)) {
 						buf.append("! passt vom Alter her nicht in die Freizeit\n");
 					}
 				}
@@ -195,8 +197,12 @@ public class RegistratorBean {
 		return pk;
 	}
 
-	public String getCamproleAsString() {
-		return new EnumConverter().getStringCamprole(camprole);
+	public String getCamproleGerman() {
+		return new EnumConverter().getCamproleGerman(camprole);
+	}
+	
+	public String getSexGerman() {
+		return new EnumConverter().getSexGerman(sex);
 	}
 
 	public EnumCamprole getCamprole() {
@@ -249,5 +255,13 @@ public class RegistratorBean {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	public EnumSex getSex() {
+		return sex;
+	}
+
+	public void setSex(EnumSex sex) {
+		this.sex = sex;
 	}
 }

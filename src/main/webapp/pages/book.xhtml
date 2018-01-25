@@ -23,11 +23,10 @@
 							<h:outputText value="Rolle" />
 							<b:selectOneMenu value="#{bookModel.bean.camprole}">
 								<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
-								<f:selectItem itemValue="girl" itemLabel="Mädchen" />
-								<f:selectItem itemValue="boy" itemLabel="Junge" />
-								<f:selectItem itemValue="helpergirl" itemLabel="Mitarbeiterin" />
-								<f:selectItem itemValue="helperboy" itemLabel="Mitarbeiter" />
-								<f:selectItem itemValue="kitchen" itemLabel="Küche" />
+								<f:selectItem itemValue="student" itemLabel="Teilnehmer" />
+								<f:selectItem itemValue="teacher" itemLabel="Mitarbeiter" />
+								<f:selectItem itemValue="director" itemLabel="Leiter" />
+								<f:selectItem itemValue="feeder" itemLabel="Küche" />
 							</b:selectOneMenu>
 							<h:outputText value="Freizeit" />
 							<b:selectOneMenu value="#{bookModel.bean.fkCamp}">
@@ -55,16 +54,20 @@
 							<b:inputText value="#{personBean.phone}" placeholder="Bitte eine Telefonnummer eingeben" />
 							<h:outputText value="Geburtsdatum" />
 							<b:datepicker value="#{personBean.birthdate}" placeholder="Bitte das Geburtsdatum des Teilnehmers eingeben" />
+							<h:outputText value="Geschlecht" />
+							<b:selectOneMenu value="#{personBean.sex}">
+								<f:selectItem itemLabel="weiblich" itemValue="female" />
+								<f:selectItem itemLabel="männlich" itemValue="male" />
+							</b:selectOneMenu>
 							<h:outputText value="E-Mail" />
 							<b:inputText value="#{personBean.email}" placeholder="Bitte die E-Mail-Adresse angeben" />
 							<h:outputText value="Rolle" />
 							<b:selectOneMenu value="#{personBean.camprole}">
 								<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
-								<f:selectItem itemValue="girl" itemLabel="Mädchen" />
-								<f:selectItem itemValue="boy" itemLabel="Junge" />
-								<f:selectItem itemValue="helpergirl" itemLabel="Mitarbeiterin" />
-								<f:selectItem itemValue="helperboy" itemLabel="Mitarbeiter" />
-								<f:selectItem itemValue="kitchen" itemLabel="Küche" />
+								<f:selectItem itemValue="student" itemLabel="Teilnehmer" />
+								<f:selectItem itemValue="teacher" itemLabel="Mitarbeiter" />
+								<f:selectItem itemValue="director" itemLabel="Leiter" />
+								<f:selectItem itemValue="feeder" itemLabel="Küche" />
 							</b:selectOneMenu>
 							<h:outputText value="Freizeit" />
 							<b:selectOneMenu value="#{personBean.fkCamp}">

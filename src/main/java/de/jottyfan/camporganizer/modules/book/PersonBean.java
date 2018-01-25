@@ -11,6 +11,9 @@ import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 
 import de.jottyfan.camporganizer.CampBean;
+import de.jottyfan.camporganizer.db.converter.EnumConverter;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
 
 /**
  * 
@@ -57,8 +60,12 @@ public class PersonBean {
 	private Date birthdate;
 
 	@CsvBindByPosition(position = 8)
+	@CsvBindByName(column = "Geschlecht")
+	private EnumSex sex;
+	
+	@CsvBindByPosition(position = 9)
 	@CsvBindByName(column = "Status")
-	private String camprole;
+	private EnumCamprole camprole;
 
 	private Integer fkCamp;
 	private Integer fkProfile;
@@ -138,11 +145,11 @@ public class PersonBean {
 	}
 
 	public String getCamprole() {
-		return camprole;
+		return camprole == null ? null : camprole.getLiteral();
 	}
 
 	public void setCamprole(String camprole) {
-		this.camprole = camprole;
+		this.camprole = new EnumConverter().getEnumCamprole(camprole);
 	}
 
 	public Integer getFkCamp() {
@@ -175,5 +182,21 @@ public class PersonBean {
 
 	public void setPk(Integer pk) {
 		this.pk = pk;
+	}
+
+	public String getSex() {
+		return sex == null ? null : sex.getLiteral();
+	}
+
+	public void setSex(String sex) {
+		this.sex = new EnumConverter().getEnumSex(sex);
+	}
+
+	public EnumSex getSexEnum() {
+		return sex;
+	}
+
+	public EnumCamprole getCamproleEnum() {
+		return camprole;
 	}
 }

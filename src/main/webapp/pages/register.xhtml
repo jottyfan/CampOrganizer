@@ -13,15 +13,15 @@
 				<b:panel>
 					<b:panelGrid colSpans="3,9" size="xs">
 						<h:outputText value="Vorname" />
-						<b:inputText value="#{profileBean.forename}" />
+						<b:inputText value="#{profileBean.forename}" required="true" requiredMessage="Das Feld Vorname muss ausgefüllt werden." />
 						<h:outputText value="Nachname" />
-						<b:inputText value="#{profileBean.surname}" />
+						<b:inputText value="#{profileBean.surname}" required="true" requiredMessage="Das Feld Nachname muss ausgefüllt werden." />
 						<h:outputText value="Login-Name" />
-						<b:inputText value="#{profileBean.username}" />
+						<b:inputText value="#{profileBean.username}" required="true" requiredMessage="Das Feld Login-Name muss ausgefüllt werden." />
 						<h:outputText value="Passwort" />
-						<b:inputSecret value="#{profileBean.password}" />
+						<b:inputSecret value="#{profileBean.password}" required="true" requiredMessage="Das Feld Passwort muss ausgefüllt werden."/>
 						<h:outputText value="Passwort (nochmal)" />
-						<b:inputSecret value="#{profileBean.passwordAgain}" />
+						<b:inputSecret value="#{profileBean.passwordAgain}" required="true" requiredMessage="Das Feld Passwort (nochmal) muss ausgefüllt werden."/>
 						<h:outputText value="" />
 						<b:commandButton action="#{profileController.doRegister}" value="registrieren" look="primary" />
 					</b:panelGrid>
