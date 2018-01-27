@@ -40,10 +40,22 @@ public class EnumConverter {
 	 *           if no such literal was found
 	 */
 	public EnumCamprole getEnumCamprole(String camprole) throws DataAccessException {
+		if (camprole == null) {
+			return null;
+		}
 		for (EnumCamprole enumCamprole : EnumCamprole.values()) {
 			if (enumCamprole.getLiteral().equals(camprole)) {
 				return enumCamprole;
 			}
+		}
+		if ("Teilnehmer".equals(camprole)) {
+			return EnumCamprole.student;
+		} else if ("Mitarbeiter".equals(camprole)) {
+			return EnumCamprole.teacher;
+		} else if ("Leiter".equals(camprole)) {
+			return EnumCamprole.director;
+		} else if ("Küche".equals(camprole)) {
+			return EnumCamprole.feeder;
 		}
 		throw new DataAccessException(
 				"enum " + camprole + " not found. Maybe the jooq generated classes are not up to date?");
@@ -59,10 +71,18 @@ public class EnumConverter {
 	 *           if no such literal was found
 	 */
 	public EnumSex getEnumSex(String sex) throws DataAccessException {
+		if (sex == null) {
+			return null;
+		}
 		for (EnumSex enumSex : EnumSex.values()) {
 			if (enumSex.getLiteral().equals(sex)) {
 				return enumSex;
 			}
+		}
+		if ("weiblich".equals(sex)) {
+			return EnumSex.female;
+		} else if ("männlich".equals(sex)) {
+			return EnumSex.male;
 		}
 		throw new DataAccessException("enum " + sex + " not found. Maybe the jooq generated classes are not up to date?");
 	}

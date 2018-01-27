@@ -61,16 +61,25 @@ public class PersonBean {
 
 	@CsvBindByPosition(position = 8)
 	@CsvBindByName(column = "Geschlecht")
-	private EnumSex sex;
-	
+	private String sex;
+
 	@CsvBindByPosition(position = 9)
-	@CsvBindByName(column = "Status")
-	private EnumCamprole camprole;
+	@CsvBindByName(column = "Rolle")
+	private String camprole;
 
 	private Integer fkCamp;
 	private Integer fkProfile;
 
 	private List<CampBean> camps;
+
+	/**
+	 * generate csv headline
+	 * 
+	 * @return headline
+	 */
+	public static final String getHeadline() {
+		return "Vorname,Nachname,Straße,PLZ,Ort,Telefon,E-Mail,Geburtstag,Geschlecht,Rolle\n";
+	}
 
 	public String getAddress() {
 		return new StringBuilder("").append(street).append(", ").append(zip).append(" ").append(city).toString();
@@ -145,11 +154,11 @@ public class PersonBean {
 	}
 
 	public String getCamprole() {
-		return camprole == null ? null : camprole.getLiteral();
+		return camprole;
 	}
 
 	public void setCamprole(String camprole) {
-		this.camprole = new EnumConverter().getEnumCamprole(camprole);
+		this.camprole = camprole;
 	}
 
 	public Integer getFkCamp() {
@@ -185,18 +194,18 @@ public class PersonBean {
 	}
 
 	public String getSex() {
-		return sex == null ? null : sex.getLiteral();
-	}
-
-	public void setSex(String sex) {
-		this.sex = new EnumConverter().getEnumSex(sex);
-	}
-
-	public EnumSex getSexEnum() {
 		return sex;
 	}
 
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public EnumSex getSexEnum() {
+		return new EnumConverter().getEnumSex(sex);
+	}
+
 	public EnumCamprole getCamproleEnum() {
-		return camprole;
+		return new EnumConverter().getEnumCamprole(camprole);
 	}
 }

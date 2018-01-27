@@ -136,27 +136,15 @@ public class RegistratorModel {
 	 */
 	public void doDownloadCsv(FacesContext facesContext) {
 		try {
+			List<PersonBean> list = new RegistratorGateway(facesContext).getAllPersonsOfCamp(campPk);
+			String csvContent = new CsvGenerator<PersonBean>().generateContent(list, PersonBean.getHeadline());
+			// all exceptions that lead to jsf output must be done here
 			ExternalContext ec = facesContext.getExternalContext();
 			ec.responseReset();
 			ec.setResponseContentType("csv");
 			ec.setResponseHeader("Content-Disposition", "attachment; filename=\"camp" + campPk + ".csv\"");
-			List<PersonBean> list = new RegistratorGateway(facesContext).getAllPersonsOfCamp(campPk);
-			// hack to generate a head line
-			PersonBean bean = new PersonBean();
-			bean.setForename("Vorname");
-			bean.setSurname("Nachname");
-			bean.setStreet("Straße");
-			bean.setZip("PLZ");
-			bean.setCity("Ort");
-			bean.setPhone("Telefon");
-			bean.setEmail("E-Mail");
-			bean.setSex("Geschlecht");
-			bean.setCamprole("Rolle");
 			Writer writer = ec.getResponseOutputWriter();
-			StatefulBeanToCsvBuilder<PersonBean> builder = new StatefulBeanToCsvBuilder<>(writer);
-			StatefulBeanToCsv<PersonBean> b2c = builder.build();
-			b2c.write(bean);
-			b2c.write(list);
+			writer.write(csvContent);
 			writer.close();
 			facesContext.responseComplete();
 		} catch (DataAccessException | IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
