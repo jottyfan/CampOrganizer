@@ -95,17 +95,7 @@ public class EnumConverter {
 	 * @return german translation of camprole
 	 */
 	public String getCamproleGerman(EnumCamprole camprole) {
-		if (EnumCamprole.boy.equals(camprole)) {
-			return "Junge (veraltet)";
-		} else if (EnumCamprole.girl.equals(camprole)) {
-			return "Mädchen (veraltet)";
-		} else if (EnumCamprole.helperboy.equals(camprole)) {
-			return "Mitarbeiter (veraltet)";
-		} else if (EnumCamprole.helpergirl.equals(camprole)) {
-			return "Mitarbeiterin (veraltet)";
-		} else if (EnumCamprole.kitchen.equals(camprole)) {
-			return "Küche (veraltet)";
-		} else if (EnumCamprole.student.equals(camprole)) {
+    if (EnumCamprole.student.equals(camprole)) {
 			return "Teilnehmer";
 		} else if (EnumCamprole.teacher.equals(camprole)) {
 			return "Mitarbeiter";

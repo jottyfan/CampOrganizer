@@ -26,16 +26,6 @@ import org.jooq.Schema;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public enum EnumCamprole implements EnumType {
 
-    boy("boy"),
-
-    girl("girl"),
-
-    helperboy("helperboy"),
-
-    helpergirl("helpergirl"),
-
-    kitchen("kitchen"),
-
     student("student"),
 
     teacher("teacher"),
