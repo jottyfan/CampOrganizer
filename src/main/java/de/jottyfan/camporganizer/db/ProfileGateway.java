@@ -336,6 +336,37 @@ public class ProfileGateway extends JooqGateway {
 	}
 
 	/**
+	 * get all users with role from db (except password)
+	 * 
+	 * @param role the role the user must have
+	 * 
+	 * @return list of valid users
+	 */
+	public List<ProfileBean> getAllUsersWithRole(EnumRole role) {
+		SelectConditionStep<Record4<String, String, String, Integer>> sql = getJooq()
+		// @formatter:off
+			.select(T_PROFILE.FORENAME,
+					    T_PROFILE.SURNAME,
+					    T_PROFILE.USERNAME,
+					    T_PROFILE.PK)
+			.from(T_PROFILEROLE)
+			.leftJoin(T_PROFILE).on(T_PROFILE.PK.eq(T_PROFILEROLE.FK_PROFILE))
+			.where(T_PROFILEROLE.ROLE.eq(role));
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		List<ProfileBean> list = new ArrayList<>();
+		for (Record r : sql.fetch()) {
+			ProfileBean bean = new ProfileBean();
+			bean.setForename(r.get(T_PROFILE.FORENAME));
+			bean.setSurname(r.get(T_PROFILE.SURNAME));
+			bean.setUsername(r.get(T_PROFILE.USERNAME));
+			bean.setPk(r.get(T_PROFILE.PK));
+			list.add(bean);
+		}
+		return list;
+	}
+
+	/**
 	 * delete entry from profile role table
 	 * 
 	 * @param bean

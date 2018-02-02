@@ -17,7 +17,7 @@ import org.jooq.exception.DataAccessException;
 @ManagedBean
 @SessionScoped
 public class ProfileBean {
-	
+
 	private Integer pk;
 	private String forename;
 	private String surname;
@@ -55,12 +55,11 @@ public class ProfileBean {
 			return false;
 		}
 	}
-	
-	public Boolean getIsEmpty()
-	{
+
+	public Boolean getIsEmpty() {
 		return pk == null;
 	}
-	
+
 	public boolean hasRole(String role) {
 		return roles == null ? false : roles.contains(role);
 	}
@@ -68,6 +67,11 @@ public class ProfileBean {
 	public String getFullname() {
 		return new StringBuilder(forename == null ? "" : forename).append(" ").append(surname == null ? "" : surname)
 				.toString();
+	}
+
+	public String getComparename() {
+		return new StringBuilder(surname == null ? "" : surname.toLowerCase())
+				.append(forename == null ? "" : forename.toLowerCase()).toString();
 	}
 
 	public String getUsername() {
@@ -85,7 +89,7 @@ public class ProfileBean {
 	public void setPasswordButKeepEncrypted(String password) {
 		this.password = password;
 	}
-	
+
 	/**
 	 * use this from the web pages
 	 * 

@@ -114,6 +114,11 @@
 											<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
 											<f:selectItems value="#{campadminModel.documents}" var="d" itemValue="#{d.pk}" itemLabel="#{d.name}" />
 										</b:selectOneMenu>
+										<h:outputText value="Verantwortlicher" />
+										<b:selectOneMenu value="#{campadminModel.camp.fkProfile}" required="true" requiredMessage="Bitte das Feld Verantwortlicher ausfüllen.">
+										  <f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+										  <f:selectItems value="#{campadminModel.profiles}" var="p" itemValue="#{p.pk}" itemLabel="#{p.fullname}" />
+										</b:selectOneMenu>
 										<h:outputText value="Kassenschluss" rendered="#{!campadminModel.camp.lockSales}" />
 										<b:dropButton value="Rechnungen abschließen" iconAwesome="lock" look="warning" rendered="#{!campadminModel.camp.lockSales}">
 											<b:commandButton action="#{campadminController.doLockSales}" value="ja, endgültig Rechnungen festschreiben" look="warning" />

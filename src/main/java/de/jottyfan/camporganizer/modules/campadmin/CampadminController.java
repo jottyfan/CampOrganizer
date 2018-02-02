@@ -22,6 +22,7 @@ import de.jottyfan.camporganizer.db.ProfileGateway;
 import de.jottyfan.camporganizer.db.RssGateway;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumRole;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 import de.jottyfan.camporganizer.rss.RssBean;
 
@@ -62,6 +63,9 @@ public class CampadminController extends Controller {
 			}
 			model.setCamps(new CampGateway(facesContext).getAllCampsFromTable());
 			model.setLocationNameToCamp();
+			
+			model.setProfiles(new ProfileGateway(facesContext).getAllUsersWithRole(EnumRole.registrator));
+			model.orderProfiles();
 
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));

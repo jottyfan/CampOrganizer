@@ -24,6 +24,7 @@ public class CampBean {
 	private Integer fkDocument;
 	private Integer bookings;
 	private Boolean lockSales;
+	private Integer fkProfile;
 
 	public String getFullCampname() {
 		StringBuilder buf = new StringBuilder();
@@ -159,5 +160,13 @@ public class CampBean {
 
 	public void setLockSales(Boolean lockSales) {
 		this.lockSales = lockSales;
+	}
+
+	public Integer getFkProfile() {
+		return fkProfile;
+	}
+
+	public void setFkProfile(Integer fkProfile) {
+		this.fkProfile = fkProfile;
 	}
 }

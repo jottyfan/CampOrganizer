@@ -1,6 +1,7 @@
 package de.jottyfan.camporganizer.modules.campadmin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -14,6 +15,7 @@ import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
@@ -40,6 +42,8 @@ public class CampadminModel {
 	private CampBean camp;
 	private List<CampBean> camps;
 
+	private List<ProfileBean> profiles;
+
 	public List<String> getPossibleCountries() {
 		List<String> list = new ArrayList<>();
 		list.add("Bayern");
@@ -60,6 +64,10 @@ public class CampadminModel {
 		list.add("Thüringen");
 		list.add("Heilbronn und Umgebung");
 		return list;
+	}
+
+	public void orderProfiles() {
+		profiles.sort((o1, o2) -> (o1 == null || o2 == null) ? 0 : o1.getComparename().compareTo(o2.getComparename()));
 	}
 
 	public void setLocationNameToCamp() {
@@ -177,5 +185,13 @@ public class CampadminModel {
 
 	public void setCamps(List<CampBean> camps) {
 		this.camps = camps;
+	}
+
+	public List<ProfileBean> getProfiles() {
+		return profiles;
+	}
+
+	public void setProfiles(List<ProfileBean> profiles) {
+		this.profiles = profiles;
 	}
 }
