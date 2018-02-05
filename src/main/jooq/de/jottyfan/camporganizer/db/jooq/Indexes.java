@@ -15,6 +15,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
+import de.jottyfan.camporganizer.db.jooq.tables.TSalesprofile;
 
 import javax.annotation.Generated;
 
@@ -56,6 +57,8 @@ public class Indexes {
     public static final Index T_SALES_PKEY = Indexes0.T_SALES_PKEY;
     public static final Index T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = Indexes0.T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY;
     public static final Index T_SALESCONTENTTYPE_PKEY = Indexes0.T_SALESCONTENTTYPE_PKEY;
+    public static final Index T_SALESPROFILE_FK_CAMP_FK_PROFILE_KEY = Indexes0.T_SALESPROFILE_FK_CAMP_FK_PROFILE_KEY;
+    public static final Index T_SALESPROFILE_PKEY = Indexes0.T_SALESPROFILE_PKEY;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -78,5 +81,7 @@ public class Indexes {
         public static Index T_SALES_PKEY = createIndex("t_sales_pkey", TSales.T_SALES, new OrderField[] { TSales.T_SALES.PK }, true);
         public static Index T_SALESCONTENT_FK_SALES_FK_SALESCONTENTTYPE_KEY = createIndex("t_salescontent_fk_sales_fk_salescontenttype_key", TSalescontent.T_SALESCONTENT, new OrderField[] { TSalescontent.T_SALESCONTENT.FK_SALES, TSalescontent.T_SALESCONTENT.FK_SALESCONTENTTYPE }, true);
         public static Index T_SALESCONTENTTYPE_PKEY = createIndex("t_salescontenttype_pkey", TSalescontenttype.T_SALESCONTENTTYPE, new OrderField[] { TSalescontenttype.T_SALESCONTENTTYPE.NAME }, true);
+        public static Index T_SALESPROFILE_FK_CAMP_FK_PROFILE_KEY = createIndex("t_salesprofile_fk_camp_fk_profile_key", TSalesprofile.T_SALESPROFILE, new OrderField[] { TSalesprofile.T_SALESPROFILE.FK_CAMP, TSalesprofile.T_SALESPROFILE.FK_PROFILE }, true);
+        public static Index T_SALESPROFILE_PKEY = createIndex("t_salesprofile_pkey", TSalesprofile.T_SALESPROFILE, new OrderField[] { TSalesprofile.T_SALESPROFILE.PK }, true);
     }
 }

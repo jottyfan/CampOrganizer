@@ -18,8 +18,8 @@
 								<b:inputText value="#{salesModel.bean.trader}" placeholder="Bitte Laden/Verkäufer eintragen" typeahead="true"
 									typeaheadValues="#{salesModel.bean.traders}" />
 								<h:outputText value="Freizeit" />
-								<b:selectOneMenu value="#{salesModel.bean.fkCamp}">
-									<f:selectItems value="#{salesModel.bean.camps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
+								<b:selectOneMenu value="#{salesModel.bean.fkCamp}" styleClass="filterdropdown">
+									<f:selectItems value="#{salesModel.bean.unlockedCamps}" var="i" itemValue="#{i.pk}" itemLabel="#{i.name} #{i.year}" />
 								</b:selectOneMenu>
 								<h:outputText value="Name" />
 								<b:inputText value="#{salesModel.bean.provider}" placeholder="Bitte Namen des Einkaufenden eintragen" typeahead="true"

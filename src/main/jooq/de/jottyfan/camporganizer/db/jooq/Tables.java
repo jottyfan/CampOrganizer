@@ -15,6 +15,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
+import de.jottyfan.camporganizer.db.jooq.tables.TSalesprofile;
 import de.jottyfan.camporganizer.db.jooq.tables.VBudget;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamprole;
@@ -93,6 +94,11 @@ public class Tables {
      * The table <code>camp.t_salescontenttype</code>.
      */
     public static final TSalescontenttype T_SALESCONTENTTYPE = de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype.T_SALESCONTENTTYPE;
+
+    /**
+     * The table <code>camp.t_salesprofile</code>.
+     */
+    public static final TSalesprofile T_SALESPROFILE = de.jottyfan.camporganizer.db.jooq.tables.TSalesprofile.T_SALESPROFILE;
 
     /**
      * The table <code>camp.v_budget</code>.

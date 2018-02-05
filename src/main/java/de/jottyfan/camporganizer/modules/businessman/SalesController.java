@@ -18,6 +18,7 @@ import org.jooq.exception.DataAccessException;
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.SalesGateway;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
@@ -35,6 +36,9 @@ public class SalesController extends Controller {
 
 	@ManagedProperty(value = "#{salesModel}")
 	private SalesModel model;
+	
+	@ManagedProperty(value = "#{profileBean}")
+	private ProfileBean profileBean;
 
 	private String toSales(Integer activeIndex) {
 		try {
@@ -43,7 +47,7 @@ public class SalesController extends Controller {
 			model.getBean().setCamps(new CampGateway(facesContext).getAllCampsFromView(false));
 			model.getBean().setTraders(gw.getAllTraders());
 			model.getBean().setProviders(gw.getAllProviders());
-			model.setList(gw.getAllSales());
+			model.setList(gw.getAllSales(profileBean.getPk()));
 			model.setBudget(gw.getBudget());
 		} catch (DataAccessException e) {
 			model.getBean().setCamps(new ArrayList<>());
@@ -70,7 +74,7 @@ public class SalesController extends Controller {
 		try {
 			SalesGateway gw = new SalesGateway(facesContext);
 			gw.delete(selection);
-			model.setList(gw.getAllSales());
+			model.setList(gw.getAllSales(profileBean.getPk()));
 			return toSales(1);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
@@ -84,7 +88,7 @@ public class SalesController extends Controller {
 			SalesGateway gw = new SalesGateway(facesContext);
 			model.getBean().uploadFile();
 			gw.upsert(model.getBean());
-			model.setList(gw.getAllSales());
+			model.setList(gw.getAllSales(profileBean.getPk()));
 			return toSales(1);
 		} catch (DataAccessException | IOException e) {
 			facesContext.addMessage(null,
@@ -128,5 +132,13 @@ public class SalesController extends Controller {
 
 	public void setModel(SalesModel model) {
 		this.model = model;
+	}
+
+	public ProfileBean getProfileBean() {
+		return profileBean;
+	}
+
+	public void setProfileBean(ProfileBean profileBean) {
+		this.profileBean = profileBean;
 	}
 }

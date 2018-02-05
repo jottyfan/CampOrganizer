@@ -3,6 +3,7 @@ package de.jottyfan.camporganizer.modules.businessman;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,6 +74,21 @@ public class SalesBean {
 				recipeshot = null;
 			}
 		}
+	}
+
+	/**
+	 * get all unlocked camp beans
+	 * 
+	 * @return list of unlocked camp beans
+	 */
+	public List<CampBean> getUnlockedCamps() {
+		List<CampBean> list = new ArrayList<>();
+		for (CampBean bean : camps) {
+			if (!bean.getLockSales()) {
+				list.add(bean);
+			}
+		}
+		return list;
 	}
 
 	@Override

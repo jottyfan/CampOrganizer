@@ -17,6 +17,7 @@ import org.jooq.Record1;
 import org.jooq.Record10;
 import org.jooq.Record11;
 import org.jooq.Record5;
+import org.jooq.SelectConditionStep;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
 import org.jooq.exception.DataAccessException;
@@ -81,13 +82,16 @@ public class SalesGateway extends JooqGateway {
 	}
 
 	/**
-	 * get all sales from db
+	 * get all sales from db, limited by current profile's pk
+	 * 
+	 * @param fkProfile
+	 *          primary key of profile
 	 * 
 	 * @return list of sales
 	 * @throws DataAccessException
 	 */
-	public List<SalesBean> getAllSales() throws DataAccessException {
-		SelectJoinStep<Record11<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String, Boolean>> sql = getJooq()
+	public List<SalesBean> getAllSales(Integer fkProfile) throws DataAccessException {
+		SelectConditionStep<Record11<Integer, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String, Boolean>> sql = getJooq()
 		// @formatter:off
 			.select(T_SALES.PK,
 							T_SALES.TRADER,
@@ -100,8 +104,10 @@ public class SalesGateway extends JooqGateway {
 					    T_SALES.RECIPESHOT,
 					    T_SALES.RECIPENOTE,
 					    T_CAMP.LOCK_SALES)
-			.from(T_SALES)
-			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(T_SALES.FK_CAMP));
+			.from(T_SALESPROFILE)
+			.leftJoin(T_SALES).on(T_SALES.FK_CAMP.eq(T_SALESPROFILE.FK_CAMP))
+			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(T_SALES.FK_CAMP))
+			.where(T_SALESPROFILE.FK_PROFILE.eq(fkProfile));
 		// @formatter.on
 		LOGGER.debug("{}", sql.toString());
 		List<SalesBean> list = new ArrayList<>();

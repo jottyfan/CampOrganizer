@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TCamp extends TableImpl<TCampRecord> {
 
-    private static final long serialVersionUID = 1322515888;
+    private static final long serialVersionUID = 400067249;
 
     /**
      * The reference instance of <code>camp.t_camp</code>
@@ -112,7 +112,7 @@ public class TCamp extends TableImpl<TCampRecord> {
     /**
      * The column <code>camp.t_camp.fk_profile</code>.
      */
-    public final TableField<TCampRecord, Integer> FK_PROFILE = createField("fk_profile", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<TCampRecord, Integer> FK_PROFILE = createField("fk_profile", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>camp.t_camp</code> table reference

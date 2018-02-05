@@ -58,7 +58,7 @@ public class CampGateway extends JooqGateway {
 		if (futureOnly) {
 			limitDate.setTime(new Date().getTime());
 		}
-		SelectSeekStep1<Record12<Integer, String, String, Double, Integer, Integer, String, Timestamp, Timestamp, String, String, Integer>, Timestamp> sql = getJooq()
+		SelectSeekStep1<Record13<Integer, String, String, Double, Integer, Integer, String, Timestamp, Timestamp, String, String, Integer, Boolean>, Timestamp> sql = getJooq()
 		// @formatter:off
 			.select(V_CAMP.PK,
 					    V_CAMP.NAME,
@@ -71,16 +71,16 @@ public class CampGateway extends JooqGateway {
 					    V_CAMP.DEPART,
 					    V_CAMP.PRICE,
 					    V_CAMP.COUNTRIES,
-					    V_CAMP.FK_DOCUMENT)
+					    V_CAMP.FK_DOCUMENT,
+					    T_CAMP.LOCK_SALES)
 			.from(V_CAMP)
 			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(V_CAMP.PK))
 			.where(V_CAMP.ARRIVE.greaterThan(limitDate))
-			.and(T_CAMP.LOCK_SALES.eq(false))
 			.orderBy(V_CAMP.ARRIVE);
 	  // @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		List<CampBean> list = new ArrayList<>();
-		for (Record12<Integer, String, String, Double, Integer, Integer, String, Timestamp, Timestamp, String, String, Integer> r : sql
+		for (Record13<Integer, String, String, Double, Integer, Integer, String, Timestamp, Timestamp, String, String, Integer, Boolean> r : sql
 				.fetch()) {
 			CampBean bean = new CampBean();
 			bean.setPk(r.get(V_CAMP.PK));
@@ -98,6 +98,7 @@ public class CampGateway extends JooqGateway {
 				bean.setYear(year.intValue());
 			}
 			bean.setFkDocument(r.get(V_CAMP.FK_DOCUMENT));
+			bean.setLockSales(r.get(T_CAMP.LOCK_SALES));
 			list.add(bean);
 		}
 		return list;
