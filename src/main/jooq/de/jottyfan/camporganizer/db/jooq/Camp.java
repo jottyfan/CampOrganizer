@@ -15,6 +15,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontent;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
+import de.jottyfan.camporganizer.db.jooq.tables.TSalesprofile;
 import de.jottyfan.camporganizer.db.jooq.tables.VBudget;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamp;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamprole;
@@ -47,7 +48,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Camp extends SchemaImpl {
 
-    private static final long serialVersionUID = -184647594;
+    private static final long serialVersionUID = -208876540;
 
     /**
      * The reference instance of <code>camp</code>
@@ -108,6 +109,11 @@ public class Camp extends SchemaImpl {
      * The table <code>camp.t_salescontenttype</code>.
      */
     public final TSalescontenttype T_SALESCONTENTTYPE = de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype.T_SALESCONTENTTYPE;
+
+    /**
+     * The table <code>camp.t_salesprofile</code>.
+     */
+    public final TSalesprofile T_SALESPROFILE = de.jottyfan.camporganizer.db.jooq.tables.TSalesprofile.T_SALESPROFILE;
 
     /**
      * The table <code>camp.v_budget</code>.
@@ -180,6 +186,7 @@ public class Camp extends SchemaImpl {
             TSales.T_SALES,
             TSalescontent.T_SALESCONTENT,
             TSalescontenttype.T_SALESCONTENTTYPE,
+            TSalesprofile.T_SALESPROFILE,
             VBudget.V_BUDGET,
             VCamp.V_CAMP,
             VCamprole.V_CAMPROLE,
