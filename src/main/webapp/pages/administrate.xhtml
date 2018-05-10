@@ -77,7 +77,7 @@
                     <b:dataTableColumn label="Inhalt">
                       <b:commandButton action="#{adminController.toEditRss(d.pk)}" value="#{d.message}" look="link" />
                     </b:dataTableColumn>
-                    <b:dataTableColumn label="Datum">
+                    <b:dataTableColumn label="Datum" dataType="date">
                       <b:commandButton action="#{adminController.toEditRss(d.pk)}" value="#{d.pubdate}" look="link" />
                     </b:dataTableColumn>
                   </b:dataTable>

@@ -46,7 +46,7 @@
 					</b:tab>
 					<b:tab title="Rechnungen anzeigen" styleClass="dist16">
 						<b:form>
-							<b:dataTable value="#{salesModel.list}" var="l" lang="de">
+							<b:dataTable value="#{salesModel.list}" var="l" lang="de" csv="true" pdf="true">
 								<b:dataTableColumn label="Einkauf bei">
 									<h:outputText value="#{l.trader}" />
 								</b:dataTableColumn>

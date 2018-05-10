@@ -60,11 +60,11 @@
 						<b:tabView activeIndex="#{campadminModel.activeIndexCamp}">
 							<b:tab title="Tabelle">
 								<b:form>
-									<b:dataTable value="#{campadminModel.camps}" var="c" lang="de">
+									<b:dataTable value="#{campadminModel.camps}" var="c" lang="de" csv="true" pdf="true">
 										<b:dataTableColumn label="Name">
 											<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.name}" look="link" />
 										</b:dataTableColumn>
-										<b:dataTableColumn label="Zeit">
+										<b:dataTableColumn label="Zeit" dataType="date" dataOrder="#{c.arrive}">
 											<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.campTime}" look="link" />
 										</b:dataTableColumn>
 										<b:dataTableColumn label="in">
