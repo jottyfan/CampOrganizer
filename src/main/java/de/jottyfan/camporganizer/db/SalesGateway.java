@@ -1,6 +1,9 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.*;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMP;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALES;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALESPROFILE;
+import static de.jottyfan.camporganizer.db.jooq.Tables.V_BUDGET;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -15,7 +18,6 @@ import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep9;
 import org.jooq.Query;
 import org.jooq.Record1;
-import org.jooq.Record10;
 import org.jooq.Record11;
 import org.jooq.Record5;
 import org.jooq.SelectConditionStep;
@@ -122,7 +124,8 @@ public class SalesGateway extends JooqGateway {
 			.from(T_SALESPROFILE)
 			.leftJoin(T_SALES).on(T_SALES.FK_CAMP.eq(T_SALESPROFILE.FK_CAMP))
 			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(T_SALES.FK_CAMP))
-			.where(T_SALESPROFILE.FK_PROFILE.eq(fkProfile));
+			.where(T_SALESPROFILE.FK_PROFILE.eq(fkProfile))
+			.and(T_SALES.PK.isNotNull());
 		// @formatter.on
 		LOGGER.debug("{}", sql.toString());
 		List<SalesBean> list = new ArrayList<>();
