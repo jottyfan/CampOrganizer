@@ -63,19 +63,19 @@ public class CampGateway extends JooqGateway {
 		}
 		SelectSeekStep1<Record13<Integer, String, String, Double, Integer, Integer, String, Timestamp, Timestamp, String, String, Integer, Boolean>, Timestamp> sql = getJooq()
 		// @formatter:off
-			.select(V_CAMP.PK,
-					    V_CAMP.NAME,
-					    V_CAMP.LOCATION_NAME,
-					    V_CAMP.YEAR,
-					    V_CAMP.MIN_AGE,
-					    V_CAMP.MAX_AGE,
-					    V_CAMP.URL,
-					    V_CAMP.ARRIVE,
-					    V_CAMP.DEPART,
-					    V_CAMP.PRICE,
-					    V_CAMP.COUNTRIES,
-					    V_CAMP.FK_DOCUMENT,
-					    T_CAMP.LOCK_SALES)
+			.selectDistinct(V_CAMP.PK,
+					    				V_CAMP.NAME,
+									    V_CAMP.LOCATION_NAME,
+									    V_CAMP.YEAR,
+									    V_CAMP.MIN_AGE,
+									    V_CAMP.MAX_AGE,
+									    V_CAMP.URL,
+									    V_CAMP.ARRIVE,
+									    V_CAMP.DEPART,
+									    V_CAMP.PRICE,
+									    V_CAMP.COUNTRIES,
+									    V_CAMP.FK_DOCUMENT,
+									    T_CAMP.LOCK_SALES)
 			.from(V_CAMP)
 			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(V_CAMP.PK))
 			.leftJoin(T_SALESPROFILE).on(T_SALESPROFILE.FK_CAMP.eq(T_CAMP.PK))
