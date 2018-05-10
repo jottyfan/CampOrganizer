@@ -78,7 +78,7 @@
 				</b:form>
 				<b:form>
 					<b:panelGrid colSpans="9,3" size="sm">
-						<b:selectOneMenu value="#{registratorModel.campPk}" required="true"
+						<b:selectOneMenu value="#{registratorModel.campPk}" styleClass="filterdropdown" required="true"
 							requiredMessage="bitte eine Freizeit zum Herunterladen auswählen">
 							<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
 							<f:selectItems value="#{registratorModel.camps}" var="c" itemValue="#{c.pk}" itemLabel="#{c.fullCampname}" />
