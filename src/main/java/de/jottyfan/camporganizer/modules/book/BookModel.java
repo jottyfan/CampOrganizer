@@ -44,7 +44,7 @@ public class BookModel {
 	 * @return list of found camp beans
 	 */
 	public List<CampBean> getCamps(FacesContext facesContext) {
-		bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(true));
+		bean.setCamps(new CampGateway(facesContext).getAllCampsFromView(true, null));
 		// do not catch DataAccessException, as there is no
 		// facesMessage rendered here (jsf lifecycle is too late)
 		return bean.getCamps();
@@ -60,7 +60,7 @@ public class BookModel {
 
 	public void toBook(FacesContext facesContext, ProfileBean profileBean) {
 		try {
-			this.camps = new CampGateway(facesContext).getAllCampsFromView(true);
+			this.camps = new CampGateway(facesContext).getAllCampsFromView(true, null);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on loading camps", e.getMessage()));

@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
+import org.jooq.InsertValuesStep9;
 import org.jooq.Query;
 import org.jooq.Record1;
 import org.jooq.Record10;
@@ -20,6 +21,8 @@ import org.jooq.Record5;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectSeekStep1;
+import org.jooq.UpdateConditionStep;
+import org.jooq.UpdateSetMoreStep;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
@@ -48,10 +51,12 @@ public class SalesGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public Integer upsert(SalesBean bean) throws DataAccessException {
-		boolean isNew = bean.getPk() == null;
+		return bean.getPk() == null ? insert(bean) : update(bean);
+	}
+
+	private Integer insert(SalesBean bean) throws DataAccessException {
 		Timestamp buydate = bean.getBuydate() == null ? null : new Timestamp(bean.getBuydate().getTime());
-		@SuppressWarnings("resource")
-		Query sql = isNew ? getJooq()
+		InsertValuesStep9<TSalesRecord, String, Integer, String, String, BigDecimal, Timestamp, String, byte[], String> sql = getJooq()
 		// @formatter:off
 			.insertInto(T_SALES,
 					        T_SALES.TRADER,
@@ -63,8 +68,16 @@ public class SalesGateway extends JooqGateway {
 					        T_SALES.RECIPENUMBER,
 					        T_SALES.RECIPESHOT,
 					        T_SALES.RECIPENOTE)
-			.values(bean.getTrader(), bean.getFkCamp(), bean.getProvider(), bean.getIncredients(), bean.getCashBigDecimal(), buydate, bean.getRecipeNumber(), bean.getRecipeshot(), bean.getRecipeNote())
-			: getJooq()
+			.values(bean.getTrader(), bean.getFkCamp(), bean.getProvider(), bean.getIncredients(), bean.getCashBigDecimal(), buydate, bean.getRecipeNumber(), bean.getRecipeshot(), bean.getRecipeNote());
+		// @formatter:on
+		LOGGER.debug("{}", sql.toString());
+		return sql.execute();
+	}
+
+	private Integer update(SalesBean bean) throws DataAccessException {
+		Timestamp buydate = bean.getBuydate() == null ? null : new Timestamp(bean.getBuydate().getTime());
+		UpdateSetMoreStep<TSalesRecord> sql = getJooq()
+		// @formatter:off
 			.update(T_SALES)
 			.set(T_SALES.TRADER, bean.getTrader())
 			.set(T_SALES.FK_CAMP, bean.getFkCamp())
@@ -73,12 +86,14 @@ public class SalesGateway extends JooqGateway {
 			.set(T_SALES.CASH, bean.getCashBigDecimal())
 			.set(T_SALES.BUYDATE, buydate)
 			.set(T_SALES.RECIPENUMBER, bean.getRecipeNumber())
-			.set(T_SALES.RECIPESHOT, bean.getRecipeshot())
-			.set(T_SALES.RECIPENOTE, bean.getRecipeNote())		
-			.where(T_SALES.PK.eq(bean.getPk()));
-	  // @formatter:on
-		LOGGER.debug("{}", sql.toString());
-		return sql.execute();
+			.set(T_SALES.RECIPENOTE, bean.getRecipeNote());	
+		  if (bean.getRecipeshot() != null) {
+		  	sql = sql.set(T_SALES.RECIPESHOT, bean.getRecipeshot());
+			}
+			UpdateConditionStep<TSalesRecord> stmt = sql.where(T_SALES.PK.eq(bean.getPk()));
+		// @formatter:on
+		LOGGER.debug("{}", stmt.toString());
+		return stmt.execute();
 	}
 
 	/**

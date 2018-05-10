@@ -24,6 +24,10 @@ public class SalesModel {
 	private List<BudgetBean> budget;
 
 	private Integer activeIndex;
+	
+	public void clearBean() {
+		this.bean = new SalesBean();
+	}
 
 	public List<SalesBean> getList() {
 		return list;

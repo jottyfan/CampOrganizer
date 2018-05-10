@@ -7,7 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'war'
 
 group = 'de.jottyfan'
-version = '1.0.8'
+version = '1.0.9'
 
 description = """CampOrganizer"""
 
@@ -22,7 +22,7 @@ dependencies {
     compile group: 'org.apache.myfaces.core', name: 'myfaces-api', version:'2.2.12'
     compile group: 'org.apache.myfaces.core', name: 'myfaces-impl', version:'2.2.12'
     compile group: 'net.bootsfaces', name: 'bootsfaces', version:'1.2.0'
-    compile group: 'org.jooq', name: 'jooq', version:'3.10.2'
+    compile group: 'org.jooq', name: 'jooq', version:'3.10.7'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version:'2.8.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version:'2.8.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-web', version:'2.8.2'

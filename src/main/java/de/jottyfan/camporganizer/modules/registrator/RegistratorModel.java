@@ -43,7 +43,7 @@ public class RegistratorModel {
 	public boolean loadRegistratorPageContent(FacesContext facesContext) {
 		try {
 			list = new RegistratorGateway(facesContext).loadUsers();
-			camps = new CampGateway(facesContext).getAllCampsFromView(false);
+			camps = new CampGateway(facesContext).getAllCampsFromView(false, null);
 			return true;
 		} catch (DataAccessException e) {
 			list = new ArrayList<>();

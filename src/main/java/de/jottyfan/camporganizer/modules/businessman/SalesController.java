@@ -44,7 +44,7 @@ public class SalesController extends Controller {
 		try {
 			SalesGateway gw = new SalesGateway(facesContext);
 			model.setBean(model.getBean() == null ? new SalesBean() : model.getBean());
-			model.getBean().setCamps(new CampGateway(facesContext).getAllCampsFromView(false));
+			model.getBean().setCamps(new CampGateway(facesContext).getAllCampsFromView(false, profileBean.getPk()));
 			model.getBean().setTraders(gw.getAllTraders());
 			model.getBean().setProviders(gw.getAllProviders());
 			model.setList(gw.getAllSales(profileBean.getPk()));
@@ -89,6 +89,7 @@ public class SalesController extends Controller {
 			model.getBean().uploadFile();
 			gw.upsert(model.getBean());
 			model.setList(gw.getAllSales(profileBean.getPk()));
+			model.clearBean();
 			return toSales(1);
 		} catch (DataAccessException | IOException e) {
 			facesContext.addMessage(null,
