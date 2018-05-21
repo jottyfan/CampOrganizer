@@ -42,7 +42,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TPerson extends TableImpl<TPersonRecord> {
 
-    private static final long serialVersionUID = 755248373;
+    private static final long serialVersionUID = -1305639549;
 
     /**
      * The reference instance of <code>camp.t_person</code>
@@ -131,6 +131,11 @@ public class TPerson extends TableImpl<TPersonRecord> {
      * The column <code>camp.t_person.sex</code>.
      */
     public final TableField<TPersonRecord, EnumSex> SEX = createField("sex", org.jooq.util.postgres.PostgresDataType.VARCHAR.asEnumDataType(de.jottyfan.camporganizer.db.jooq.enums.EnumSex.class), this, "");
+
+    /**
+     * The column <code>camp.t_person.fk_registrator</code>.
+     */
+    public final TableField<TPersonRecord, Integer> FK_REGISTRATOR = createField("fk_registrator", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>camp.t_person</code> table reference

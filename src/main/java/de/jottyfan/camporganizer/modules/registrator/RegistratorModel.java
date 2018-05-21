@@ -22,6 +22,7 @@ import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.RegistratorGateway;
 import de.jottyfan.camporganizer.modules.book.PersonBean;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
@@ -59,9 +60,9 @@ public class RegistratorModel {
 	 * @param facesContext
 	 * @param pk
 	 */
-	public void acceptRegistration(FacesContext facesContext, RegistratorBean bean) {
+	public void acceptRegistration(FacesContext facesContext, RegistratorBean bean, ProfileBean profile) {
 		try {
-			new RegistratorGateway(facesContext).acceptUser(bean);
+			new RegistratorGateway(facesContext).acceptUser(bean, profile);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on accepting user", e.getMessage()));
@@ -74,9 +75,9 @@ public class RegistratorModel {
 	 * @param facesContext
 	 * @param bean2
 	 */
-	public void rejectRegistration(FacesContext facesContext, RegistratorBean bean) {
+	public void rejectRegistration(FacesContext facesContext, RegistratorBean bean, ProfileBean profile) {
 		try {
-			new RegistratorGateway(facesContext).rejectUser(bean);
+			new RegistratorGateway(facesContext).rejectUser(bean, profile);
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "error on rejecting user", e.getMessage()));
@@ -114,9 +115,9 @@ public class RegistratorModel {
 	 * @param facesContext
 	 *          to be used
 	 */
-	public void update(FacesContext facesContext) {
+	public void update(FacesContext facesContext, ProfileBean profile) {
 		try {
-			Integer affectedRows = new RegistratorGateway(facesContext).update(bean);
+			Integer affectedRows = new RegistratorGateway(facesContext).update(bean, profile);
 			if (affectedRows != 1) {
 				facesContext.addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_WARN, "mysterious behavior",

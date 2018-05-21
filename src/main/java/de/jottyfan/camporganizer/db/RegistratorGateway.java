@@ -34,12 +34,14 @@ import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
+import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
 import de.jottyfan.camporganizer.modules.book.PersonBean;
 import de.jottyfan.camporganizer.modules.registrator.RegistratorBean;
 import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
@@ -54,6 +56,9 @@ public class RegistratorGateway extends JooqGateway {
 	}
 
 	public List<RegistratorBean> loadUsers() throws DataAccessException {
+		TProfile subscriber = T_PROFILE.as("s");
+		TProfile registrator = T_PROFILE.as("r");
+		
 		SelectOnConditionStep<Record> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
@@ -76,12 +81,15 @@ public class RegistratorGateway extends JooqGateway {
 					    V_CAMP.DEPART,
 					    V_CAMP.YEAR,
 					    V_CAMP.LOCATION_NAME,
-					    T_PROFILE.FORENAME,
-					    T_PROFILE.SURNAME,
-					    T_PROFILE.UUID)
+					    subscriber.FORENAME,
+					    subscriber.SURNAME,
+					    subscriber.UUID,
+					    registrator.FORENAME,
+					    registrator.SURNAME)
 			.from(T_PERSON)
 			.leftJoin(V_CAMP).on(V_CAMP.PK.eq(T_PERSON.FK_CAMP))
-			.leftJoin(T_PROFILE).on(T_PROFILE.PK.eq(T_PERSON.FK_PROFILE));
+			.leftJoin(subscriber).on(subscriber.PK.eq(T_PERSON.FK_PROFILE))
+			.leftJoin(registrator).on(registrator.PK.eq(T_PERSON.FK_REGISTRATOR));
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		List<RegistratorBean> list = new ArrayList<>();
@@ -109,9 +117,11 @@ public class RegistratorGateway extends JooqGateway {
 			bean.setArrive(r.get(V_CAMP.ARRIVE));
 			bean.setDepart(r.get(V_CAMP.DEPART));
 			bean.setAccept(r.get(T_PERSON.ACCEPT));
-			bean.setProfileForename(r.get(T_PROFILE.FORENAME));
-			bean.setProfileSurname(r.get(T_PROFILE.SURNAME));
-			bean.setProfileUUID(r.get(T_PROFILE.UUID));
+			bean.setProfileForename(r.get(subscriber.FORENAME));
+			bean.setProfileSurname(r.get(subscriber.SURNAME));
+			bean.setProfileUUID(r.get(subscriber.UUID));
+			bean.setRegistratorForename(r.get(registrator.FORENAME));
+			bean.setRegistratorSurname(r.get(registrator.SURNAME));
 			bean.getDocuments().addAll(getAllPersondocumentsOf(bean.getPk()));
 			list.add(bean);
 		}
@@ -154,16 +164,19 @@ public class RegistratorGateway extends JooqGateway {
 	 * 
 	 * @param bean
 	 *          containing registration information
+	 * @param profile
+	 *          the profile bean of the current user
 	 * @return number of affected rows
 	 * @throws DataAccessException
 	 */
-	public Integer acceptUser(RegistratorBean bean) throws DataAccessException {
+	public Integer acceptUser(RegistratorBean bean, ProfileBean profile) throws DataAccessException {
 		LambdaResultWrapper lrw = new LambdaResultWrapper();
 		getJooq().transaction(t -> {
 			UpdateConditionStep<TPersonRecord> sql = getJooq()
 			// @formatter:off
 				.update(T_PERSON)
 				.set(T_PERSON.ACCEPT, true)
+				.set(T_PERSON.FK_REGISTRATOR, profile.getPk())
 				.where(T_PERSON.PK.eq(bean.getPk()));
 			// @formatter:on
 			LOGGER.debug("{}", sql.toString());
@@ -175,8 +188,8 @@ public class RegistratorGateway extends JooqGateway {
 			buf.append(bean.getSurname());
 			buf.append(" zur Freizeit ");
 			buf.append(bean.getCampname());
-			buf.append(
-					" wurde bestätigt. Melde Dich jetzt unter https://onkelwernerfreizeiten.de/camporganizer an, um die Bestätigungen herunterzuladen.");
+			buf.append(" wurde bestätigt. Melde Dich jetzt unter https://onkelwernerfreizeiten.de/camporganizer an,");
+			buf.append(" um die Bestätigungen herunterzuladen.");
 
 			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
 			// @formatter:off
@@ -196,14 +209,17 @@ public class RegistratorGateway extends JooqGateway {
 	 * 
 	 * @param bean
 	 *          to be used
+	 * @param profile
+	 *          the profile bean of the current user
 	 * @throws DataAccessException
 	 */
-	public void rejectUser(RegistratorBean bean) throws DataAccessException {
+	public void rejectUser(RegistratorBean bean, ProfileBean profile) throws DataAccessException {
 		getJooq().transaction(t -> {
 			UpdateConditionStep<TPersonRecord> sql = getJooq()
 			// @formatter:off
 				.update(T_PERSON)
 				.set(T_PERSON.ACCEPT, false)
+				.set(T_PERSON.FK_REGISTRATOR, profile.getPk())
 				.where(T_PERSON.PK.eq(bean.getPk()));
 			// @formatter:on
 			LOGGER.debug("{}", sql.toString());
@@ -215,7 +231,8 @@ public class RegistratorGateway extends JooqGateway {
 			buf.append(bean.getSurname());
 			buf.append(" zur Freizeit ");
 			buf.append(bean.getCampname());
-			buf.append(" wurde leider abgelehnt. Möglicherweise ist sie schon ausgebucht? Sollte dann ein Platz frei werden, wird die Anmeldung akzeptiert.");
+			buf.append(" wurde leider abgelehnt.");
+			buf.append(" Möglicherweise ist sie schon ausgebucht? Deine Anmeldung befindet sich jetzt auf der Warteliste.");
 
 			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
 			// @formatter:off
@@ -264,10 +281,12 @@ public class RegistratorGateway extends JooqGateway {
 	 * update registration
 	 * 
 	 * @param bean to be used for update
+	 * @param profile
+	 *          the profile bean of the current user
 	 * @return number of affected rows
 	 * @throws DataAccessException
 	 */
-	public Integer update(RegistratorBean bean) throws DataAccessException {
+	public Integer update(RegistratorBean bean, ProfileBean profile) throws DataAccessException {
 		Date birthDate = bean.getBirthdate() == null ? null : new Date(bean.getBirthdate().getTime());
 		LambdaResultWrapper lrw = new LambdaResultWrapper();
 		getJooq().transaction(t->{
@@ -288,12 +307,16 @@ public class RegistratorGateway extends JooqGateway {
 			LOGGER.debug("{}", sql.toString());
 			lrw.setNumber(sql.execute());
 
+			StringBuilder buf = new StringBuilder("Eine Anmeldung für ").append(bean.getCampname());
+			buf.append(" wurde von ").append(profile.getFullname());
+			buf.append(" korrigiert.");
+
 			InsertValuesStep2<TRssRecord, String, String> sql2 = getJooq()
 			// @formatter:off
 		    .insertInto(T_RSS,
 				            T_RSS.MSG,
 				            T_RSS.RECIPIENT)
-		    .values(new StringBuilder("Eine Anmeldung für ").append(bean.getCampname()).append(" wurde korrigiert.").toString(), "registrator");
+		    .values(buf.toString(), "registrator");
 		  // @formatter:on
 			LOGGER.debug("{}", sql2.toString());
 			sql2.execute();

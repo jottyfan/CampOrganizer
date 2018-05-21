@@ -6,7 +6,6 @@ package de.jottyfan.camporganizer.db.jooq.tables;
 
 import de.jottyfan.camporganizer.db.jooq.Camp;
 import de.jottyfan.camporganizer.db.jooq.Indexes;
-import de.jottyfan.camporganizer.db.jooq.Keys;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
 
 import java.math.BigDecimal;
@@ -17,7 +16,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Schema;
@@ -40,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TSales extends TableImpl<TSalesRecord> {
 
-    private static final long serialVersionUID = 1362449622;
+    private static final long serialVersionUID = 940598385;
 
     /**
      * The reference instance of <code>camp.t_sales</code>
@@ -58,7 +56,7 @@ public class TSales extends TableImpl<TSalesRecord> {
     /**
      * The column <code>camp.t_sales.pk</code>.
      */
-    public final TableField<TSalesRecord, Integer> PK = createField("pk", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('camp.t_sales_pk_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<TSalesRecord, Integer> PK = createField("pk", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>camp.t_sales.trader</code>.
@@ -148,14 +146,6 @@ public class TSales extends TableImpl<TSalesRecord> {
     @Override
     public List<Index> getIndexes() {
         return Arrays.<Index>asList(Indexes.T_SALES_PKEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Identity<TSalesRecord, Integer> getIdentity() {
-        return Keys.IDENTITY_T_SALES;
     }
 
     /**

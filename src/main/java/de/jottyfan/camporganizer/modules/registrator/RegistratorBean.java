@@ -40,6 +40,8 @@ public class RegistratorBean {
 	private String profileForename;
 	private String profileSurname;
 	private String profileUUID;
+	private String registratorForename;
+	private String registratorSurname;
 	private List<PersondocumentBean> documents;
 
 	public RegistratorBean(Integer pk) {
@@ -50,11 +52,25 @@ public class RegistratorBean {
 
 	public String getNote() {
 		StringBuilder buf = new StringBuilder();
-		if (profileForename == null && profileSurname == null) {
-			buf.append("! bitte per Post bestätigen\n");
-		}	else {
-			buf.append("* angemeldet von ");
-			buf.append(profileForename).append(" ").append(profileSurname).append("\n");
+		if (accept == null) {
+			if (profileForename == null && profileSurname == null) {
+				buf.append("! bitte per Post bestätigen\n");
+			} else {
+				buf.append("* angemeldet von ");
+				buf.append(profileForename).append(" ").append(profileSurname).append("\n");
+			}
+		} else if (accept) {
+			buf.append("* bestätigt von ");
+			buf.append(registratorForename == null ? "unbekannt" : registratorForename);
+			buf.append(" ");
+			buf.append(registratorSurname == null ? "" : registratorSurname);
+			buf.append("\n");
+		} else {
+			buf.append("* abgelehnt von ");
+			buf.append(registratorForename == null ? "unbekannt" : registratorForename);
+			buf.append(" ");
+			buf.append(registratorSurname == null ? "" : registratorSurname);
+			buf.append("\n");
 		}
 		if (birthdate != null) {
 			if (arrive != null && depart != null) {
@@ -200,7 +216,7 @@ public class RegistratorBean {
 	public String getCamproleGerman() {
 		return new EnumConverter().getCamproleGerman(camprole);
 	}
-	
+
 	public String getSexGerman() {
 		return new EnumConverter().getSexGerman(sex);
 	}
@@ -263,5 +279,21 @@ public class RegistratorBean {
 
 	public void setSex(EnumSex sex) {
 		this.sex = sex;
+	}
+
+	public String getRegistratorForename() {
+		return registratorForename;
+	}
+
+	public void setRegistratorForename(String registratorForename) {
+		this.registratorForename = registratorForename;
+	}
+
+	public String getRegistratorSurname() {
+		return registratorSurname;
+	}
+
+	public void setRegistratorSurname(String registratorSurname) {
+		this.registratorSurname = registratorSurname;
 	}
 }

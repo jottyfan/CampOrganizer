@@ -11,7 +11,6 @@ import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
 import de.jottyfan.camporganizer.db.jooq.tables.TPersondocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TRss;
-import de.jottyfan.camporganizer.db.jooq.tables.TSales;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TDocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
@@ -19,7 +18,6 @@ import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersondocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TProfileRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TRssRecord;
-import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
 
 import javax.annotation.Generated;
 
@@ -52,7 +50,6 @@ public class Keys {
     public static final Identity<TPersondocumentRecord, Integer> IDENTITY_T_PERSONDOCUMENT = Identities0.IDENTITY_T_PERSONDOCUMENT;
     public static final Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = Identities0.IDENTITY_T_PROFILE;
     public static final Identity<TRssRecord, Integer> IDENTITY_T_RSS = Identities0.IDENTITY_T_RSS;
-    public static final Identity<TSalesRecord, Integer> IDENTITY_T_SALES = Identities0.IDENTITY_T_SALES;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -76,6 +73,5 @@ public class Keys {
         public static Identity<TPersondocumentRecord, Integer> IDENTITY_T_PERSONDOCUMENT = createIdentity(TPersondocument.T_PERSONDOCUMENT, TPersondocument.T_PERSONDOCUMENT.PK);
         public static Identity<TProfileRecord, Integer> IDENTITY_T_PROFILE = createIdentity(TProfile.T_PROFILE, TProfile.T_PROFILE.PK);
         public static Identity<TRssRecord, Integer> IDENTITY_T_RSS = createIdentity(TRss.T_RSS, TRss.T_RSS.PK);
-        public static Identity<TSalesRecord, Integer> IDENTITY_T_SALES = createIdentity(TSales.T_SALES, TSales.T_SALES.PK);
     }
 }

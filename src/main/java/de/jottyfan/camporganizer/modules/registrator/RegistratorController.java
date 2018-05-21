@@ -7,6 +7,7 @@ import javax.faces.context.FacesContext;
 
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.modules.subscriber.PersondocumentBean;
+import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
  * 
@@ -23,6 +24,9 @@ public class RegistratorController extends Controller {
 	@ManagedProperty(value="#{registratorModel}")
 	private RegistratorModel model;
 	
+	@ManagedProperty(value="#{profileBean}")
+	private ProfileBean profileBean;
+	
 	public String toMain() {
 		model.loadRegistratorPageContent(facesContext);
 		return "/pages/registrator/main.jsf";
@@ -34,12 +38,12 @@ public class RegistratorController extends Controller {
 	}
 	
 	public String doUpdate() {
-		model.update(facesContext);
+		model.update(facesContext, profileBean);
 		return toMain();
 	}
 	
 	public String doAccept(RegistratorBean bean) {
-		model.acceptRegistration(facesContext, bean);
+		model.acceptRegistration(facesContext, bean, profileBean);
 		return toMain();
 	}
 	
@@ -49,7 +53,7 @@ public class RegistratorController extends Controller {
 	}
 	
 	public String doReject(RegistratorBean bean) {
-		model.rejectRegistration(facesContext, bean);
+		model.rejectRegistration(facesContext, bean, profileBean);
 		return toMain();
 	}
 	
@@ -73,5 +77,9 @@ public class RegistratorController extends Controller {
 
 	public void setModel(RegistratorModel model) {
 		this.model = model;
+	}
+
+	public void setProfileBean(ProfileBean profileBean) {
+		this.profileBean = profileBean;
 	}
 }
