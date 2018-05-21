@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition>
+	<b:tabView activeIndex="#{campadminModel.activeIndexLocation}">
+		<b:tab title="Tabelle">
+			<b:form>
+				<b:dataTable value="#{campadminModel.locations}" var="l" lang="de">
+					<b:dataTableColumn label="ID">
+						<b:commandButton action="#{campadminController.toEditLocation(l.pk)}" value="#{l.pk}" look="link" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Name">
+						<b:commandButton action="#{campadminController.toEditLocation(l.pk)}" value="#{l.name}" look="link" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Webseite">
+						<b:commandButton action="#{campadminController.toEditLocation(l.pk)}" value="#{l.showUrl(32)}" look="link" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Wegbeschreibung">
+						<b:commandButton action="#{campadminController.doDownloadDocument(l)}" value="" iconAwesome="download"
+							rendered="#{l.fkDocument != null}" />
+					</b:dataTableColumn>
+				</b:dataTable>
+			</b:form>
+		</b:tab>
+		<b:tab title="Element">
+			<b:form>
+				<b:panelGrid colSpans="3,9" size="xs">
+					<h:outputText value="ID = #{campadminModel.location.pk}" />
+					<b:commandButton action="#{campadminController.doResetLocation}" value="Felder leeren" />
+					<h:outputText value="Name" />
+					<b:inputText value="#{campadminModel.location.name}" />
+					<h:outputText value="Webseite" />
+					<b:inputText value="#{campadminModel.location.url}" mask="https{0,1}://*{1,999}" />
+					<h:outputText value="Wegbeschreibung" />
+					<b:selectOneMenu value="#{campadminModel.location.fkDocument}">
+						<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+						<f:selectItems value="#{campadminModel.documents}" var="d" itemValue="#{d.pk}" itemLabel="#{d.name}" />
+					</b:selectOneMenu>
+					<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
+						<b:commandButton action="#{campadminController.doDeleteLocation}" value="ja, unwiederbringlich löschen" look="danger" />
+					</b:dropButton>
+					<b:commandButton action="#{campadminController.doUpsertLocation}" value="Übernehmen" look="primary" />
+				</b:panelGrid>
+			</b:form>
+		</b:tab>
+	</b:tabView>
+</ui:composition>
+</html>

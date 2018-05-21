@@ -16,6 +16,7 @@ import org.jooq.exception.DataAccessException;
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.CampGateway;
+import de.jottyfan.camporganizer.db.CampprofileGateway;
 import de.jottyfan.camporganizer.db.DocumentGateway;
 import de.jottyfan.camporganizer.db.LocationGateway;
 import de.jottyfan.camporganizer.db.ProfileGateway;
@@ -63,10 +64,12 @@ public class CampadminController extends Controller {
 			}
 			model.setCamps(new CampGateway(facesContext).getAllCampsFromTable());
 			model.setLocationNameToCamp();
-			
+
 			model.setProfiles(new ProfileGateway(facesContext).getAllUsersWithRole(EnumRole.registrator));
 			model.orderProfiles();
 
+			model.setCampprofiles(new CampprofileGateway(facesContext).getAll());
+			model.setCampprofile(new CampprofileBean()); // editing makes no sense
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.toAdministrate: ", e);
@@ -114,7 +117,7 @@ public class CampadminController extends Controller {
 		}
 		return toEditCamp(model.getCamp().getPk());
 	}
-	
+
 	public String doDeleteDocument() {
 		model.setActiveIndex(2);
 		try {
@@ -150,6 +153,37 @@ public class CampadminController extends Controller {
 		} catch (DataAccessException e) {
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
 			LOGGER.error("AdminController.doDeleteCamp: ", e);
+		}
+		return toCampadmin();
+	}
+
+	public String doDeleteCampprofile(Integer pk) {
+		model.setActiveIndex(3);
+		try {
+			Integer affected = new CampprofileGateway(facesContext).deleteCampprofile(pk);
+			if (affected != 1) {
+				facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "database warning",
+						"deleted " + affected + " database entries"));
+			}
+			model.setCampprofile(new CampprofileBean());
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doDeleteCampprofile: ", e);
+		}
+		return toCampadmin();
+	}
+
+	public String doAddCampprofile() {
+		model.setActiveIndex(3);
+		try {
+			Integer affected = new CampprofileGateway(facesContext).add(model.getCampprofile());
+			if (affected != 1) {
+				facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "database warning",
+						"added " + affected + " database entries"));
+			}
+		} catch (DataAccessException e) {
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "database error", e.getMessage()));
+			LOGGER.error("AdminController.doAddCampprofile: ", e);
 		}
 		return toCampadmin();
 	}

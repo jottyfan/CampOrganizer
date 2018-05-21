@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition>
+	<b:tabView activeIndex="#{campadminModel.activeIndexCamp}">
+		<b:tab title="Tabelle">
+			<b:form>
+				<b:dataTable value="#{campadminModel.camps}" var="c" lang="de" csv="true" pdf="true">
+					<b:dataTableColumn label="Name">
+						<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.name}" look="link" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Zeit" dataType="date" dataOrder="#{c.arrive}">
+						<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.campTime}" look="link" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="in">
+						<b:commandButton action="#{campadminController.toEditCamp(c.pk)}" value="#{c.locationName}" look="link" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Bestätigung">
+						<b:commandButton action="#{campadminController.doDownloadDocument(c)}" value="" iconAwesome="download"
+							rendered="#{c.fkDocument != null}" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Anmeldungen">
+						<h:outputText value="#{c.bookings}" />
+					</b:dataTableColumn>
+				</b:dataTable>
+			</b:form>
+		</b:tab>
+		<b:tab title="Element">
+			<b:form>
+				<b:panelGrid colSpans="3,9" size="xs">
+					<h:outputText value="ID = #{campadminModel.camp.pk}" />
+					<b:commandButton action="#{campadminController.doResetCamp}" value="Felder leeren" />
+					<h:outputText value="Name" />
+					<b:inputText value="#{campadminModel.camp.name}" />
+					<h:outputText value="von" />
+					<b:datepicker value="#{campadminModel.camp.arrive}" />
+					<h:outputText value="bis" />
+					<b:datepicker value="#{campadminModel.camp.depart}" />
+					<h:outputText value="Freizeitheim" />
+					<b:selectOneMenu value="#{campadminModel.camp.fkLocation}">
+						<f:selectItem itemValue="" itemLabel="--- bitte auswählen ---" />
+						<f:selectItems value="#{campadminModel.locations}" var="l" itemValue="#{l.pk}" itemLabel="#{l.name}" />
+					</b:selectOneMenu>
+					<h:outputText value="Mindestalter" />
+					<b:inputText value="#{campadminModel.camp.minAge}">
+						<f:convertNumber integerOnly="true" />
+					</b:inputText>
+					<h:outputText value="Maximalalter" />
+					<b:inputText value="#{campadminModel.camp.maxAge}">
+						<f:convertNumber integerOnly="true" />
+					</b:inputText>
+					<h:outputText value="Preis" />
+					<b:inputTextarea value="#{campadminModel.camp.price}" />
+					<h:outputText value="Ferien in" />
+					<b:inputText value="#{campadminModel.camp.countries}" tags="true" typeahead="true"
+						typeaheadValues="#{campadminModel.possibleCountries}" />
+					<h:outputText value="Bestätigung" />
+					<b:selectOneMenu value="#{campadminModel.camp.fkDocument}">
+						<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+						<f:selectItems value="#{campadminModel.documents}" var="d" itemValue="#{d.pk}" itemLabel="#{d.name}" />
+					</b:selectOneMenu>
+					<h:outputText value="Verantwortlicher" />
+					<b:selectOneMenu value="#{campadminModel.camp.fkProfile}" required="true"
+						requiredMessage="Bitte das Feld Verantwortlicher ausfüllen.">
+						<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+						<f:selectItems value="#{campadminModel.profiles}" var="p" itemValue="#{p.pk}" itemLabel="#{p.fullname}" />
+					</b:selectOneMenu>
+					<h:outputText value="Kassenschluss" rendered="#{!campadminModel.camp.lockSales}" />
+					<b:dropButton value="Rechnungen abschließen" iconAwesome="lock" look="warning" rendered="#{!campadminModel.camp.lockSales}">
+						<b:commandButton action="#{campadminController.doLockSales}" value="ja, endgültig Rechnungen festschreiben" look="warning" />
+					</b:dropButton>
+					<b:dropButton value="löschen" iconAwesome="trash-o" look="danger">
+						<b:commandButton action="#{campadminController.doDeleteCamp}" value="ja, unwiederbringlich löschen" look="danger" />
+					</b:dropButton>
+					<b:commandButton action="#{campadminController.doUpsertCamp}" value="Übernehmen" look="primary" />
+				</b:panelGrid>
+			</b:form>
+		</b:tab>
+	</b:tabView>
+</ui:composition>
+</html>

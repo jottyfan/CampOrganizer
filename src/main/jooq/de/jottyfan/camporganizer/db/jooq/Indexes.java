@@ -5,6 +5,7 @@ package de.jottyfan.camporganizer.db.jooq;
 
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.TCampprofile;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
@@ -42,6 +43,8 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     public static final Index T_CAMP_PKEY = Indexes0.T_CAMP_PKEY;
+    public static final Index T_CAMPPROFILE_PKEY = Indexes0.T_CAMPPROFILE_PKEY;
+    public static final Index UK_CAMPPROFILE = Indexes0.UK_CAMPPROFILE;
     public static final Index T_DOCUMENT_NAME_KEY = Indexes0.T_DOCUMENT_NAME_KEY;
     public static final Index T_DOCUMENT_PKEY = Indexes0.T_DOCUMENT_PKEY;
     public static final Index T_LOCATION_PKEY = Indexes0.T_LOCATION_PKEY;
@@ -66,6 +69,8 @@ public class Indexes {
 
     private static class Indexes0 extends AbstractKeys {
         public static Index T_CAMP_PKEY = createIndex("t_camp_pkey", TCamp.T_CAMP, new OrderField[] { TCamp.T_CAMP.PK }, true);
+        public static Index T_CAMPPROFILE_PKEY = createIndex("t_campprofile_pkey", TCampprofile.T_CAMPPROFILE, new OrderField[] { TCampprofile.T_CAMPPROFILE.PK }, true);
+        public static Index UK_CAMPPROFILE = createIndex("uk_campprofile", TCampprofile.T_CAMPPROFILE, new OrderField[] { TCampprofile.T_CAMPPROFILE.FK_PROFILE, TCampprofile.T_CAMPPROFILE.FK_CAMP, TCampprofile.T_CAMPPROFILE.MODULE }, true);
         public static Index T_DOCUMENT_NAME_KEY = createIndex("t_document_name_key", TDocument.T_DOCUMENT, new OrderField[] { TDocument.T_DOCUMENT.NAME }, true);
         public static Index T_DOCUMENT_PKEY = createIndex("t_document_pkey", TDocument.T_DOCUMENT, new OrderField[] { TDocument.T_DOCUMENT.PK }, true);
         public static Index T_LOCATION_PKEY = createIndex("t_location_pkey", TLocation.T_LOCATION, new OrderField[] { TLocation.T_LOCATION.PK }, true);

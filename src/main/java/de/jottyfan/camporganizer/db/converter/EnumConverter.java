@@ -3,6 +3,7 @@ package de.jottyfan.camporganizer.db.converter;
 import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumModule;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumRole;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
 
@@ -12,6 +13,26 @@ import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
  *
  */
 public class EnumConverter {
+
+	/**
+	 * get enum of module
+	 * 
+	 * @param literal
+	 *          String containing the enum literal to look for
+	 * @return found enum
+	 * @throws DataAccessException
+	 *           if no such literal was found
+	 */
+	public EnumModule getEnumModule(String literal) throws DataAccessException {
+		for (EnumModule enumModule : EnumModule.values()) {
+			if (enumModule.getLiteral().equals(literal)) {
+				return enumModule;
+			}
+		}
+		throw new DataAccessException(
+				"enum " + literal + " not found. Maybe the jooq generated classes are not up to date?");
+	}
+
 	/**
 	 * get enum of role
 	 * 
@@ -95,7 +116,7 @@ public class EnumConverter {
 	 * @return german translation of camprole
 	 */
 	public String getCamproleGerman(EnumCamprole camprole) {
-    if (EnumCamprole.student.equals(camprole)) {
+		if (EnumCamprole.student.equals(camprole)) {
 			return "Teilnehmer";
 		} else if (EnumCamprole.teacher.equals(camprole)) {
 			return "Mitarbeiter";

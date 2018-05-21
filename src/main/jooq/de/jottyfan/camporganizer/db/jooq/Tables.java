@@ -5,6 +5,7 @@ package de.jottyfan.camporganizer.db.jooq;
 
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.TCampprofile;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
@@ -44,6 +45,11 @@ public class Tables {
      * The table <code>camp.t_camp</code>.
      */
     public static final TCamp T_CAMP = de.jottyfan.camporganizer.db.jooq.tables.TCamp.T_CAMP;
+
+    /**
+     * The table <code>camp.t_campprofile</code>.
+     */
+    public static final TCampprofile T_CAMPPROFILE = de.jottyfan.camporganizer.db.jooq.tables.TCampprofile.T_CAMPPROFILE;
 
     /**
      * The table <code>camp.t_document</code>.

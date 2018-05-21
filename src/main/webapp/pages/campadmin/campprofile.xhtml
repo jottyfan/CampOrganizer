@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition>
+	<b:form>
+		<b:dataTable value="#{campadminModel.campprofiles}" var="c" lang="de">
+			<b:dataTableColumn label="Name" value="#{c.fullname}" dataOrder="#{c.surname}#{c.forename}">
+				<f:facet name="footer">
+					<b:selectOneMenu value="#{campadminModel.campprofile.fkProfile}" styleClass="filterdropdown" required="true"
+						requiredMessage="Bitte das Feld Name ausfüllen!">
+						<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+						<f:selectItems value="#{campadminModel.profiles}" var="p" itemValue="#{p.pk}" itemLabel="#{p.fullname}" />
+					</b:selectOneMenu>
+				</f:facet>
+			</b:dataTableColumn>
+			<b:dataTableColumn label="Freizeit" value="#{c.campname}" dataOrder="#{c.startdate}" dataType="date">
+				<f:facet name="footer">
+					<b:selectOneMenu value="#{campadminModel.campprofile.fkCamp}" styleClass="filterdropdown" required="true"
+						requiredMessage="Bitte das Feld Freizeit ausfüllen!">
+						<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+						<f:selectItems value="#{campadminModel.camps}" var="c" itemValue="#{c.pk}"
+							itemLabel="#{c.name} #{c.campTime} in #{c.locationName}" />
+					</b:selectOneMenu>
+				</f:facet>
+			</b:dataTableColumn>
+			<b:dataTableColumn label="Aufgabe" value="#{c.module}">
+				<f:facet name="footer">
+					<b:selectOneMenu value="#{campadminModel.campprofile.module}" required="true"
+						requiredMessage="Bitte das Feld Aufgabe ausfüllen!">
+						<f:selectItem itemValue="" itemLabel="--- bitte wählen ---" />
+						<f:selectItems value="#{campadminModel.modules}" var="m" itemValue="#{m.key}" itemLabel="#{m.value}" />
+					</b:selectOneMenu>
+				</f:facet>
+			</b:dataTableColumn>
+			<b:dataTableColumn label="" value="">
+				<b:commandButton action="#{campadminController.doDeleteCampprofile(c.pk)}" value="" look="danger" iconAwesome="trash" immediate="true" />
+				<f:facet name="footer">
+					<b:commandButton action="#{campadminController.doAddCampprofile}" value="" look="success" iconAwesome="plus" />
+				</f:facet>
+			</b:dataTableColumn>
+		</b:dataTable>
+	</b:form>
+</ui:composition>
+</html>

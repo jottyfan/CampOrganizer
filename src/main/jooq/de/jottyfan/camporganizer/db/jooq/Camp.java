@@ -5,6 +5,7 @@ package de.jottyfan.camporganizer.db.jooq;
 
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.TCampprofile;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
@@ -48,7 +49,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Camp extends SchemaImpl {
 
-    private static final long serialVersionUID = -208876540;
+    private static final long serialVersionUID = 1331773250;
 
     /**
      * The reference instance of <code>camp</code>
@@ -59,6 +60,11 @@ public class Camp extends SchemaImpl {
      * The table <code>camp.t_camp</code>.
      */
     public final TCamp T_CAMP = de.jottyfan.camporganizer.db.jooq.tables.TCamp.T_CAMP;
+
+    /**
+     * The table <code>camp.t_campprofile</code>.
+     */
+    public final TCampprofile T_CAMPPROFILE = de.jottyfan.camporganizer.db.jooq.tables.TCampprofile.T_CAMPPROFILE;
 
     /**
      * The table <code>camp.t_document</code>.
@@ -176,6 +182,7 @@ public class Camp extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             TCamp.T_CAMP,
+            TCampprofile.T_CAMPPROFILE,
             TDocument.T_DOCUMENT,
             TLocation.T_LOCATION,
             TPerson.T_PERSON,

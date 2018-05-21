@@ -1,8 +1,10 @@
 package de.jottyfan.camporganizer.modules.campadmin;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -13,6 +15,7 @@ import org.jooq.exception.DataAccessException;
 
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.CampGateway;
+import de.jottyfan.camporganizer.db.converter.ModuleTranslation;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumDocument;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
 import de.jottyfan.camporganizer.profile.ProfileBean;
@@ -41,6 +44,9 @@ public class CampadminModel {
 	private Integer activeIndexCamp;
 	private CampBean camp;
 	private List<CampBean> camps;
+
+	private List<CampprofileBean> campprofiles;
+	private CampprofileBean campprofile;
 
 	private List<ProfileBean> profiles;
 
@@ -78,6 +84,10 @@ public class CampadminModel {
 				}
 			}
 		}
+	}
+
+	public Set<Entry<String, String>> getModules() {
+		return new ModuleTranslation().getAll().entrySet();
 	}
 
 	public Integer getActiveIndex() {
@@ -193,5 +203,21 @@ public class CampadminModel {
 
 	public void setProfiles(List<ProfileBean> profiles) {
 		this.profiles = profiles;
+	}
+
+	public List<CampprofileBean> getCampprofiles() {
+		return campprofiles;
+	}
+
+	public void setCampprofiles(List<CampprofileBean> campprofiles) {
+		this.campprofiles = campprofiles;
+	}
+
+	public CampprofileBean getCampprofile() {
+		return campprofile;
+	}
+
+	public void setCampprofile(CampprofileBean campprofile) {
+		this.campprofile = campprofile;
 	}
 }
