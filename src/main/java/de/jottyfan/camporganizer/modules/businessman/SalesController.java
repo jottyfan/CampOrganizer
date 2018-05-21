@@ -18,6 +18,7 @@ import org.jooq.exception.DataAccessException;
 import de.jottyfan.camporganizer.Controller;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.SalesGateway;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumModule;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
 /**
@@ -44,7 +45,7 @@ public class SalesController extends Controller {
 		try {
 			SalesGateway gw = new SalesGateway(facesContext);
 			model.setBean(model.getBean() == null ? new SalesBean() : model.getBean());
-			model.getBean().setCamps(new CampGateway(facesContext).getAllCampsFromView(false, profileBean.getPk()));
+			model.getBean().setCamps(new CampGateway(facesContext).getAllCampsFromView(false, profileBean.getPk(), EnumModule.business));
 			model.getBean().setTraders(gw.getAllTraders());
 			model.getBean().setProviders(gw.getAllProviders());
 			model.setList(gw.getAllSales(profileBean.getPk()));

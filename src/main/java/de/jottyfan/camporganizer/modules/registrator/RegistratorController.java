@@ -28,7 +28,7 @@ public class RegistratorController extends Controller {
 	private ProfileBean profileBean;
 	
 	public String toMain() {
-		model.loadRegistratorPageContent(facesContext);
+		model.loadRegistratorPageContent(facesContext, profileBean);
 		return "/pages/registrator/main.jsf";
 	}
 	

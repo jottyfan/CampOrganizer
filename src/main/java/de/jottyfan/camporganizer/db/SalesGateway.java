@@ -2,7 +2,7 @@ package de.jottyfan.camporganizer.db;
 
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMP;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALES;
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALESPROFILE;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMPPROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_BUDGET;
 
 import java.math.BigDecimal;
@@ -27,6 +27,7 @@ import org.jooq.UpdateConditionStep;
 import org.jooq.UpdateSetMoreStep;
 import org.jooq.exception.DataAccessException;
 
+import de.jottyfan.camporganizer.db.jooq.enums.EnumModule;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TSalesRecord;
 import de.jottyfan.camporganizer.modules.businessman.BudgetBean;
 import de.jottyfan.camporganizer.modules.businessman.SalesBean;
@@ -121,10 +122,11 @@ public class SalesGateway extends JooqGateway {
 					    T_SALES.RECIPESHOT,
 					    T_SALES.RECIPENOTE,
 					    T_CAMP.LOCK_SALES)
-			.from(T_SALESPROFILE)
-			.leftJoin(T_SALES).on(T_SALES.FK_CAMP.eq(T_SALESPROFILE.FK_CAMP))
+			.from(T_CAMPPROFILE)
+			.leftJoin(T_SALES).on(T_SALES.FK_CAMP.eq(T_CAMPPROFILE.FK_CAMP))
 			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(T_SALES.FK_CAMP))
-			.where(T_SALESPROFILE.FK_PROFILE.eq(fkProfile))
+			.where(T_CAMPPROFILE.FK_PROFILE.eq(fkProfile))
+			.and(T_CAMPPROFILE.MODULE.eq(EnumModule.business))
 			.and(T_SALES.PK.isNotNull());
 		// @formatter.on
 		LOGGER.debug("{}", sql.toString());

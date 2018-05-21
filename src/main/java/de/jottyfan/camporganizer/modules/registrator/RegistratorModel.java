@@ -21,6 +21,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.db.CampGateway;
 import de.jottyfan.camporganizer.db.RegistratorGateway;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumModule;
 import de.jottyfan.camporganizer.modules.book.PersonBean;
 import de.jottyfan.camporganizer.profile.ProfileBean;
 
@@ -40,11 +41,15 @@ public class RegistratorModel {
 
 	/**
 	 * prepare everything for the page registrator
+	 * 
+	 * @param facesContext
+	 * @param profileBean
+	 *          the profile for the filtered view
 	 */
-	public boolean loadRegistratorPageContent(FacesContext facesContext) {
+	public boolean loadRegistratorPageContent(FacesContext facesContext, ProfileBean profileBean) {
 		try {
-			list = new RegistratorGateway(facesContext).loadUsers();
-			camps = new CampGateway(facesContext).getAllCampsFromView(false, null);
+			list = new RegistratorGateway(facesContext).loadUsers(profileBean.getPk());
+			camps = new CampGateway(facesContext).getAllCampsFromView(false, profileBean.getPk(), EnumModule.registration);
 			return true;
 		} catch (DataAccessException e) {
 			list = new ArrayList<>();

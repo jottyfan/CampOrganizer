@@ -1,5 +1,6 @@
 package de.jottyfan.camporganizer.db;
 
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMPPROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSON;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSONDOCUMENT;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PROFILE;
@@ -33,6 +34,7 @@ import de.jottyfan.camporganizer.LambdaResultWrapper;
 import de.jottyfan.camporganizer.db.converter.EnumConverter;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumCamprole;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumFiletype;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumModule;
 import de.jottyfan.camporganizer.db.jooq.enums.EnumSex;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
@@ -55,11 +57,18 @@ public class RegistratorGateway extends JooqGateway {
 		super(facesContext);
 	}
 
-	public List<RegistratorBean> loadUsers() throws DataAccessException {
+	/**
+	 * load all registrations from the db restricted by the user's privileges from t_campprofile
+	 * 
+	 * @param usnr the usnr to filter for
+	 * @return the list of registrations, an empty one at least
+	 * @throws DataAccessException on database errors
+	 */
+	public List<RegistratorBean> loadUsers(Integer usnr) throws DataAccessException {
 		TProfile subscriber = T_PROFILE.as("s");
 		TProfile registrator = T_PROFILE.as("r");
 		
-		SelectOnConditionStep<Record> sql = getJooq()
+		SelectConditionStep<Record> sql = getJooq()
 		// @formatter:off
 			.select(T_PERSON.PK,
 							T_PERSON.FORENAME,
@@ -89,7 +98,10 @@ public class RegistratorGateway extends JooqGateway {
 			.from(T_PERSON)
 			.leftJoin(V_CAMP).on(V_CAMP.PK.eq(T_PERSON.FK_CAMP))
 			.leftJoin(subscriber).on(subscriber.PK.eq(T_PERSON.FK_PROFILE))
-			.leftJoin(registrator).on(registrator.PK.eq(T_PERSON.FK_REGISTRATOR));
+			.leftJoin(registrator).on(registrator.PK.eq(T_PERSON.FK_REGISTRATOR))
+			.leftJoin(T_CAMPPROFILE).on(T_CAMPPROFILE.FK_CAMP.eq(T_PERSON.FK_CAMP))
+			.where(T_CAMPPROFILE.FK_PROFILE.eq(usnr))
+			.and(T_CAMPPROFILE.MODULE.eq(EnumModule.registration));
 		// @formatter:on
 		LOGGER.debug("{}", sql.toString());
 		List<RegistratorBean> list = new ArrayList<>();

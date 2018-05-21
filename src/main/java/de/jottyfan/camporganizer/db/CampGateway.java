@@ -1,6 +1,6 @@
 package de.jottyfan.camporganizer.db;
 
-import static de.jottyfan.camporganizer.db.jooq.Tables.T_SALESPROFILE;
+import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMPPROFILE;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_CAMP;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSON;
 import static de.jottyfan.camporganizer.db.jooq.Tables.V_CAMP;
@@ -29,6 +29,7 @@ import org.jooq.impl.DSL;
 
 import de.jottyfan.camporganizer.CampBean;
 import de.jottyfan.camporganizer.LambdaResultWrapper;
+import de.jottyfan.camporganizer.db.jooq.enums.EnumModule;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
 
@@ -51,12 +52,12 @@ public class CampGateway extends JooqGateway {
 	 * @param futureOnly
 	 *          if true, load only camps that have not yet started
 	 * @param user
-	 *          if not null, filter the camps by the user privileges in t_salesprofile
+	 *          if not null, filter the camps by the user privileges in t_campprofile
 	 * 
 	 * @return list of camps
 	 * @throws DataAccessException
 	 */
-	public List<CampBean> getAllCampsFromView(boolean futureOnly, Integer user) throws DataAccessException {
+	public List<CampBean> getAllCampsFromView(boolean futureOnly, Integer user, EnumModule... modules) throws DataAccessException {
 		Timestamp limitDate = new Timestamp(0);
 		if (futureOnly) {
 			limitDate.setTime(new Date().getTime());
@@ -78,9 +79,10 @@ public class CampGateway extends JooqGateway {
 									    T_CAMP.LOCK_SALES)
 			.from(V_CAMP)
 			.leftJoin(T_CAMP).on(T_CAMP.PK.eq(V_CAMP.PK))
-			.leftJoin(T_SALESPROFILE).on(T_SALESPROFILE.FK_CAMP.eq(T_CAMP.PK))
+			.leftJoin(T_CAMPPROFILE).on(T_CAMPPROFILE.FK_CAMP.eq(T_CAMP.PK))
 			.where(V_CAMP.ARRIVE.greaterThan(limitDate))
-			.and(user == null ? DSL.trueCondition() : T_SALESPROFILE.FK_PROFILE.eq(user))
+			.and(user == null ? DSL.trueCondition() : T_CAMPPROFILE.MODULE.in(modules))
+			.and(user == null ? DSL.trueCondition() : T_CAMPPROFILE.FK_PROFILE.eq(user))
 			.orderBy(V_CAMP.ARRIVE);
 	  // @formatter:on
 		LOGGER.debug("{}", sql.toString());
