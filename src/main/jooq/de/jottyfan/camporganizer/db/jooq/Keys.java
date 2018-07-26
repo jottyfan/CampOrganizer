@@ -5,6 +5,7 @@ package de.jottyfan.camporganizer.db.jooq;
 
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.TCampdocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
 import de.jottyfan.camporganizer.db.jooq.tables.TPerson;
@@ -12,6 +13,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TPersondocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.TRss;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TCampRecord;
+import de.jottyfan.camporganizer.db.jooq.tables.records.TCampdocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TDocumentRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TLocationRecord;
 import de.jottyfan.camporganizer.db.jooq.tables.records.TPersonRecord;
@@ -44,6 +46,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final Identity<TCampRecord, Integer> IDENTITY_T_CAMP = Identities0.IDENTITY_T_CAMP;
+    public static final Identity<TCampdocumentRecord, Integer> IDENTITY_T_CAMPDOCUMENT = Identities0.IDENTITY_T_CAMPDOCUMENT;
     public static final Identity<TDocumentRecord, Integer> IDENTITY_T_DOCUMENT = Identities0.IDENTITY_T_DOCUMENT;
     public static final Identity<TLocationRecord, Integer> IDENTITY_T_LOCATION = Identities0.IDENTITY_T_LOCATION;
     public static final Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = Identities0.IDENTITY_T_PERSON;
@@ -67,6 +70,7 @@ public class Keys {
 
     private static class Identities0 extends AbstractKeys {
         public static Identity<TCampRecord, Integer> IDENTITY_T_CAMP = createIdentity(TCamp.T_CAMP, TCamp.T_CAMP.PK);
+        public static Identity<TCampdocumentRecord, Integer> IDENTITY_T_CAMPDOCUMENT = createIdentity(TCampdocument.T_CAMPDOCUMENT, TCampdocument.T_CAMPDOCUMENT.PK);
         public static Identity<TDocumentRecord, Integer> IDENTITY_T_DOCUMENT = createIdentity(TDocument.T_DOCUMENT, TDocument.T_DOCUMENT.PK);
         public static Identity<TLocationRecord, Integer> IDENTITY_T_LOCATION = createIdentity(TLocation.T_LOCATION, TLocation.T_LOCATION.PK);
         public static Identity<TPersonRecord, Integer> IDENTITY_T_PERSON = createIdentity(TPerson.T_PERSON, TPerson.T_PERSON.PK);

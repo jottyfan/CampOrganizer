@@ -5,6 +5,7 @@ package de.jottyfan.camporganizer.db.jooq;
 
 
 import de.jottyfan.camporganizer.db.jooq.tables.TCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.TCampdocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TCampprofile;
 import de.jottyfan.camporganizer.db.jooq.tables.TDocument;
 import de.jottyfan.camporganizer.db.jooq.tables.TLocation;
@@ -19,6 +20,7 @@ import de.jottyfan.camporganizer.db.jooq.tables.TSalescontenttype;
 import de.jottyfan.camporganizer.db.jooq.tables.TSalesprofile;
 import de.jottyfan.camporganizer.db.jooq.tables.VBudget;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamp;
+import de.jottyfan.camporganizer.db.jooq.tables.VCampdocument;
 import de.jottyfan.camporganizer.db.jooq.tables.VCamprole;
 import de.jottyfan.camporganizer.db.jooq.tables.VProfile;
 import de.jottyfan.camporganizer.db.jooq.tables.VRegistration;
@@ -45,6 +47,11 @@ public class Tables {
      * The table <code>camp.t_camp</code>.
      */
     public static final TCamp T_CAMP = de.jottyfan.camporganizer.db.jooq.tables.TCamp.T_CAMP;
+
+    /**
+     * The table <code>camp.t_campdocument</code>.
+     */
+    public static final TCampdocument T_CAMPDOCUMENT = de.jottyfan.camporganizer.db.jooq.tables.TCampdocument.T_CAMPDOCUMENT;
 
     /**
      * The table <code>camp.t_campprofile</code>.
@@ -115,6 +122,11 @@ public class Tables {
      * The table <code>camp.v_camp</code>.
      */
     public static final VCamp V_CAMP = de.jottyfan.camporganizer.db.jooq.tables.VCamp.V_CAMP;
+
+    /**
+     * The table <code>camp.v_campdocument</code>.
+     */
+    public static final VCampdocument V_CAMPDOCUMENT = de.jottyfan.camporganizer.db.jooq.tables.VCampdocument.V_CAMPDOCUMENT;
 
     /**
      * The table <code>camp.v_camprole</code>.

@@ -6,6 +6,7 @@ import static de.jottyfan.camporganizer.db.jooq.Tables.T_LOCATION;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSON;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_PERSONDOCUMENT;
 import static de.jottyfan.camporganizer.db.jooq.Tables.T_RSS;
+import static de.jottyfan.camporganizer.db.jooq.Tables.V_CAMPDOCUMENT;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,8 +19,9 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.DeleteConditionStep;
 import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
-import org.jooq.Record11;
+import org.jooq.Record12;
 import org.jooq.Record4;
+import org.jooq.Record5;
 import org.jooq.SelectConditionStep;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
@@ -57,19 +59,20 @@ public class SubscriberGateway extends JooqGateway {
 	 * @throws DataAccessException
 	 */
 	public List<SubscriberBean> getCamps(Integer pk) throws DataAccessException {
-		SelectConditionStep<Record11<Integer, String, String, Integer, String, Timestamp, Timestamp, Integer, String, String, Boolean>> sql = getJooq()
+		SelectConditionStep<Record12<Integer, String, String, Integer, Integer, String, Timestamp, Timestamp, Integer, String, String, Boolean>> sql = getJooq()
 		// @formatter:off
 		  .select(T_PERSON.PK,
-		  		      T_PERSON.FORENAME,
-		  		      T_PERSON.SURNAME,
-		  		      T_CAMP.FK_DOCUMENT,
-		  				  T_CAMP.NAME,
-		  		      T_CAMP.ARRIVE,
-		  		      T_CAMP.DEPART,
-		  		      T_LOCATION.FK_DOCUMENT,
-		  		      T_LOCATION.NAME,
-		  		      T_LOCATION.URL,
-		  		      T_PERSON.ACCEPT)
+		  		    T_PERSON.FORENAME,
+		  		    T_PERSON.SURNAME,
+		  		    T_CAMP.PK,
+		  		    T_CAMP.FK_DOCUMENT,
+		  				T_CAMP.NAME,
+		  		    T_CAMP.ARRIVE,
+		  		    T_CAMP.DEPART,
+		  		    T_LOCATION.FK_DOCUMENT,
+		  		    T_LOCATION.NAME,
+		  		    T_LOCATION.URL,
+		  		    T_PERSON.ACCEPT)
 		  .from(T_PERSON)
 		  .leftJoin(T_CAMP).on(T_CAMP.PK.eq(T_PERSON.FK_CAMP))
 		  .leftJoin(T_LOCATION).on(T_LOCATION.PK.eq(T_CAMP.FK_LOCATION))
@@ -78,6 +81,8 @@ public class SubscriberGateway extends JooqGateway {
 		LOGGER.debug("{}", sql.toString());
 		List<SubscriberBean> list = new ArrayList<>();
 		for (Record r : sql.fetch()) {
+			Integer pkCamp = r.get(T_CAMP.PK);
+
 			StringBuilder fullname = new StringBuilder();
 			fullname.append(r.get(T_PERSON.FORENAME));
 			fullname.append(" ");
@@ -95,9 +100,10 @@ public class SubscriberGateway extends JooqGateway {
 			Integer locationDoc = r.get(T_LOCATION.FK_DOCUMENT);
 			Integer campDoc = r.get(T_CAMP.FK_DOCUMENT);
 
-			SelectConditionStep<Record4<String, EnumDocument, EnumFiletype, String>> sql2 = getJooq()
+			SelectConditionStep<Record5<Integer, String, EnumDocument, EnumFiletype, String>> sql2 = getJooq()
 			// @formatter:off
-				.select(T_DOCUMENT.NAME,
+				.select(T_DOCUMENT.PK,
+						    T_DOCUMENT.NAME,
 						    T_DOCUMENT.DOCTYPE,
 						    T_DOCUMENT.FILETYPE,
 						    T_DOCUMENT.DOCUMENT)
@@ -108,7 +114,7 @@ public class SubscriberGateway extends JooqGateway {
 			// @formatter:on
 			LOGGER.debug("{}", sql2.toString());
 			for (Record rec : sql2.fetch()) {
-				DocumentBean doc = new DocumentBean(null);
+				DocumentBean doc = new DocumentBean(rec.get(T_DOCUMENT.PK));
 				doc.setDoctype(rec.get(T_DOCUMENT.DOCTYPE));
 				doc.setDocument(rec.get(T_DOCUMENT.DOCUMENT));
 				doc.setFiletype(rec.get(T_DOCUMENT.FILETYPE));
@@ -116,7 +122,27 @@ public class SubscriberGateway extends JooqGateway {
 				bean.getDocuments().add(doc);
 			}
 
-			SelectConditionStep<Record4<Integer, String, EnumFiletype, String>> sql3 = getJooq()
+			SelectConditionStep<Record5<Integer, EnumDocument, String, EnumFiletype, String>> sql3 = getJooq()
+			// @formatter:off
+				.select(V_CAMPDOCUMENT.FK_DOCUMENT,
+						    V_CAMPDOCUMENT.DOCTYPE,
+						    V_CAMPDOCUMENT.DOCUMENT,
+						    V_CAMPDOCUMENT.FILETYPE,
+						    V_CAMPDOCUMENT.DOCUMENTNAME)
+				.from(V_CAMPDOCUMENT)
+				.where(V_CAMPDOCUMENT.FK_CAMP.eq(pkCamp));
+			// @formatter:on
+			LOGGER.debug("{}", sql3.toString());
+			for (Record rec : sql3.fetch()) {
+				DocumentBean doc = new DocumentBean(r.get(V_CAMPDOCUMENT.FK_DOCUMENT));
+				doc.setDoctype(rec.get(V_CAMPDOCUMENT.DOCTYPE));
+				doc.setDocument(rec.get(V_CAMPDOCUMENT.DOCUMENT));
+				doc.setFiletype(rec.get(V_CAMPDOCUMENT.FILETYPE));
+				doc.setName(rec.get(V_CAMPDOCUMENT.DOCUMENTNAME));
+				bean.getDocuments().add(doc);
+			}
+
+			SelectConditionStep<Record4<Integer, String, EnumFiletype, String>> sql4 = getJooq()
 			// @formatter:off
 				.select(T_PERSONDOCUMENT.PK,
 						    T_PERSONDOCUMENT.NAME,
@@ -125,8 +151,8 @@ public class SubscriberGateway extends JooqGateway {
 				.from(T_PERSONDOCUMENT)
 				.where(T_PERSONDOCUMENT.FK_PERSON.eq(bean.getPkPerson()));
 			// @formatter:on
-			LOGGER.debug("{}", sql3.toString());
-			for (Record rec : sql3.fetch()) {
+			LOGGER.debug("{}", sql4.toString());
+			for (Record rec : sql4.fetch()) {
 				PersondocumentBean doc = new PersondocumentBean(rec.get(T_PERSONDOCUMENT.PK));
 				doc.setFkPerson(bean.getPkPerson());
 				doc.setDocument(rec.get(T_PERSONDOCUMENT.DOCUMENT));
